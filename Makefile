@@ -1,10 +1,9 @@
-
-CC = g++
+CC = gcc
 CPPFLAGS = -DGTEST_HAS_PTHREAD=0
 CXXFLAGS = -g -std=c++11
 
-LIBS = 
-INCLUDES = -I/usr/include/pkcs11
+LIBS = -ldl #-L/usr/lib64/pkcs11/ /usr/lib64/pkcs11/libsofthsm2.so
+INCLUDES = -I.
 
 EXECUTABLE = run.out
 
@@ -12,10 +11,10 @@ SRC_DIR = src
 INCLUDE_DIR =include
 
 SRCS = $(wildcard $(SRC_DIR)/*.cpp)
-OBJS = $(SRCS:.c=.o)
+OBJS = $(SRCS:.cpp=.o)
 
 
-%.o: %.c
+%.o: %.cpp
 	@echo 'Building file: $<'
 	@echo 'Invoking: GCC Compiler'
 	$(CC) $(CPPFLAGS) $(CXXFLAGS) $(INCLUDES) -O0 -Wall -c -o "$@" "$<" $(LIBS)
@@ -23,7 +22,7 @@ OBJS = $(SRCS:.c=.o)
 	@echo ' '
 
 all: $(OBJS)
-	$(CC) $(CPPFLAGS) $(CXXFLAGS) -o $(EXECUTABLE) $(OBJS) $(LIBS)
+	$(CC) $(CPPFLAGS) $(CXXFLAGS) $(INCLUDES) -o $(EXECUTABLE) $(LIBS) $(OBJS) 
 	@echo 'Build complete!'
 	@echo ' '
 
