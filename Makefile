@@ -13,6 +13,7 @@ INCLUDE_DIR =include
 SRCS = $(wildcard $(SRC_DIR)/*.cpp)
 OBJS = $(SRCS:.cpp=.o)
 
+RM = /usr/bin/rm
 
 %.o: %.cpp
 	@echo 'Building file: $<'
@@ -27,5 +28,5 @@ all: $(OBJS)
 	@echo ' '
 
 clean: 
-	@rm $(SRC_DIR/*.o)
-	@rm $(EXECUTABLE)
+	$(RM) $(SRC_DIR)/*.o
+	$(RM) $(EXECUTABLE)
