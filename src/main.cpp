@@ -24,32 +24,38 @@ int main ( int argc, const char* argv[] )
 	//{
 	//	printf( "arg %d: %s\n", i, argv[i] );
 	//}
-
-	void* sym = dlopen("/usr/lib64/libsofthsm2.so", RTLD_LAZY);
-	assert(sym != 0);
-	CK_C_GetFunctionList gfl = (CK_C_GetFunctionList) dlsym(sym, "C_GetFunctionList");
-
 	CK_RV rv;
-	CK_UTF8CHAR pin[] = SLOT_0_USER1_PIN;
-	CK_ULONG pinLength = sizeof(pin) - 1;
-	CK_UTF8CHAR sopin[] = SLOT_0_SO1_PIN;
-	CK_ULONG sopinLength = sizeof(sopin) - 1;
-	CK_SESSION_HANDLE hSession;
+	//CK_UTF8CHAR pin[] = SLOT_0_USER1_PIN;
+	//CK_ULONG pinLength = sizeof(pin) - 1;
+	//CK_UTF8CHAR sopin[] = SLOT_0_SO1_PIN;
+	//CK_ULONG sopinLength = sizeof(sopin) - 1;
+	//CK_SESSION_HANDLE hSession;
 
-	CK_UTF8CHAR label[32];
-	memset(label, ' ', 32);
-	memcpy(label, "token1", strlen("token1"));
+	//CK_UTF8CHAR label[32];
+	//memset(label, ' ', 32);
+	//memcpy(label, "token1", strlen("token1"));
+
+	//void* sym = dlopen("/usr/lib64/libsofthsm2.so", RTLD_LAZY);
+	
+
+	void* sym = dlopen("/usr/lib64/opensc-pkcs11.so", RTLD_LAZY);
+	assert(sym != 0);
+	CK_C_GetFunctionList getFuncList = (CK_C_GetFunctionList) dlsym(sym, "C_GetFunctionList");
+
 
 	//TODO: Carregar o C_GetFunctionList via Libdl,
 	//usar funcoes carregadas a partir dele.
-	CK_FUNCTION_LIST_PTR flp = 0;
-	rv = gfl(&flp);
+	CK_FUNCTION_LIST_PTR listPointer = 0;
+	rv = getFuncList(&listPointer);
+	assert(rv == 0);
+	printf("getFuncList return: (%d)\n", rv);
 
-	printf("Ret value of GetListPtr (%d)\n", rv);
-
-	CK_C_Initialize func = flp->C_Initialize;
+	CK_C_Initialize init = listPointer->C_Initialize;
 	// (Re)initialize the token
-	rv = (*func)(0);
+	rv = (*init)(NULL_PTR);
 	printf("Initializing (%d)\n", rv);
-	
+
+
+
+	dlclose(sym);	
 }
