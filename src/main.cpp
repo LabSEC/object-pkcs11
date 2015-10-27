@@ -9,7 +9,7 @@
 #include <string>
 
 
-#include "pkcs11.h"
+#include "P11.h"
 #include "macros.h"
 
 // Slots
@@ -24,64 +24,81 @@
 #define SLOT_0_USER2_PIN "123456"
 
 
-typedef std::string string;
-
-void* loadDefaultModule()
-{
-	//TODO(perin): check for loading errors.
-	TRACE("Loading default module (libsofthsm2)");
-	return dlopen("/usr/lib64/libsofthsm2.so", RTLD_LAZY);
-}
-
-void* loadModule(string path)
-{
-	//TODO(perin): check for loading errors.	
-	TRACE("Loading module from PATH");
-	return dlopen(path.c_str(), RTLD_LAZY);
-}
-
 int main(int argc, const char* argv[])
 {
+	P11* myP11;
 
-	void* sym = 0;
+
 	if (argv[1] != 0)
 	{
 		std::string path = argv[1];
-		sym = loadModule(path);
+		myP11 = new P11(path);
 	}
 	else
 	{
-		sym = loadDefaultModule();
+		std::string defaultModule = "/usr/lib64/libsofthsm2.so";
+		myP11 = new P11(defaultModule);
 	}
-	
-	CK_RV rv;
 
+	std::string soPin = "123456";
+	std::string label = "token1";
+
+
+	myP11->initialize();
+	myP11->getInfo();
+	myP11->getFunctionList();
+	myP11->initToken(0, soPin, label);
+	myP11->openSession();
+	myP11->login();
+	myP11->initPin();
+	myP11->finalize();
+	
+/*
 	assert(sym != 0);
 	CK_C_GetFunctionList getFuncList = (CK_C_GetFunctionList) dlsym(sym, "C_GetFunctionList");
 
 
 	CK_FUNCTION_LIST_PTR lp = 0;
 	rv = getFuncList(&lp);
-	CK_FUNCTION_LIST listPointer = *lp;
+	CK_FUNCTION_LIST p11 = *lp;
 	assert(rv == CKR_OK);
 	TRACE("GetFunctionList::Ok!");
 
-	rv = listPointer.C_Initialize(0);
+
+
+	CK_UTF8CHAR pin[] = SLOT_0_USER1_PIN;
+	CK_ULONG pinLength = sizeof(pin) - 1;
+	CK_UTF8CHAR sopin[] = SLOT_0_SO1_PIN;
+	CK_ULONG sopinLength = sizeof(sopin) - 1;
+	CK_SESSION_HANDLE hSession;
+	CK_UTF8CHAR label[32];
+	memset(label, ' ', 32);
+	memcpy(label, "token1", strlen("token1"));
+
+	rv = p11.C_Initialize(0);
 	assert(rv == CKR_OK);
 	TRACE("Initialize::Ok!");
 
+	rv = p11.C_InitToken(SLOT_INIT_TOKEN, sopin,sopinLength, label);
+	assert(rv == CKR_OK);
+	TRACE("InitToken::Ok!");
+	
+	rv = p11.C_OpenSession(SLOT_INIT_TOKEN, CKF_SERIAL_SESSION | CKF_RW_SESSION, NULL_PTR, NULL_PTR, &hSession);
+	assert(rv == CKR_OK);
+	TRACE("OpenSession::OK");
 
-	//CK_UTF8CHAR pin[] = SLOT_0_USER1_PIN;
-	//CK_ULONG pinLength = sizeof(pin) - 1;
-	//CK_UTF8CHAR sopin[] = SLOT_0_SO1_PIN;
-	//CK_ULONG sopinLength = sizeof(sopin) - 1;
-	//CK_SESSION_HANDLE hSession;
+	rv = p11.C_Login(hSession,CKU_SO, sopin, sopinLength);
+	assert(rv == CKR_OK);
+	TRACE("Login::OK");
+	
+	rv = p11.C_InitPIN(hSession, pin, pinLength);
+	assert(rv == CKR_OK);
+	TRACE("InitPin::OK");
 
-	//CK_UTF8CHAR label[32];
-	//memset(label, ' ', 32);
-	//memcpy(label, "token1", strlen("token1"));
-
-	dlclose(sym);	
+	p11.C_Finalize(0);
+	dlclose(sym);
+	TRACE("Quit..");
+*/
 }
 
 #endif /*MAIN_CPP*/
