@@ -1,4 +1,4 @@
-CC = gcc
+CC = g++
 CPPFLAGS = -DGTEST_HAS_PTHREAD=0
 CXXFLAGS = -g -std=c++11
 

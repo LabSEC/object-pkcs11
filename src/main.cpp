@@ -2,11 +2,15 @@
 #define MAIN_CPP
 
 #include <assert.h>
-#include <pkcs11.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <dlfcn.h>
+#include <regex>
+#include <string>
+
+
+#include "pkcs11.h"
+#include "macros.h"
 
 // Slots
 #define SLOT_INVALID 9999
@@ -19,15 +23,68 @@
 #define SLOT_0_USER1_PIN "123456"
 #define SLOT_0_USER2_PIN "123456"
 
-int main ( int argc, const char* argv[] )
-{
-	printf("Hello World\n");
 
-	//for( int i = 0; i < argc; i++ )
-	//{
-	//	printf( "arg %d: %s\n", i, argv[i] );
-	//}
+typedef std::string string;
+
+void* loadDefaultModule()
+{
+	//TODO(perin): check for loading errors.
+	TRACE("Loading default module (libsofthsm2)");
+	return dlopen("/usr/lib64/libsofthsm2.so", RTLD_LAZY);
+}
+
+bool pathIsValid(string path)
+{
+	if(std::regex_match(path, std::regex(".?:(\\[a-zA-Z 0-9]*)*.so.")))
+	{
+		TRACE("Path is valid: " + path);
+		return true;
+	}
+	TRACE("Failed to validate path: " + path);
+	return false;
+}
+
+void* loadModule(string path)
+{
+	//TODO(perin): check for loading errors.	
+	if (pathIsValid(path)){
+		TRACE("Loading module from PATH");
+		return dlopen(path.c_str(), RTLD_LAZY);
+	}
+	return loadDefaultModule();
+}
+
+int main(int argc, const char* argv[])
+{
+
+	void* sym = 0;
+	if (argv[1] != 0)
+	{
+		std::string path = argv[1];
+		sym = loadModule(path);
+	}
+	else
+	{
+		sym = loadDefaultModule();
+	}
+	
 	CK_RV rv;
+
+	assert(sym != 0);
+	CK_C_GetFunctionList getFuncList = (CK_C_GetFunctionList) dlsym(sym, "C_GetFunctionList");
+
+
+	CK_FUNCTION_LIST_PTR listPointer = 0;
+	rv = getFuncList(&listPointer);
+	assert(rv == 0);
+	TRACE("GetFunctionList::Ok!");
+
+	CK_C_Initialize init = listPointer->C_Initialize;
+	// (Re)initialize the token
+	rv = (*init)(0);
+	printf("Initializing (%lu)\n", rv);
+
+
 	//CK_UTF8CHAR pin[] = SLOT_0_USER1_PIN;
 	//CK_ULONG pinLength = sizeof(pin) - 1;
 	//CK_UTF8CHAR sopin[] = SLOT_0_SO1_PIN;
@@ -37,25 +94,6 @@ int main ( int argc, const char* argv[] )
 	//CK_UTF8CHAR label[32];
 	//memset(label, ' ', 32);
 	//memcpy(label, "token1", strlen("token1"));
-
-	void* sym = dlopen("/usr/lib64/libsofthsm2.so", RTLD_LAZY);
-	//void* sym = dlopen("/usr/lib64/opensc-pkcs11.so", RTLD_LAZY);
-
-	assert(sym != 0);
-	CK_C_GetFunctionList getFuncList = (CK_C_GetFunctionList) dlsym(sym, "C_GetFunctionList");
-
-
-	CK_FUNCTION_LIST_PTR listPointer = 0;
-	rv = getFuncList(&listPointer);
-	assert(rv == 0);
-	printf("getFuncList return: (%lu)\n", rv);
-
-	CK_C_Initialize init = listPointer->C_Initialize;
-	// (Re)initialize the token
-	rv = (*init)(0);
-	printf("Initializing (%lu)\n", rv);
-
-
 
 	dlclose(sym);	
 }
