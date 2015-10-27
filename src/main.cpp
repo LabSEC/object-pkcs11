@@ -33,25 +33,11 @@ void* loadDefaultModule()
 	return dlopen("/usr/lib64/libsofthsm2.so", RTLD_LAZY);
 }
 
-bool pathIsValid(string path)
-{
-	if(std::regex_match(path, std::regex(".?:(\\[a-zA-Z 0-9]*)*.so.")))
-	{
-		TRACE("Path is valid: " + path);
-		return true;
-	}
-	TRACE("Failed to validate path: " + path);
-	return false;
-}
-
 void* loadModule(string path)
 {
 	//TODO(perin): check for loading errors.	
-	if (pathIsValid(path)){
-		TRACE("Loading module from PATH");
-		return dlopen(path.c_str(), RTLD_LAZY);
-	}
-	return loadDefaultModule();
+	TRACE("Loading module from PATH");
+	return dlopen(path.c_str(), RTLD_LAZY);
 }
 
 int main(int argc, const char* argv[])
@@ -74,15 +60,15 @@ int main(int argc, const char* argv[])
 	CK_C_GetFunctionList getFuncList = (CK_C_GetFunctionList) dlsym(sym, "C_GetFunctionList");
 
 
-	CK_FUNCTION_LIST_PTR listPointer = 0;
-	rv = getFuncList(&listPointer);
-	assert(rv == 0);
+	CK_FUNCTION_LIST_PTR lp = 0;
+	rv = getFuncList(&lp);
+	CK_FUNCTION_LIST listPointer = *lp;
+	assert(rv == CKR_OK);
 	TRACE("GetFunctionList::Ok!");
 
-	CK_C_Initialize init = listPointer->C_Initialize;
-	// (Re)initialize the token
-	rv = (*init)(0);
-	printf("Initializing (%lu)\n", rv);
+	rv = listPointer.C_Initialize(0);
+	assert(rv == CKR_OK);
+	TRACE("Initialize::Ok!");
 
 
 	//CK_UTF8CHAR pin[] = SLOT_0_USER1_PIN;
