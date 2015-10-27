@@ -2,8 +2,8 @@ CC = gcc
 CPPFLAGS = -DGTEST_HAS_PTHREAD=0
 CXXFLAGS = -g -std=c++11
 
-LIBS = -ldl #-L/usr/lib64/pkcs11/ /usr/lib64/pkcs11/libsofthsm2.so
-INCLUDES = -I.
+LIBS = -ldl
+INCLUDES = -I./include
 
 EXECUTABLE = run.out
 

@@ -1,5 +1,5 @@
 #include <assert.h>
-#include <cryptoki.h>
+#include <pkcs11.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -43,17 +43,15 @@ int main ( int argc, const char* argv[] )
 	CK_C_GetFunctionList getFuncList = (CK_C_GetFunctionList) dlsym(sym, "C_GetFunctionList");
 
 
-	//TODO: Carregar o C_GetFunctionList via Libdl,
-	//usar funcoes carregadas a partir dele.
 	CK_FUNCTION_LIST_PTR listPointer = 0;
 	rv = getFuncList(&listPointer);
 	assert(rv == 0);
-	printf("getFuncList return: (%d)\n", rv);
+	printf("getFuncList return: (%lu)\n", rv);
 
 	CK_C_Initialize init = listPointer->C_Initialize;
 	// (Re)initialize the token
-	rv = (*init)(NULL_PTR);
-	printf("Initializing (%d)\n", rv);
+	rv = (*init)(0);
+	printf("Initializing (%lu)\n", rv);
 
 
 
