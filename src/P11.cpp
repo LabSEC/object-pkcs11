@@ -28,19 +28,30 @@ void P11::loadFunctions() {
 }
 
 void P11::initialize() {
-	TRACE(NOT_IMPLEMENTED);
+	rv = (*functionList->C_Initialize)(0);
+	assert(rv == 0);
+	TRACE("Cryptoki initialization success.");
 }
 
 void P11::finalize() {
-	TRACE(NOT_IMPLEMENTED);
+	(*functionList->C_Finalize)(0);
+	TRACE("Cryptoki finalized.");
 }
 
-void P11::getInfo() {
-	TRACE(NOT_IMPLEMENTED);
+CK_INFO P11::getInfo() {
+	CK_INFO info;
+	rv = (*functionList->C_GetInfo)(&info);
+	assert(rv == 0);
+	TRACE("GetInfo success.");
+	return info;
 }
 
-void P11::getFunctionList() {
-	TRACE(NOT_IMPLEMENTED);
+CK_FUNCTION_LIST P11::getFunctionList() {
+	CK_FUNCTION_LIST_PTR fList;
+	rv = (*functionList->C_GetFunctionList)(&fList);
+	assert(rv == 0);
+	TRACE("GetFunctionList success.");
+	return *fList;
 }
 
 void P11::initToken(unsigned int slot, std::string &soPin, std::string &label) {

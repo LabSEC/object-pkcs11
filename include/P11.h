@@ -59,12 +59,12 @@ public:
 	/*!
 	* Obtains general information about Cryptoki.
 	*/
-	void getInfo();
+	CK_INFO getInfo();
 	
 	/*!
 	* Obtains entry points of Cryptoki library functions.
 	*/
-	void getFunctionList();
+	CK_FUNCTION_LIST getFunctionList();
 
 	/*! @} 
 	* @addtogroup slot&token

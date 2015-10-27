@@ -36,7 +36,7 @@ int main(int argc, const char* argv[])
 	}
 	else
 	{
-		std::string defaultModule = "/usr/lib64/libsofthsm2.so";
+		std::string defaultModule = "/usr/lib64/opensc-pkcs11.so";
 		myP11 = new P11(defaultModule);
 	}
 
@@ -45,8 +45,8 @@ int main(int argc, const char* argv[])
 
 
 	myP11->initialize();
-	myP11->getInfo();
-	myP11->getFunctionList();
+	CK_INFO info = myP11->getInfo();
+	CK_FUNCTION_LIST flist = myP11->getFunctionList();
 	myP11->initToken(0, soPin, label);
 	myP11->openSession();
 	myP11->login();
