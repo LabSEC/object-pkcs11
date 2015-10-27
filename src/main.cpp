@@ -1,3 +1,6 @@
+#ifndef MAIN_CPP
+#define MAIN_CPP
+
 #include <assert.h>
 #include <pkcs11.h>
 #include <stdio.h>
@@ -35,10 +38,9 @@ int main ( int argc, const char* argv[] )
 	//memset(label, ' ', 32);
 	//memcpy(label, "token1", strlen("token1"));
 
-	//void* sym = dlopen("/usr/lib64/libsofthsm2.so", RTLD_LAZY);
-	
+	void* sym = dlopen("/usr/lib64/libsofthsm2.so", RTLD_LAZY);
+	//void* sym = dlopen("/usr/lib64/opensc-pkcs11.so", RTLD_LAZY);
 
-	void* sym = dlopen("/usr/lib64/opensc-pkcs11.so", RTLD_LAZY);
 	assert(sym != 0);
 	CK_C_GetFunctionList getFuncList = (CK_C_GetFunctionList) dlsym(sym, "C_GetFunctionList");
 
@@ -57,3 +59,5 @@ int main ( int argc, const char* argv[] )
 
 	dlclose(sym);	
 }
+
+#endif /*MAIN_CPP*/
