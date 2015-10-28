@@ -1,4 +1,4 @@
-PKCS #11 key wrapping and unwraping tests..
+Object Oriented Library PKCS #11 C++
 =======
 
 # Introduction
