@@ -43,13 +43,13 @@ int main(int argc, const char* argv[])
 
 	std::string soPin = "123456";
 	std::string label = "token1";
-
+	int slot = 1;
 	try
 	{
 		myP11->initialize();
 		CK_INFO info = myP11->getInfo();
 		CK_FUNCTION_LIST flist = myP11->getFunctionList();
-		myP11->initToken(0, soPin, label);
+		myP11->initToken(slot, soPin, label);
 		myP11->openSession();
 		myP11->login();
 		myP11->initPin();
@@ -57,8 +57,7 @@ int main(int argc, const char* argv[])
 	} 
 	catch (P11Exception &e)
 	{
-		TRACE(e.what());
-		TRACEm("%s %lu","Exit with error code: ", e.getErrorCode());
+		TRACEm_ERROR("%s %lu (%s)","Exit with error code: ", e.getErrorCode(), e.what());
 	}
 /*
 	assert(sym != 0);

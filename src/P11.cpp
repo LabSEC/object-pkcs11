@@ -25,23 +25,25 @@ void P11::loadFunctions() {
 	rv = getFuncList(&functionList);
 	if(rv)
 	{
+		FAILED;
 		throw P11Exception(rv);
 	}
-	TRACE("PKCS11 functions load success.");
+	OK;
 }
 
 void P11::initialize() {
 	rv = (*functionList->C_Initialize)(0);
 	if(rv)
 	{
+		FAILED;
 		throw P11Exception(rv);
 	}
-	TRACE("Cryptoki initialization success.");
+	OK;
 }
 
 void P11::finalize() {
 	(*functionList->C_Finalize)(0);
-	TRACE("Cryptoki finalized.");
+	OK;
 }
 
 CK_INFO P11::getInfo() {
@@ -49,9 +51,10 @@ CK_INFO P11::getInfo() {
 	rv = (*functionList->C_GetInfo)(&info);
 	if(rv)
 	{
+		FAILED;
 		throw P11Exception(rv);
 	}
-	TRACE("GetInfo::OK");
+	OK;
 	return info;
 }
 
@@ -60,9 +63,10 @@ CK_FUNCTION_LIST P11::getFunctionList() {
 	rv = (*functionList->C_GetFunctionList)(&fList);
 	if(rv)
 	{
+		FAILED;
 		throw P11Exception(rv);
 	}
-	TRACE("GetFunctionList::OK");
+	OK;
 	return *fList;
 }
 
@@ -80,20 +84,21 @@ void P11::initToken(unsigned int slot, std::string &soPin, std::string &label) {
 	rv = (*functionList->C_InitToken)(slot, utf8SoPin, pinLength, utf8Label);
 	if(rv)
 	{
+		FAILED;
 		throw P11Exception(rv);
 	}
-	TRACE("InitToken::OK");
+	OK;
 }
 
 void P11::initPin() {
-	TRACE(NOT_IMPLEMENTED);
+	NOT_IMPLEMENTED;
 }
 
 void P11::openSession() {
-	TRACE(NOT_IMPLEMENTED);
+	NOT_IMPLEMENTED;
 }
 
 void P11::login() {
-	TRACE(NOT_IMPLEMENTED);
+	NOT_IMPLEMENTED;
 }
 
