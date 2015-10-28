@@ -2,8 +2,9 @@
 #define P11_H
 
 #include <assert.h>
-#include <string>
-#include <stdlib.h>
+#include <string.h>
+//#include <stdlib.h>
+//#include <stdio.h>
 #include <dlfcn.h>
 
 #include "pkcs11.h"

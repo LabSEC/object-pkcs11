@@ -42,7 +42,7 @@ CK_INFO P11::getInfo() {
 	CK_INFO info;
 	rv = (*functionList->C_GetInfo)(&info);
 	assert(rv == 0);
-	TRACE("GetInfo success.");
+	TRACE("GetInfo::OK");
 	return info;
 }
 
@@ -50,12 +50,23 @@ CK_FUNCTION_LIST P11::getFunctionList() {
 	CK_FUNCTION_LIST_PTR fList;
 	rv = (*functionList->C_GetFunctionList)(&fList);
 	assert(rv == 0);
-	TRACE("GetFunctionList success.");
+	TRACE("GetFunctionList::OK");
 	return *fList;
 }
 
 void P11::initToken(unsigned int slot, std::string &soPin, std::string &label) {
-	TRACE(NOT_IMPLEMENTED);
+	int len = soPin.length();
+	CK_ULONG pinLength = len;
+	CK_UTF8CHAR* utf8SoPin = new CK_UTF8CHAR[len];
+	strncpy((char*)utf8SoPin, soPin.c_str(), len);
+
+	len = label.length();
+	CK_UTF8CHAR* utf8Label = new CK_UTF8CHAR[len];
+	strncpy((char*)utf8Label, label.c_str(), len);
+
+	rv = (*functionList->C_InitToken)(slot, utf8SoPin, pinLength, utf8Label);
+	assert(rv == 0);
+	TRACE("InitToken::OK");
 }
 
 void P11::initPin() {
