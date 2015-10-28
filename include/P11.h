@@ -85,7 +85,7 @@ public:
 	/*!
 	* Initializes the normal user's PIN.
 	*/
-	void initPin();
+	void initPin(Session& session, std::string& pin);
 
 	/*! @} 
 	* @addtogroup session
@@ -103,7 +103,7 @@ public:
 	/*!
 	* Logs into a Token.
 	*/
-	void login();
+	void login(Session& session, std::string& soPin);
 
 	/*! @} */
 };

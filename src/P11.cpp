@@ -82,16 +82,14 @@ FunctionList P11::getFunctionList()
 //TODO(perin): copy strings without casting. CK_UTF8CHAR is unsigned char.
 void P11::initToken(unsigned int slot, std::string& soPin, std::string& label)
 {
-	int len = soPin.length();
-	CK_ULONG pinLength = len;
-	CK_UTF8CHAR* utf8SoPin = new CK_UTF8CHAR[len];
-	strncpy((char*)utf8SoPin, soPin.c_str(), len);
+	CK_ULONG soPinLen = soPin.length();
+	CK_UTF8CHAR* utf8soPin = new CK_UTF8CHAR[soPin.length];
+	strncpy((char*)utf8soPin, soPin.c_str(), soPin.length);
 
-	len = label.length();
-	CK_UTF8CHAR* utf8Label = new CK_UTF8CHAR[len];
-	strncpy((char*)utf8Label, label.c_str(), len);
+	CK_UTF8CHAR* utf8label = new CK_UTF8CHAR[label.length()];
+	strncpy((char*)utf8label, label.c_str(), label.length());
 
-	rv = (*functionList->C_InitToken)(slot, utf8SoPin, pinLength, utf8Label);
+	rv = (*functionList->C_InitToken)(slot, utf8soPin, soPinLen, utf8label);
 	if(rv)
 	{
 		FAILED;
@@ -100,13 +98,24 @@ void P11::initToken(unsigned int slot, std::string& soPin, std::string& label)
 	OK;
 }
 
-void P11::initPin()
+void P11::initPin(Session& session, std::string& pin)
 {
-	NOT_IMPLEMENTED;
+	CK_ULONG pinLen = pin.length;
+	CK_UTF8CHAR* utf8pin = new CK_UTF8CHAR[pin.length];
+	strncpy((char*)utf8pin, pin.c_str(), pin.length);
+
+	rv = (*functionList->C_InitPIN)(&session, utf8pin, pinLen);
+	if(rv)
+	{
+		FAILED;
+		throw P11Exception(rv);
+	}
+	OK;
 }
 
 void P11::openSession(unsigned int slot, Session& session)
 {
+	//TODO(perin): Here we could use flgs/enum to set Session settings.
 	rv = (*functionList->C_OpenSession)(slot, CKF_SERIAL_SESSION | CKF_RW_SESSION, 
 			NULL_PTR, NULL_PTR, &session);
 	if(rv)
@@ -117,8 +126,18 @@ void P11::openSession(unsigned int slot, Session& session)
 	OK;
 }
 
-void P11::login()
+void P11::login(Session& session, std::string& soPin)
 {
-	NOT_IMPLEMENTED;
+	CK_ULONG pinLen = soPin.length;
+	CK_UTF8CHAR* utf8soPin = new CK_UTF8CHAR[soPin.length];
+	strncpy((char*)utf8soPin, soPin.c_str(), soPin.length);
+
+	rv = (*functionList->C_Login)(&session, CKU_SO, utf8soPin, pinLen);
+	if(rv)
+	{
+		FAILED;
+		throw P11Exception(rv);
+	}
+	OK;
 }
 
