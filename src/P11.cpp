@@ -1,26 +1,31 @@
 #include "P11.h"
 
-P11::P11(std::string &path) {
+P11::P11(std::string& path)
+{
 //TODO(perin): check if module was loaded correctly.
 	functionList = 0;
 	loadModule(path);	
 	loadFunctions();
 }
 
-P11::~P11() {
-	if(this->module){
+P11::~P11()
+{
+	if(this->module)
+	{
 		TRACE("Cleaning up module.");
 		dlclose(module);
 	}
 }
 
-void P11::loadModule(std::string &path) {
+void P11::loadModule(std::string& path)
+{
 	//TODO(perin): check if module is already loaded;
 	TRACE("Loading module from PATH");
 	this->module = dlopen(path.c_str(), RTLD_LAZY);
 }
 
-void P11::loadFunctions() {
+void P11::loadFunctions()
+{
 	CK_C_GetFunctionList getFuncList = (CK_C_GetFunctionList) dlsym(module, "C_GetFunctionList");
 	rv = getFuncList(&functionList);
 	if(rv)
@@ -31,7 +36,8 @@ void P11::loadFunctions() {
 	OK;
 }
 
-void P11::initialize() {
+void P11::initialize()
+{
 	rv = (*functionList->C_Initialize)(0);
 	if(rv)
 	{
@@ -41,12 +47,14 @@ void P11::initialize() {
 	OK;
 }
 
-void P11::finalize() {
+void P11::finalize()
+{
 	(*functionList->C_Finalize)(0);
 	OK;
 }
 
-CK_INFO P11::getInfo() {
+Info P11::getInfo()
+{
 	CK_INFO info;
 	rv = (*functionList->C_GetInfo)(&info);
 	if(rv)
@@ -58,7 +66,8 @@ CK_INFO P11::getInfo() {
 	return info;
 }
 
-CK_FUNCTION_LIST P11::getFunctionList() {
+FunctionList P11::getFunctionList()
+{
 	CK_FUNCTION_LIST_PTR fList;
 	rv = (*functionList->C_GetFunctionList)(&fList);
 	if(rv)
@@ -71,7 +80,8 @@ CK_FUNCTION_LIST P11::getFunctionList() {
 }
 
 //TODO(perin): copy strings without casting. CK_UTF8CHAR is unsigned char.
-void P11::initToken(unsigned int slot, std::string &soPin, std::string &label) {
+void P11::initToken(unsigned int slot, std::string& soPin, std::string& label)
+{
 	int len = soPin.length();
 	CK_ULONG pinLength = len;
 	CK_UTF8CHAR* utf8SoPin = new CK_UTF8CHAR[len];
@@ -90,15 +100,25 @@ void P11::initToken(unsigned int slot, std::string &soPin, std::string &label) {
 	OK;
 }
 
-void P11::initPin() {
+void P11::initPin()
+{
 	NOT_IMPLEMENTED;
 }
 
-void P11::openSession() {
-	NOT_IMPLEMENTED;
+void P11::openSession(unsigned int slot, Session& session)
+{
+	rv = (*functionList->C_OpenSession)(slot, CKF_SERIAL_SESSION | CKF_RW_SESSION, 
+			NULL_PTR, NULL_PTR, &session);
+	if(rv)
+	{
+		FAILED;
+		throw P11Exception(rv);
+	}
+	OK;
 }
 
-void P11::login() {
+void P11::login()
+{
 	NOT_IMPLEMENTED;
 }
 

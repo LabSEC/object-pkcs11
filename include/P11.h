@@ -11,6 +11,11 @@
 #include "pkcs11.h"
 #include "P11Exception.h"
 #include "macros.h"
+
+typedef CK_INFO Info;
+typedef CK_FUNCTION_LIST FunctionList;
+typedef CK_SESSION_HANDLE Session;
+
 /*!
  * @brief <b>P11 API</b><br>
  *
@@ -30,14 +35,14 @@ class P11
 	CK_RV rv;
 	CK_FUNCTION_LIST_PTR functionList;
 
-	void loadModule(std::string &path);
+	void loadModule(std::string& path);
 
 	void closeModule();
 
 	void loadFunctions();
 public:
 
-	P11(std::string &path);
+	P11(std::string& path);
 
 	virtual ~P11();
 
@@ -59,12 +64,12 @@ public:
 	/*!
 	* Obtains general information about Cryptoki.
 	*/
-	CK_INFO getInfo();
+	Info getInfo();
 	
 	/*!
 	* Obtains entry points of Cryptoki library functions.
 	*/
-	CK_FUNCTION_LIST getFunctionList();
+	FunctionList getFunctionList();
 
 	/*! @} 
 	* @addtogroup slot&token
@@ -75,7 +80,7 @@ public:
 	/*!
 	* Initializes a Token.
 	*/
-	void initToken(unsigned int slot, std::string &soPin, std::string &label);
+	void initToken(unsigned int slot, std::string& soPin, std::string& label);
 
 	/*!
 	* Initializes the normal user's PIN.
@@ -93,7 +98,7 @@ public:
 	* particular token or sets up an application callback 
 	* for token insertion.
 	*/
-	void openSession();
+	void openSession(unsigned int slot, Session& session);
 
 	/*!
 	* Logs into a Token.
