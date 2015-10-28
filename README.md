@@ -1,4 +1,4 @@
-Object Oriented Library PKCS #11 C++
+Object Oriented Library for PKCS #11 C++
 =======
 
 # Introduction
