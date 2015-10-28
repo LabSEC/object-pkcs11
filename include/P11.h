@@ -2,7 +2,8 @@
 #define P11_H
 
 #include <assert.h>
-#include <string.h>
+#include <string>
+#include <cstring>
 //#include <stdlib.h>
 //#include <stdio.h>
 #include <dlfcn.h>

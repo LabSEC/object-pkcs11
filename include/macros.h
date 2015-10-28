@@ -1,6 +1,7 @@
 #ifndef MACROS_H
 #define MACROS_H
 
+#include <stdio.h>
 #include <iostream>
 
 #define NOT_IMPLEMENTED "\e[34m[NOT IMPLEMENTED.]\e[0m"
@@ -14,10 +15,17 @@
  * Output includes the File name, function and line number.
  *
  */
-#define TRACE(x) do                                \
+#ifdef DEBUG
+#define TRACE(x) \
 { std::cerr <<"\e[33m"<<"[TRACE] "<<__FILE__<<"::" \
             <<__func__<<"("<<__LINE__<<") - ("     \
-            << x <<")\e[0m"<<std::endl; }          \
-    while (0)
+            << x <<")\e[0m"<<std::endl; }
+
+#define TRACEm(fmt,...) \
+	fprintf(stderr, "\e[33m[TRACE] %s::%s:%d\t\t>" fmt\
+	 "\e[0m\n",__FILE__,__func__,__LINE__, __VA_ARGS__)
+#else
+#define TRACE(M,...)
+#endif
 
 #endif /*MACROS_H*/

@@ -7,6 +7,7 @@
 #include <dlfcn.h>
 #include <regex>
 #include <string>
+#include <cstring>
 
 
 #include "P11.h"
@@ -57,7 +58,7 @@ int main(int argc, const char* argv[])
 	catch (P11Exception &e)
 	{
 		TRACE(e.what());
-		TRACE("Exit..");
+		TRACEm("%s %lu","Exit with error code: ", e.getErrorCode());
 	}
 /*
 	assert(sym != 0);
