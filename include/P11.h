@@ -8,19 +8,22 @@
 #include <dlfcn.h>
 
 #include "pkcs11.h"
+#include "P11Exception.h"
 #include "macros.h"
 /*!
- * @brief <b>P11 API Object</b><br>
+ * @brief <b>P11 API</b><br>
  *
- * This object calls pkcs11 functions from pkcs11
+ * This class calls pkcs11 functions from pkcs11
  * module. The module is loaded dynamically and
  * functions are called through CK_FUNCTION_LIST.<p>
  *
  * <b> Module must implement 'C_GetFunctionList' </b><p>
  *
  * @see pkcs11.h
+ * @see P11Exception.h
  */
-class P11 {
+class P11
+{
 
 	void* module; 
 	CK_RV rv;
@@ -33,14 +36,9 @@ class P11 {
 	void loadFunctions();
 public:
 
-	//TODO(perin):throws
 	P11(std::string &path);
 
 	virtual ~P11();
-
-	/**
-	*TODO(perin): Criar exceção com códigos de erro do PKCS11
-	*/ 
 
 	/*! @addtogroup general
 	*  General Purpose functions
@@ -103,5 +101,4 @@ public:
 
 	/*! @} */
 };
-
 #endif /*P11_h*/

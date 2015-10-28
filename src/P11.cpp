@@ -23,13 +23,19 @@ void P11::loadModule(std::string &path) {
 void P11::loadFunctions() {
 	CK_C_GetFunctionList getFuncList = (CK_C_GetFunctionList) dlsym(module, "C_GetFunctionList");
 	rv = getFuncList(&functionList);
-	assert(rv == 0);
+	if(rv)
+	{
+		throw P11Exception(rv);
+	}
 	TRACE("PKCS11 functions load success.");
 }
 
 void P11::initialize() {
 	rv = (*functionList->C_Initialize)(0);
-	assert(rv == 0);
+	if(rv)
+	{
+		throw P11Exception(rv);
+	}
 	TRACE("Cryptoki initialization success.");
 }
 
@@ -41,7 +47,10 @@ void P11::finalize() {
 CK_INFO P11::getInfo() {
 	CK_INFO info;
 	rv = (*functionList->C_GetInfo)(&info);
-	assert(rv == 0);
+	if(rv)
+	{
+		throw P11Exception(rv);
+	}
 	TRACE("GetInfo::OK");
 	return info;
 }
@@ -49,11 +58,15 @@ CK_INFO P11::getInfo() {
 CK_FUNCTION_LIST P11::getFunctionList() {
 	CK_FUNCTION_LIST_PTR fList;
 	rv = (*functionList->C_GetFunctionList)(&fList);
-	assert(rv == 0);
+	if(rv)
+	{
+		throw P11Exception(rv);
+	}
 	TRACE("GetFunctionList::OK");
 	return *fList;
 }
 
+//TODO(perin): copy strings without casting. CK_UTF8CHAR is unsigned char.
 void P11::initToken(unsigned int slot, std::string &soPin, std::string &label) {
 	int len = soPin.length();
 	CK_ULONG pinLength = len;
@@ -65,7 +78,10 @@ void P11::initToken(unsigned int slot, std::string &soPin, std::string &label) {
 	strncpy((char*)utf8Label, label.c_str(), len);
 
 	rv = (*functionList->C_InitToken)(slot, utf8SoPin, pinLength, utf8Label);
-	assert(rv == 0);
+	if(rv)
+	{
+		throw P11Exception(rv);
+	}
 	TRACE("InitToken::OK");
 }
 

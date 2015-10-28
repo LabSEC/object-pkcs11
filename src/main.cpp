@@ -43,16 +43,22 @@ int main(int argc, const char* argv[])
 	std::string soPin = "123456";
 	std::string label = "token1";
 
-
-	myP11->initialize();
-	CK_INFO info = myP11->getInfo();
-	CK_FUNCTION_LIST flist = myP11->getFunctionList();
-	myP11->initToken(0, soPin, label);
-	myP11->openSession();
-	myP11->login();
-	myP11->initPin();
-	myP11->finalize();
-	
+	try
+	{
+		myP11->initialize();
+		CK_INFO info = myP11->getInfo();
+		CK_FUNCTION_LIST flist = myP11->getFunctionList();
+		myP11->initToken(0, soPin, label);
+		myP11->openSession();
+		myP11->login();
+		myP11->initPin();
+		myP11->finalize();
+	} 
+	catch (P11Exception &e)
+	{
+		TRACE(e.what());
+		TRACE("Exit..");
+	}
 /*
 	assert(sym != 0);
 	CK_C_GetFunctionList getFuncList = (CK_C_GetFunctionList) dlsym(sym, "C_GetFunctionList");
