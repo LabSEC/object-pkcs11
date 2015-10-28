@@ -1,4 +1,4 @@
-Object Oriented Wrapper for PKCS #11 C++
+C++ Object Oriented Wrapper for PKCS#11
 =======
 
 # Introduction
