@@ -43,7 +43,7 @@ void testAPI(P11* p11)
 		CryptokiInfo info = p11->getInfo();
 		printInfo(info);
 		CK_FUNCTION_LIST flist = p11->getFunctionList();
-		p11->initToken(slot, soPin, label);
+		//p11->initToken(slot, soPin, label);
 		CryptokiSession session = p11->openSession(slot);
 		session.login(soPin);
 		p11->initPin(session, tpin);
@@ -51,7 +51,8 @@ void testAPI(P11* p11)
 	}
 	catch (P11Exception &e)
 	{
-		TRACEm_ERROR("%s %lu (%s)","Exit with error code: ", e.getErrorCode(), e.what());
+		TRACEm_ERROR("%s %lu (%s) at <%s>","Exit with error code: ", 
+			e.getErrorCode(), e.what(), e.where());
 	}
 }
 

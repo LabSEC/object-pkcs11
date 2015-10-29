@@ -28,7 +28,7 @@ public:
 	* @param where String with place where exception occurred.
 	* @param erc PKCS#11 Error code.
 	*/
-	P11Exception(const char* where,CK_RV erc = CKR_GENERAL_ERROR) { _where=where; erc=erc; };
+	P11Exception(const char* where,CK_RV erc = CKR_GENERAL_ERROR) { _where=where; _erc=erc; };
 
 	/*!
 	* Default destructor.

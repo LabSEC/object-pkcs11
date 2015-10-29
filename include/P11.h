@@ -32,9 +32,9 @@ typedef CK_NOTIFY CryptokiNotify;
 class P11
 {
 protected:
-	void* module; 
-	CK_RV rv;
-	CK_FUNCTION_LIST_PTR functionList;
+	void* _module; 
+	CK_RV _rv;
+	CK_FUNCTION_LIST_PTR _functionList;
 	
 	/*!
  	* Protected function that loads

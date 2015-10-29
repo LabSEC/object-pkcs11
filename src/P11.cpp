@@ -3,17 +3,17 @@
 P11::P11(std::string& path)
 {
 //TODO(perin): check if module was loaded correctly.
-	functionList = 0;
+	_functionList = 0;
 	loadModule(path);
 	loadFunctions();
 }
 
 P11::~P11()
 {
-	if(this->module)
+	if(_module)
 	{
 		TRACE("Cleaning up module.");
-		dlclose(module);
+		dlclose(_module);
 	}
 }
 
@@ -21,49 +21,49 @@ void P11::loadModule(std::string& path)
 {
 	//TODO(perin): check if module is already loaded;
 	TRACE("Loading module from PATH");
-	this->module = dlopen(path.c_str(), RTLD_LAZY);
+	_module = dlopen(path.c_str(), RTLD_LAZY);
 }
 
 void P11::loadFunctions()
 {
-	CK_C_GetFunctionList getFuncList = (CK_C_GetFunctionList) dlsym(module, "C_GetFunctionList");
-	rv = getFuncList(&functionList);
-	if(rv)
+	CK_C_GetFunctionList getFuncList = (CK_C_GetFunctionList) dlsym(_module, "C_GetFunctionList");
+	_rv = getFuncList(&_functionList);
+	if(_rv)
 	{
 		FAILED;
-		throw P11Exception(rv);
+		throw P11Exception(_rv);
 	}
 	OK;
 }
 
 void P11::initialize()
 {
-	EXPECT_N_ZERO(functionList)
-	rv = (*functionList->C_Initialize)(0);
-	if(rv)
+	PRECONDITION(_functionList)
+	_rv = (*_functionList->C_Initialize)(0);
+	if(_rv)
 	{
 		FAILED;
-		throw P11Exception(rv);
+		throw P11Exception(_rv);
 	}
 	OK;
 }
 
 void P11::finalize()
 {
-	EXPECT_N_ZERO(functionList)
-	(*functionList->C_Finalize)(0);
+	PRECONDITION(_functionList)
+	(*_functionList->C_Finalize)(0);
 	OK;
 }
 
 CryptokiInfo P11::getInfo()
 {
-	EXPECT_N_ZERO(functionList)
+	PRECONDITION(_functionList)
 	CryptokiInfo cryptokiInfo;
-	rv = (*functionList->C_GetInfo)(&cryptokiInfo._info);
-	if(rv)
+	_rv = (*_functionList->C_GetInfo)(&cryptokiInfo._info);
+	if(_rv)
 	{
 		FAILED;
-		throw P11Exception(rv);
+		throw P11Exception(_rv);
 	}
 	OK;
 	cryptokiInfo.ress();
@@ -72,13 +72,13 @@ CryptokiInfo P11::getInfo()
 
 FunctionList P11::getFunctionList()
 {
-	EXPECT_N_ZERO(functionList)
+	PRECONDITION(_functionList)
 	CK_FUNCTION_LIST_PTR fList;
-	rv = (*functionList->C_GetFunctionList)(&fList);
-	if(rv)
+	_rv = (*_functionList->C_GetFunctionList)(&fList);
+	if(_rv)
 	{
 		FAILED;
-		throw P11Exception(rv);
+		throw P11Exception(_rv);
 	}
 	OK;
 	return *fList;
@@ -87,7 +87,7 @@ FunctionList P11::getFunctionList()
 //TODO(perin): copy strings without casting. CK_UTF8CHAR is unsigned char.
 void P11::initToken(unsigned int slot, std::string& soPin, std::string& label)
 {
-	EXPECT_N_ZERO(functionList)
+	PRECONDITION(_functionList)
 	CK_ULONG soPinLen = soPin.length();
 	CK_UTF8CHAR* utf8soPin = new CK_UTF8CHAR[soPin.length()];
 	strncpy((char*)utf8soPin, soPin.c_str(), soPin.length());
@@ -95,28 +95,28 @@ void P11::initToken(unsigned int slot, std::string& soPin, std::string& label)
 	CK_UTF8CHAR* utf8label = new CK_UTF8CHAR[label.length()];
 	strncpy((char*)utf8label, label.c_str(), label.length());
 
-	rv = (*functionList->C_InitToken)(slot, utf8soPin, soPinLen, utf8label);
-	if(rv)
+	_rv = (*_functionList->C_InitToken)(slot, utf8soPin, soPinLen, utf8label);
+	if(_rv)
 	{
 		FAILED;
-		throw P11Exception(rv);
+		throw P11Exception(_rv);
 	}
 	OK;
 }
 
 void P11::initPin(CryptokiSession& session, std::string& pin)
 {
-	EXPECT_N_ZERO(functionList)
+	PRECONDITION(_functionList)
 	NOT_IMPLEMENTED;
 /*	CK_ULONG pinLen = pin.length();
 	CK_UTF8CHAR* utf8pin = new CK_UTF8CHAR[pin.length()];
     strncpy((char*)utf8pin, pin.c_str(), pin.length());
 
-    rv = (*functionList->C_InitPIN)(session, utf8pin, pinLen);
-    if(rv)
+    _rv = (*_functionList->C_InitPIN)(session, utf8pin, pinLen);
+    if(_rv)
         {
             FAILED;
-            throw P11Exception(rv);
+            throw P11Exception(_rv);
         }
     OK;*/
 }
@@ -125,27 +125,28 @@ CryptokiSession P11::openSession(unsigned int slot,
 	CryptokiSessionInfo::CryptokiSessionFlags flags,
 	CryptokiNotify* notify, void* appPtr)
 {
-	EXPECT_N_ZERO(functionList)
+	PRECONDITION(_functionList)
 	CryptokiSession sn;
 	//TODO(Perin): Implement notify callbacks
-    rv = (*functionList->C_OpenSession)(slot, flags, 0, 0, &sn.session);
-    if(rv)
+    _rv = (*_functionList->C_OpenSession)(slot, flags, 0, 0, &sn._session);
+    if(_rv)
         {
             FAILED;
-            throw P11Exception(rv);
+            throw P11Exception(_rv);
         }
     OK;
+//	sn.ress();
 	return sn;
 }
 
 void P11::closeAllSessions(unsigned int slot)
 {
-	EXPECT_N_ZERO(functionList)
-	rv = (functionList->C_CloseAllSessions)(slot);
-    if(rv)
+	PRECONDITION(_functionList)
+	_rv = (_functionList->C_CloseAllSessions)(slot);
+    if(_rv)
         {
             FAILED;
-            throw P11Exception(rv);
+            throw P11Exception(_rv);
         }
     OK;
 }

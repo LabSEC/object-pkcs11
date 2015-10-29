@@ -44,19 +44,16 @@
 
 #ifdef PREC
 #define EXPECT_ZERO(x) if(x){\
-	std::cerr <<"\e[33m"<<"[TRACE] "<<__FILE__<<"::" \
-	<<__func__<<":"<<__LINE__<<" >>\e[31m " \
-	<< #x <<"\e[0m"<<std::endl; \
-	throw P11Exception(-2);}
+	TRACE_ERROR(#x)\
+	throw P11Exception(__func__,-2);}
 
 #define EXPECT_N_ZERO(x) if(!x){\
-	std::cerr <<"\e[33m"<<"[TRACE] "<<__FILE__<<"::" \
-	<<__func__<<":"<<__LINE__<<" >>\e[31m " \
-	<< #x <<"\e[0m"<<std::endl; \
-	throw P11Exception(-2);}
+	TRACE_ERROR(#x)\
+	throw P11Exception(__func__,-2);}
 #else
 #define EXPECT_ZERO(x)
 #define EXPECT_N_ZERO(x)
 #endif
+#define PRECONDITION(x) EXPECT_N_ZERO(x)
 
 #endif /*MACROS_H*/

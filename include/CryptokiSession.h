@@ -27,10 +27,9 @@ class CryptokiSession : public P11Init
 	friend class P11;
 
 protected:
-	CK_SESSION_HANDLE session;
-	CK_RV rv;
-	CK_FUNCTION_LIST_PTR functionList;
-	
+	CK_SESSION_HANDLE _session;
+	CK_RV _rv;
+	CK_FUNCTION_LIST_PTR _functionList;
 public:
 	CryptokiSession() : P11Init() {};
 	virtual ~CryptokiSession(){};

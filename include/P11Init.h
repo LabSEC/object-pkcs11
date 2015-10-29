@@ -33,6 +33,7 @@ protected:
 	{
 		this->_currentState = P11Init::DEAD;
 	}
+
 	/*!
 	* Sets _currentSate to ALIVE
 	*/
@@ -44,12 +45,13 @@ public:
 	/*!
 	* Default Constructor, initializes as DEAD.
 	*/
-	P11Init(P11Init::state st = P11Init::DEAD) 
-		: _currentState(st){};
+	P11Init(P11Init::state st = P11Init::DEAD) : _currentState(st){};
+
 	/*!
 	* Default destructor
 	*/
 	virtual ~P11Init() throw(){};
+
 	/*!
 	* Returns the current state of the class.
 	* @return _currentState
@@ -57,6 +59,15 @@ public:
 	P11Init::state getState()
 	{
 		return this->_currentState;
-	}
+	};
+
+	/*!
+	* Returns true is instance is ALIVE.
+	* @return true if is ALIVE
+	*/
+	bool isAlive()
+	{
+		return _currentState;
+	};
 };
 #endif /*P11INIT_H*/
