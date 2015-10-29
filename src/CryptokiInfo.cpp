@@ -24,7 +24,16 @@ std::string CryptokiInfo::manufacturerId()
 
 CryptokiInfo::CryptokiInfoFlags CryptokiInfo::flags()
 {
-	return CryptokiInfo::TOKEN_IS_PRESENT;
+	int fl = (int)this->info.flags;
+	if(fl < 1)
+	{
+		return CryptokiInfoFlags::EMPTY;
+	}
+	else if(fl > 7)
+	{
+		return CryptokiInfoFlags::UNKNOWN;
+	}
+	return static_cast<CryptokiInfoFlags>(fl);
 }
 
 std::string CryptokiInfo::libraryDescription()

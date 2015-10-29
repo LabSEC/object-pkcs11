@@ -12,7 +12,7 @@
 #include "CryptokiInfo.h"
 
 typedef CK_FUNCTION_LIST FunctionList;
-typedef CK_SESSION_HANDLE Session;
+typedef CK_SESSION_HANDLE CryptokiSession;
 
 /*!
  * @brief <b>P11 API</b><br>
@@ -112,12 +112,16 @@ public:
 	* particular token or sets up an application callback 
 	* for token insertion.
 	*/
-	void openSession(unsigned int slot, Session& session);
+	CriptokiSession openSession(unsigned int slot, );
 
 	/*!
 	* Logs into a Token.
+	* TODO(Perin): Move in to Session Object
 	*/
 	void login(Session& session, std::string& soPin);
+
+	//TODO closeAllSessions
+	
 
 	/*! @} */
 };

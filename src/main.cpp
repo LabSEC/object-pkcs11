@@ -24,6 +24,12 @@
 #define SLOT_0_USER1_PIN "123456"
 #define SLOT_0_USER2_PIN "123456"
 
+void printInfo(CryptokiInfo& info)
+{
+	TRACEm("Manufacturer ID: %s", info.manufacturerId().c_str());
+	TRACEm("Cryptoki version: %s", info.cryptokiVersion().c_str());
+	TRACEm("Library: %s (version %s)", info.libraryDescription().c_str(), info.libraryVersion().c_str());
+}
 
 int main(int argc, const char* argv[])
 {
@@ -37,19 +43,20 @@ int main(int argc, const char* argv[])
 	}
 	else
 	{
-		std::string defaultModule = "/usr/lib64/opensc-pkcs11.so";
+		std::string defaultModule = "/usr/lib64/libsofthsm2.so";
 		myP11 = new P11(defaultModule);
 	}
 
 	std::string soPin = "123456";
 	std::string tpin = "123456";
 	std::string label = "token1";
-	int slot = 0;
+	int slot = 1;
 	CK_SESSION_HANDLE hSession;
 	try
 	{
 		myP11->initialize();
 		CryptokiInfo info = myP11->getInfo();
+		printInfo(info);
 		CK_FUNCTION_LIST flist = myP11->getFunctionList();
 		myP11->initToken(slot, soPin, label);
 		myP11->openSession(slot, hSession);
