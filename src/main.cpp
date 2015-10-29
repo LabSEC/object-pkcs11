@@ -44,13 +44,12 @@ int main(int argc, const char* argv[])
 	std::string soPin = "123456";
 	std::string tpin = "123456";
 	std::string label = "token1";
-	int slot = 1;
+	int slot = 0;
 	CK_SESSION_HANDLE hSession;
-	CryptokiInfo* info;
 	try
 	{
 		myP11->initialize();
-		info = myP11->getInfo();
+		CryptokiInfo info = myP11->getInfo();
 		CK_FUNCTION_LIST flist = myP11->getFunctionList();
 		myP11->initToken(slot, soPin, label);
 		myP11->openSession(slot, hSession);

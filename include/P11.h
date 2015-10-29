@@ -78,7 +78,7 @@ public:
 	/*!
 	* Obtains general information about Cryptoki.
 	*/
-	CryptokiInfo* getInfo();
+	CryptokiInfo getInfo();
 	
 	/*!
 	* Obtains entry points of Cryptoki library functions.

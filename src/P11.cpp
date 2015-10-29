@@ -53,17 +53,17 @@ void P11::finalize()
 	OK;
 }
 
-CryptokiInfo* P11::getInfo()
+CryptokiInfo P11::getInfo()
 {
-	CK_INFO_PTR info;
-	rv = (*functionList->C_GetInfo)(info);
+	CryptokiInfo cryptokiInfo;
+	rv = (*functionList->C_GetInfo)(cryptokiInfo.getInfo());
 	if(rv)
 	{
 		FAILED;
 		throw P11Exception(rv);
 	}
 	OK;
-	return new CryptokiInfo(info);
+	return cryptokiInfo;
 }
 
 FunctionList P11::getFunctionList()
