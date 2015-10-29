@@ -4,15 +4,13 @@
 #include <assert.h>
 #include <string>
 #include <cstring>
-//#include <stdlib.h>
-//#include <stdio.h>
 #include <dlfcn.h>
 
 #include "pkcs11.h"
 #include "P11Exception.h"
 #include "macros.h"
+#include "CryptokiInfo.h"
 
-typedef CK_INFO Info;
 typedef CK_FUNCTION_LIST FunctionList;
 typedef CK_SESSION_HANDLE Session;
 
@@ -27,18 +25,34 @@ typedef CK_SESSION_HANDLE Session;
  *
  * @see pkcs11.h
  * @see P11Exception.h
+ *
+ * @author Lucas Pandolfo Perin
  */
 class P11
 {
-
+protected:
 	void* module; 
 	CK_RV rv;
 	CK_FUNCTION_LIST_PTR functionList;
-
+	
+	/*!
+ 	* Protected function that loads
+ 	* the pkcs11 module usinf libdl, dynamically.
+ 	*/ 
 	void loadModule(std::string& path);
 
+	/*!
+ 	* Protected function that unloads
+ 	* the pkcs11 module from libdl.
+ 	*/
 	void closeModule();
 
+	/*!
+ 	* Protected funtion that loads all the
+ 	* PKCS#11 functions using C_GetFunctionList.
+ 	* The PKCS#11 module must implement this
+ 	* function in order for this API to work.
+ 	*/
 	void loadFunctions();
 public:
 
@@ -64,7 +78,7 @@ public:
 	/*!
 	* Obtains general information about Cryptoki.
 	*/
-	Info getInfo();
+	CryptokiInfo* getInfo();
 	
 	/*!
 	* Obtains entry points of Cryptoki library functions.

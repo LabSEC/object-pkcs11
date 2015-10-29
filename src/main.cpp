@@ -41,16 +41,16 @@ int main(int argc, const char* argv[])
 		myP11 = new P11(defaultModule);
 	}
 
-	std::string soPin = "12345678";
-	std::string tpin = "12345678";
+	std::string soPin = "123456";
+	std::string tpin = "123456";
 	std::string label = "token1";
 	int slot = 1;
 	CK_SESSION_HANDLE hSession;
-
+	CryptokiInfo* info;
 	try
 	{
 		myP11->initialize();
-		CK_INFO info = myP11->getInfo();
+		info = myP11->getInfo();
 		CK_FUNCTION_LIST flist = myP11->getFunctionList();
 		myP11->initToken(slot, soPin, label);
 		myP11->openSession(slot, hSession);
