@@ -56,7 +56,7 @@ void P11::finalize()
 CryptokiInfo P11::getInfo()
 {
 	CryptokiInfo cryptokiInfo;
-	rv = (*functionList->C_GetInfo)(cryptokiInfo.getInfo());
+	rv = (*functionList->C_GetInfo)(&cryptokiInfo.info);
 	if(rv)
 	{
 		FAILED;
@@ -98,9 +98,10 @@ void P11::initToken(unsigned int slot, std::string& soPin, std::string& label)
 	OK;
 }
 
-void P11::initPin(Session& session, std::string& pin)
+void P11::initPin(CryptokiSession& session, std::string& pin)
 {
-	CK_ULONG pinLen = pin.length();
+	NOT_IMPLEMENTED;
+/*	CK_ULONG pinLen = pin.length();
 	CK_UTF8CHAR* utf8pin = new CK_UTF8CHAR[pin.length()];
     strncpy((char*)utf8pin, pin.c_str(), pin.length());
 
@@ -110,29 +111,28 @@ void P11::initPin(Session& session, std::string& pin)
             FAILED;
             throw P11Exception(rv);
         }
-    OK;
+    OK;*/
 }
 
-void P11::openSession(unsigned int slot, Session& session)
+CryptokiSession P11::openSession(unsigned int slot,
+	CryptokiSessionInfo::CryptokiSessionFlags flags,
+	CryptokiNotify* notify, void* appPtr)
 {
-    //TODO(perin): Here we could use flgs/enum to set Session settings.
-    rv = (*functionList->C_OpenSession)(slot, CKF_SERIAL_SESSION | CKF_RW_SESSION,
-                                        NULL_PTR, NULL_PTR, &session);
+	CryptokiSession sn;
+	//TODO(Perin): Implement notify callbacks
+    rv = (*functionList->C_OpenSession)(slot, flags, 0, 0, &sn.session);
     if(rv)
         {
             FAILED;
             throw P11Exception(rv);
         }
     OK;
+	return sn;
 }
 
-void P11::login(Session& session, std::string& soPin)
+void P11::closeAllSessions(unsigned int slot)
 {
-    CK_ULONG pinLen = soPin.length();
-    CK_UTF8CHAR* utf8soPin = new CK_UTF8CHAR[soPin.length()];
-    strncpy((char*)utf8soPin, soPin.c_str(), soPin.length());
-
-    rv = (*functionList->C_Login)(session, CKU_SO, utf8soPin, pinLen);
+	rv = (functionList->C_CloseAllSessions)(slot);
     if(rv)
         {
             FAILED;

@@ -12,17 +12,19 @@
  * the original struct protected and provides
  * public functions to return its values.
  *
- * @see pkcs11.h
+ * @see P11
  * @see CK_INFO
  *
  * @author Lucas Pandolfo Perin
  */
 class CryptokiInfo
 {
+	friend class P11;
+protected:
+	CK_INFO info;
 public:
-
 	virtual ~CryptokiInfo(){};
-
+	
 	enum CryptokiInfoFlags
 	{
 		EMPTY = 0,
@@ -45,10 +47,7 @@ public:
 	std::string libraryVersion();
 	int libraryMajorVersion();
 	int libraryMinorVersion();
-	CK_INFO* getInfo();
-
-protected:
-	CK_INFO info;
+	CK_INFO getInfo();
 };
 
 #endif /*CRYPTOKIINFO_H*/

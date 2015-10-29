@@ -59,7 +59,7 @@ int CryptokiInfo::libraryMinorVersion()
 	return (int)this->info.libraryVersion.minor;
 }
 
-CK_INFO* CryptokiInfo::getInfo()
+CK_INFO CryptokiInfo::getInfo()
 {
-	return &(this->info);
+	return this->info;
 }

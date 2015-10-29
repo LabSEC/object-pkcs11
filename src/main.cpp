@@ -51,7 +51,6 @@ int main(int argc, const char* argv[])
 	std::string tpin = "123456";
 	std::string label = "token1";
 	int slot = 1;
-	CK_SESSION_HANDLE hSession;
 	try
 	{
 		myP11->initialize();
@@ -59,9 +58,9 @@ int main(int argc, const char* argv[])
 		printInfo(info);
 		CK_FUNCTION_LIST flist = myP11->getFunctionList();
 		myP11->initToken(slot, soPin, label);
-		myP11->openSession(slot, hSession);
-		myP11->login(hSession, soPin);
-		myP11->initPin(hSession, tpin);
+		CryptokiSession session = myP11->openSession(slot);
+		session.login(soPin);
+		myP11->initPin(session, tpin);
 		myP11->finalize();
 	}
 	catch (P11Exception &e)

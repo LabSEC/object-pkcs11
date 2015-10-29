@@ -1,7 +1,6 @@
 #ifndef P11_H
 #define P11_H
 
-#include <assert.h>
 #include <string>
 #include <cstring>
 #include <dlfcn.h>
@@ -10,9 +9,11 @@
 #include "P11Exception.h"
 #include "macros.h"
 #include "CryptokiInfo.h"
+#include "CryptokiSession.h"
+#include "CryptokiSessionInfo.h"
 
 typedef CK_FUNCTION_LIST FunctionList;
-typedef CK_SESSION_HANDLE CryptokiSession;
+typedef CK_NOTIFY CryptokiNotify;
 
 /*!
  * @brief <b>P11 API</b><br>
@@ -99,7 +100,7 @@ public:
 	/*!
 	* Initializes the normal user's PIN.
 	*/
-	void initPin(Session& session, std::string& pin);
+	void initPin(CryptokiSession& session, std::string& pin);
 
 	/*! @} 
 	* @addtogroup session
@@ -108,21 +109,33 @@ public:
 	*/
 
 	/*!
-	* opens a connection between an application and a 
+	* Opens a connection between an application and a 
 	* particular token or sets up an application callback 
 	* for token insertion.
+	*
+	* @param slot Specifies the token slot..
+	* @param flags Flags to determine if conection is R/RW
+	* (SERIAL_SESSION must always be set to true).
+	* @param notify Address of the notification callback function.
+	* @param appPtr Application defined pointer to be passed to 
+	* the notification callback.
+	*
+	* @return CryptokiSession
+	* @throw P11Exception
 	*/
-	CriptokiSession openSession(unsigned int slot, );
+	CryptokiSession openSession(unsigned int slot, 
+		CryptokiSessionInfo::CryptokiSessionFlags flags = CryptokiSessionInfo::SERIAL_SESSION,
+		CryptokiNotify* notify = 0, void* appPtr = 0);
 
 	/*!
-	* Logs into a Token.
-	* TODO(Perin): Move in to Session Object
+	* Closes all sessions an aplicarion has with a token.
+	*
+	* @param slot Specifies the token slot.
+	*
+	* @throw P11Exception
 	*/
-	void login(Session& session, std::string& soPin);
-
-	//TODO closeAllSessions
+	void closeAllSessions(unsigned int slot);
 	
-
 	/*! @} */
 };
 #endif /*P11_h*/
