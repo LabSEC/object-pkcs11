@@ -9,22 +9,22 @@ std::string CryptokiInfo::cryptokiVersion()
 
 int CryptokiInfo::cryptokiMajorVersion()
 {
-	return (int)this->info.cryptokiVersion.major;
+	return (int)_info.cryptokiVersion.major;
 }
 
 int CryptokiInfo::cryptokiMinorVersion()
 {
-	return (int)this->info.cryptokiVersion.minor;
+	return (int)_info.cryptokiVersion.minor;
 }
 
 std::string CryptokiInfo::manufacturerId()
 {
-	return std::string(reinterpret_cast<const char*>(this->info.manufacturerID));
+	return std::string(reinterpret_cast<const char*>(_info.manufacturerID));
 }
 
 CryptokiInfo::CryptokiInfoFlags CryptokiInfo::flags()
 {
-	int fl = (int)this->info.flags;
+	int fl = (int)_info.flags;
 	if(fl < 1)
 	{
 		return CryptokiInfoFlags::EMPTY;
@@ -38,7 +38,7 @@ CryptokiInfo::CryptokiInfoFlags CryptokiInfo::flags()
 
 std::string CryptokiInfo::libraryDescription()
 {
-	return std::string(reinterpret_cast<const char*>(this->info.libraryDescription));
+	return std::string(reinterpret_cast<const char*>(_info.libraryDescription));
 }
 
 std::string CryptokiInfo::libraryVersion()
@@ -51,15 +51,15 @@ std::string CryptokiInfo::libraryVersion()
 
 int CryptokiInfo::libraryMajorVersion()
 {
-	return (int)this->info.libraryVersion.major;
+	return (int)_info.libraryVersion.major;
 }
 
 int CryptokiInfo::libraryMinorVersion()
 {
-	return (int)this->info.libraryVersion.minor;
+	return (int)_info.libraryVersion.minor;
 }
 
 CK_INFO CryptokiInfo::getInfo()
 {
-	return this->info;
+	return _info;
 }

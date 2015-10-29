@@ -42,4 +42,21 @@
 #define TRACEm_ERROR(fmt,...)
 #endif
 
+#ifdef PREC
+#define EXPECT_ZERO(x) if(x){\
+	std::cerr <<"\e[33m"<<"[TRACE] "<<__FILE__<<"::" \
+	<<__func__<<":"<<__LINE__<<" >>\e[31m " \
+	<< #x <<"\e[0m"<<std::endl; \
+	throw P11Exception(-2);}
+
+#define EXPECT_N_ZERO(x) if(!x){\
+	std::cerr <<"\e[33m"<<"[TRACE] "<<__FILE__<<"::" \
+	<<__func__<<":"<<__LINE__<<" >>\e[31m " \
+	<< #x <<"\e[0m"<<std::endl; \
+	throw P11Exception(-2);}
+#else
+#define EXPECT_ZERO(x)
+#define EXPECT_N_ZERO(x)
+#endif
+
 #endif /*MACROS_H*/

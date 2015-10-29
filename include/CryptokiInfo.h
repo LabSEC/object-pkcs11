@@ -3,6 +3,7 @@
 
 #include <string>
 
+#include "P11Init.h"
 #include "pkcs11.h"
 
 /*!
@@ -17,12 +18,13 @@
  *
  * @author Lucas Pandolfo Perin
  */
-class CryptokiInfo
+class CryptokiInfo : public P11Init
 {
 	friend class P11;
 protected:
-	CK_INFO info;
+	CK_INFO _info;
 public:
+	CryptokiInfo() : P11Init(){};
 	virtual ~CryptokiInfo(){};
 	
 	enum CryptokiInfoFlags

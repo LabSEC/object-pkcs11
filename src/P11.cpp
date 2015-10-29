@@ -38,6 +38,7 @@ void P11::loadFunctions()
 
 void P11::initialize()
 {
+	EXPECT_N_ZERO(functionList)
 	rv = (*functionList->C_Initialize)(0);
 	if(rv)
 	{
@@ -49,25 +50,29 @@ void P11::initialize()
 
 void P11::finalize()
 {
+	EXPECT_N_ZERO(functionList)
 	(*functionList->C_Finalize)(0);
 	OK;
 }
 
 CryptokiInfo P11::getInfo()
 {
+	EXPECT_N_ZERO(functionList)
 	CryptokiInfo cryptokiInfo;
-	rv = (*functionList->C_GetInfo)(&cryptokiInfo.info);
+	rv = (*functionList->C_GetInfo)(&cryptokiInfo._info);
 	if(rv)
 	{
 		FAILED;
 		throw P11Exception(rv);
 	}
 	OK;
+	cryptokiInfo.ress();
 	return cryptokiInfo;
 }
 
 FunctionList P11::getFunctionList()
 {
+	EXPECT_N_ZERO(functionList)
 	CK_FUNCTION_LIST_PTR fList;
 	rv = (*functionList->C_GetFunctionList)(&fList);
 	if(rv)
@@ -82,6 +87,7 @@ FunctionList P11::getFunctionList()
 //TODO(perin): copy strings without casting. CK_UTF8CHAR is unsigned char.
 void P11::initToken(unsigned int slot, std::string& soPin, std::string& label)
 {
+	EXPECT_N_ZERO(functionList)
 	CK_ULONG soPinLen = soPin.length();
 	CK_UTF8CHAR* utf8soPin = new CK_UTF8CHAR[soPin.length()];
 	strncpy((char*)utf8soPin, soPin.c_str(), soPin.length());
@@ -100,6 +106,7 @@ void P11::initToken(unsigned int slot, std::string& soPin, std::string& label)
 
 void P11::initPin(CryptokiSession& session, std::string& pin)
 {
+	EXPECT_N_ZERO(functionList)
 	NOT_IMPLEMENTED;
 /*	CK_ULONG pinLen = pin.length();
 	CK_UTF8CHAR* utf8pin = new CK_UTF8CHAR[pin.length()];
@@ -118,6 +125,7 @@ CryptokiSession P11::openSession(unsigned int slot,
 	CryptokiSessionInfo::CryptokiSessionFlags flags,
 	CryptokiNotify* notify, void* appPtr)
 {
+	EXPECT_N_ZERO(functionList)
 	CryptokiSession sn;
 	//TODO(Perin): Implement notify callbacks
     rv = (*functionList->C_OpenSession)(slot, flags, 0, 0, &sn.session);
@@ -132,6 +140,7 @@ CryptokiSession P11::openSession(unsigned int slot,
 
 void P11::closeAllSessions(unsigned int slot)
 {
+	EXPECT_N_ZERO(functionList)
 	rv = (functionList->C_CloseAllSessions)(slot);
     if(rv)
         {

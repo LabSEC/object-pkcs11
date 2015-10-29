@@ -31,42 +31,48 @@ void printInfo(CryptokiInfo& info)
 	TRACEm("Library: %s (version %s)", info.libraryDescription().c_str(), info.libraryVersion().c_str());
 }
 
-int main(int argc, const char* argv[])
+void testAPI(P11* p11)
 {
-	P11* myP11;
-
-
-	if (argv[1] != 0)
-	{
-		std::string path = argv[1];
-		myP11 = new P11(path);
-	}
-	else
-	{
-		std::string defaultModule = "/usr/lib64/libsofthsm2.so";
-		myP11 = new P11(defaultModule);
-	}
-
 	std::string soPin = "123456";
 	std::string tpin = "123456";
 	std::string label = "token1";
 	int slot = 1;
 	try
 	{
-		myP11->initialize();
-		CryptokiInfo info = myP11->getInfo();
+		p11->initialize();
+		CryptokiInfo info = p11->getInfo();
 		printInfo(info);
-		CK_FUNCTION_LIST flist = myP11->getFunctionList();
-		myP11->initToken(slot, soPin, label);
-		CryptokiSession session = myP11->openSession(slot);
+		CK_FUNCTION_LIST flist = p11->getFunctionList();
+		p11->initToken(slot, soPin, label);
+		CryptokiSession session = p11->openSession(slot);
 		session.login(soPin);
-		myP11->initPin(session, tpin);
-		myP11->finalize();
+		p11->initPin(session, tpin);
+		p11->finalize();
 	}
 	catch (P11Exception &e)
 	{
 		TRACEm_ERROR("%s %lu (%s)","Exit with error code: ", e.getErrorCode(), e.what());
 	}
+}
+
+int main(int argc, const char* argv[])
+{
+	P11* p11;
+	if (argv[1] != 0)
+	{
+		std::string path = argv[1];
+		p11 = new P11(path);
+	}
+	else
+	{
+		std::string defaultModule = "/usr/lib64/libsofthsm2.so";
+		p11 = new P11(defaultModule);
+	}
+	//init(p11, argc, argv);
+	testAPI(p11);
+	//CryptokiInfo inf;
+	//printInfo(inf);
+	
 /*
 	assert(sym != 0);
 	CK_C_GetFunctionList getFuncList = (CK_C_GetFunctionList) dlsym(sym, "C_GetFunctionList");
@@ -89,27 +95,27 @@ int main(int argc, const char* argv[])
 	memset(label, ' ', 32);
 	memcpy(label, "token1", strlen("token1"));
 
-	rv = p11.C_Initialize(0);
+	rv = p11->C_Initialize(0);
 	assert(rv == CKR_OK);
 	TRACE("Initialize::Ok!");
 
-	rv = p11.C_InitToken(SLOT_INIT_TOKEN, sopin,sopinLength, label);
+	rv = p11->C_InitToken(SLOT_INIT_TOKEN, sopin,sopinLength, label);
 	assert(rv == CKR_OK);
 	TRACE("InitToken::Ok!");
 
-	rv = p11.C_OpenSession(SLOT_INIT_TOKEN, CKF_SERIAL_SESSION | CKF_RW_SESSION, NULL_PTR, NULL_PTR, &hSession);
+	rv = p11->C_OpenSession(SLOT_INIT_TOKEN, CKF_SERIAL_SESSION | CKF_RW_SESSION, NULL_PTR, NULL_PTR, &hSession);
 	assert(rv == CKR_OK);
 	TRACE("OpenSession::OK");
 
-	rv = p11.C_Login(hSession,CKU_SO, sopin, sopinLength);
+	rv = p11->C_Login(hSession,CKU_SO, sopin, sopinLength);
 	assert(rv == CKR_OK);
 	TRACE("Login::OK");
 
-	rv = p11.C_InitPIN(hSession, pin, pinLength);
+	rv = p11->C_InitPIN(hSession, pin, pinLength);
 	assert(rv == CKR_OK);
 	TRACE("InitPin::OK");
 
-	p11.C_Finalize(0);
+	p11->C_Finalize(0);
 	dlclose(sym);
 	TRACE("Quit..");
 */

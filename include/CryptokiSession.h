@@ -1,6 +1,7 @@
 #ifndef CRYPTOKISESSION_H
 #define CRYPTOKISESSION_H
 
+#include "P11Init.h"
 #include "pkcs11.h"
 #include "macros.h"
 #include "P11Exception.h"
@@ -21,7 +22,7 @@
  *
  * @author Lucas Pandolfo Perin
  */
-class CryptokiSession
+class CryptokiSession : public P11Init
 {
 	friend class P11;
 
@@ -31,6 +32,7 @@ protected:
 	CK_FUNCTION_LIST_PTR functionList;
 	
 public:
+	CryptokiSession() : P11Init() {};
 	virtual ~CryptokiSession(){};
 
 	/*!
