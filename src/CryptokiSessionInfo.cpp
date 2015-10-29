@@ -2,17 +2,17 @@
 
 unsigned long CryptokiSessionInfo::slotId()
 {
-	return this->info.slotID;
+	return _info.slotID;
 }
 
 unsigned long CryptokiSessionInfo::state()
 {
-	return this->info.state;
+	return _info.state;
 }
 
 CryptokiSessionInfo::CryptokiSessionFlags CryptokiSessionInfo::flags()
 {
-	int fl = (int)this->info.flags;
+	int fl = (int)_info.flags;
 	if(fl < 1)
 	{
 		return CryptokiSessionFlags::EMPTY;
@@ -25,10 +25,10 @@ CryptokiSessionInfo::CryptokiSessionFlags CryptokiSessionInfo::flags()
 
 unsigned long CryptokiSessionInfo::deviceError()
 {
-	return info.ulDeviceError;
+	return _info.ulDeviceError;
 }
 
 CK_SESSION_INFO CryptokiSessionInfo::getSessionInfo()
 {
-	return this->info;
+	return _info;
 }

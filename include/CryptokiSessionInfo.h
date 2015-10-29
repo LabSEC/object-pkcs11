@@ -21,7 +21,7 @@ class CryptokiSessionInfo
 {
 	friend class CryptokiSession;
 protected:
-	CK_SESSION_INFO info;
+	CK_SESSION_INFO _info;
 public:
 
 	virtual ~CryptokiSessionInfo(){};

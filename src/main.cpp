@@ -24,6 +24,16 @@
 #define SLOT_0_USER1_PIN "123456"
 #define SLOT_0_USER2_PIN "123456"
 
+
+void printSessionInfo(CryptokiSessionInfo& info)
+{
+	TRACE("##SessionInfo##");
+	TRACEm("SlotID: %lu", info.slotId());
+	TRACEm("State: %lu", info.state());
+	TRACEm("Flags: %d", info.flags());
+	TRACEm("Device Err: %lu", info.deviceError());
+}
+
 void printInfo(CryptokiInfo& info)
 {
 	TRACEm("Manufacturer ID: %s", info.manufacturerId().c_str());
@@ -36,7 +46,7 @@ void testAPI(P11* p11)
 	std::string soPin = "123456";
 	std::string tpin = "123456";
 	std::string label = "token1";
-	int slot = 0;
+	int slot = 1;
 	try
 	{
 		p11->initialize();
@@ -46,7 +56,13 @@ void testAPI(P11* p11)
 		p11->initToken(slot, soPin, label);
 		CryptokiSession session = p11->openSession(slot);
 		session.login(soPin);
+		CryptokiSessionInfo sinfo;
+		sinfo = session.getSessionInfo();
+		printSessionInfo(sinfo);
 		p11->initPin(session, tpin);
+		session.getOperationState();
+		session.setOperationState();
+		session.closeSession();
 		p11->finalize();
 	}
 	catch (P11Exception &e)

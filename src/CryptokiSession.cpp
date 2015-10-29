@@ -12,6 +12,7 @@ void CryptokiSession::closeSession()
             throw P11Exception(_rv);
         }
     OK;
+	kill();
 }
 
 CryptokiSessionInfo CryptokiSession::getSessionInfo()
@@ -19,7 +20,14 @@ CryptokiSessionInfo CryptokiSession::getSessionInfo()
 	PRECONDITION(isAlive())
 	PRECONDITION(_functionList)
 	CryptokiSessionInfo inf;
-	NOT_IMPLEMENTED;
+	CK_SESSION_INFO a;
+	_rv = (*_functionList->C_GetSessionInfo)(_session, &a);
+    if(_rv)
+        {
+            FAILED;
+            throw P11Exception(_rv);
+        }
+    OK;
 	return inf;
 }
 
