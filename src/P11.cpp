@@ -4,7 +4,7 @@ P11::P11(std::string& path)
 {
 //TODO(perin): check if module was loaded correctly.
 	functionList = 0;
-	loadModule(path);	
+	loadModule(path);
 	loadFunctions();
 }
 
@@ -83,8 +83,8 @@ FunctionList P11::getFunctionList()
 void P11::initToken(unsigned int slot, std::string& soPin, std::string& label)
 {
 	CK_ULONG soPinLen = soPin.length();
-	CK_UTF8CHAR* utf8soPin = new CK_UTF8CHAR[soPin.length];
-	strncpy((char*)utf8soPin, soPin.c_str(), soPin.length);
+	CK_UTF8CHAR* utf8soPin = new CK_UTF8CHAR[soPin.length()];
+	strncpy((char*)utf8soPin, soPin.c_str(), soPin.length());
 
 	CK_UTF8CHAR* utf8label = new CK_UTF8CHAR[label.length()];
 	strncpy((char*)utf8label, label.c_str(), label.length());
@@ -100,44 +100,43 @@ void P11::initToken(unsigned int slot, std::string& soPin, std::string& label)
 
 void P11::initPin(Session& session, std::string& pin)
 {
-	CK_ULONG pinLen = pin.length;
-	CK_UTF8CHAR* utf8pin = new CK_UTF8CHAR[pin.length];
-	strncpy((char*)utf8pin, pin.c_str(), pin.length);
+	CK_ULONG pinLen = pin.length();
+	CK_UTF8CHAR* utf8pin = new CK_UTF8CHAR[pin.length()];
+    strncpy((char*)utf8pin, pin.c_str(), pin.length());
 
-	rv = (*functionList->C_InitPIN)(&session, utf8pin, pinLen);
-	if(rv)
-	{
-		FAILED;
-		throw P11Exception(rv);
-	}
-	OK;
+    rv = (*functionList->C_InitPIN)(session, utf8pin, pinLen);
+    if(rv)
+        {
+            FAILED;
+            throw P11Exception(rv);
+        }
+    OK;
 }
 
 void P11::openSession(unsigned int slot, Session& session)
 {
-	//TODO(perin): Here we could use flgs/enum to set Session settings.
-	rv = (*functionList->C_OpenSession)(slot, CKF_SERIAL_SESSION | CKF_RW_SESSION, 
-			NULL_PTR, NULL_PTR, &session);
-	if(rv)
-	{
-		FAILED;
-		throw P11Exception(rv);
-	}
-	OK;
+    //TODO(perin): Here we could use flgs/enum to set Session settings.
+    rv = (*functionList->C_OpenSession)(slot, CKF_SERIAL_SESSION | CKF_RW_SESSION,
+                                        NULL_PTR, NULL_PTR, &session);
+    if(rv)
+        {
+            FAILED;
+            throw P11Exception(rv);
+        }
+    OK;
 }
 
 void P11::login(Session& session, std::string& soPin)
 {
-	CK_ULONG pinLen = soPin.length;
-	CK_UTF8CHAR* utf8soPin = new CK_UTF8CHAR[soPin.length];
-	strncpy((char*)utf8soPin, soPin.c_str(), soPin.length);
+    CK_ULONG pinLen = soPin.length();
+    CK_UTF8CHAR* utf8soPin = new CK_UTF8CHAR[soPin.length()];
+    strncpy((char*)utf8soPin, soPin.c_str(), soPin.length());
 
-	rv = (*functionList->C_Login)(&session, CKU_SO, utf8soPin, pinLen);
-	if(rv)
-	{
-		FAILED;
-		throw P11Exception(rv);
-	}
-	OK;
+    rv = (*functionList->C_Login)(session, CKU_SO, utf8soPin, pinLen);
+    if(rv)
+        {
+            FAILED;
+            throw P11Exception(rv);
+        }
+    OK;
 }
-

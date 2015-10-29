@@ -42,6 +42,7 @@ int main(int argc, const char* argv[])
 	}
 
 	std::string soPin = "12345678";
+	std::string tpin = "12345678";
 	std::string label = "token1";
 	int slot = 1;
 	CK_SESSION_HANDLE hSession;
@@ -53,10 +54,10 @@ int main(int argc, const char* argv[])
 		CK_FUNCTION_LIST flist = myP11->getFunctionList();
 		myP11->initToken(slot, soPin, label);
 		myP11->openSession(slot, hSession);
-		myP11->login();
-		myP11->initPin();
+		myP11->login(hSession, soPin);
+		myP11->initPin(hSession, tpin);
 		myP11->finalize();
-	} 
+	}
 	catch (P11Exception &e)
 	{
 		TRACEm_ERROR("%s %lu (%s)","Exit with error code: ", e.getErrorCode(), e.what());
@@ -90,7 +91,7 @@ int main(int argc, const char* argv[])
 	rv = p11.C_InitToken(SLOT_INIT_TOKEN, sopin,sopinLength, label);
 	assert(rv == CKR_OK);
 	TRACE("InitToken::Ok!");
-	
+
 	rv = p11.C_OpenSession(SLOT_INIT_TOKEN, CKF_SERIAL_SESSION | CKF_RW_SESSION, NULL_PTR, NULL_PTR, &hSession);
 	assert(rv == CKR_OK);
 	TRACE("OpenSession::OK");
@@ -98,7 +99,7 @@ int main(int argc, const char* argv[])
 	rv = p11.C_Login(hSession,CKU_SO, sopin, sopinLength);
 	assert(rv == CKR_OK);
 	TRACE("Login::OK");
-	
+
 	rv = p11.C_InitPIN(hSession, pin, pinLength);
 	assert(rv == CKR_OK);
 	TRACE("InitPin::OK");
