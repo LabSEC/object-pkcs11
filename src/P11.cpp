@@ -135,7 +135,7 @@ CryptokiSession P11::openSession(unsigned int slot,
             throw P11Exception(_rv);
         }
     OK;
-//	sn.ress();
+	sn.ress();
 	return sn;
 }
 

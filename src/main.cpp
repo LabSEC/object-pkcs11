@@ -36,14 +36,14 @@ void testAPI(P11* p11)
 	std::string soPin = "123456";
 	std::string tpin = "123456";
 	std::string label = "token1";
-	int slot = 1;
+	int slot = 0;
 	try
 	{
 		p11->initialize();
 		CryptokiInfo info = p11->getInfo();
 		printInfo(info);
 		CK_FUNCTION_LIST flist = p11->getFunctionList();
-		//p11->initToken(slot, soPin, label);
+		p11->initToken(slot, soPin, label);
 		CryptokiSession session = p11->openSession(slot);
 		session.login(soPin);
 		p11->initPin(session, tpin);
