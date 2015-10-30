@@ -19,7 +19,8 @@ int CryptokiInfo::cryptokiMinorVersion()
 
 std::string CryptokiInfo::manufacturerId()
 {
-	return std::string(reinterpret_cast<const char*>(_info.manufacturerID));
+	return std::string(_info.manufacturerID, _info.manufacturerID + 32);
+
 }
 
 CryptokiInfo::CryptokiInfoFlags CryptokiInfo::flags()
@@ -38,7 +39,7 @@ CryptokiInfo::CryptokiInfoFlags CryptokiInfo::flags()
 
 std::string CryptokiInfo::libraryDescription()
 {
-	return std::string(reinterpret_cast<const char*>(_info.libraryDescription));
+	return std::string(_info.libraryDescription, _info.libraryDescription + 32);
 }
 
 std::string CryptokiInfo::libraryVersion()
