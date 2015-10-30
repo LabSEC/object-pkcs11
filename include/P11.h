@@ -97,11 +97,6 @@ public:
 	*/
 	void initToken(unsigned int slot, std::string& soPin, std::string& label);
 
-	/*!
-	* Initializes the normal user's PIN.
-	*/
-	void initPin(CryptokiSession& session, std::string& pin);
-
 	/*! @} 
 	* @addtogroup session
 	*  Session maagement functions.

@@ -63,3 +63,21 @@ void CryptokiSession::login(std::string& soPin)
         }
     OK;*/
 }
+
+void CryptokiSession::initPin(std::string& pin)
+{
+	PRECONDITION(_functionList)
+	NOT_IMPLEMENTED;
+/*	CK_ULONG pinLen = pin.length();
+	CK_UTF8CHAR* utf8pin = new CK_UTF8CHAR[pin.length()];
+    strncpy((char*)utf8pin, pin.c_str(), pin.length());
+
+    _rv = (*_functionList->C_InitPIN)(session, utf8pin, pinLen);
+    if(_rv)
+        {
+            FAILED;
+            throw P11Exception(_rv);
+        }
+    OK;*/
+}
+

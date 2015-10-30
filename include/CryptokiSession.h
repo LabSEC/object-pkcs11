@@ -45,6 +45,12 @@ public:
 	void setOperationState();
 	
 	/*!
+	* Initializes the normal user's PIN.
+	*/
+	void initPin(std::string& pin);
+
+	
+	/*!
 	* Logs into a Token.
 	*/
 	void login(std::string& soPin);
