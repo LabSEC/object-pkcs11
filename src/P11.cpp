@@ -1,6 +1,6 @@
 #include "P11.h"
 
-P11::P11(std::string& path)
+P11::P11(const std::string& path)
 {
 //TODO(perin): check if module was loaded correctly.
 	_functionList = 0;
@@ -17,11 +17,15 @@ P11::~P11()
 	}
 }
 
-void P11::loadModule(std::string& path)
+void P11::loadModule(const std::string& path)
 {
 	//TODO(perin): check if module is already loaded;
 	TRACE("Loading module from PATH");
 	_module = dlopen(path.c_str(), RTLD_LAZY);
+	if (!_module) {
+		TRACE(dlerror());
+		FAILED;
+	}
 }
 
 void P11::loadFunctions()

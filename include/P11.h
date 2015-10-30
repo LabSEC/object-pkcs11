@@ -40,7 +40,7 @@ protected:
  	* Protected function that loads
  	* the pkcs11 module usinf libdl, dynamically.
  	*/ 
-	void loadModule(std::string& path);
+	void loadModule(const std::string& path);
 
 	/*!
  	* Protected function that unloads
@@ -57,7 +57,7 @@ protected:
 	void loadFunctions();
 public:
 
-	P11(std::string& path);
+	P11(const std::string& path);
 
 	virtual ~P11();
 
