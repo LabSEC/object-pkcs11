@@ -104,23 +104,6 @@ void P11::initToken(unsigned int slot, std::string& soPin, std::string& label)
 	OK;
 }
 
-void P11::initPin(CryptokiSession& session, std::string& pin)
-{
-	PRECONDITION(_functionList)
-	NOT_IMPLEMENTED;
-/*	CK_ULONG pinLen = pin.length();
-	CK_UTF8CHAR* utf8pin = new CK_UTF8CHAR[pin.length()];
-    strncpy((char*)utf8pin, pin.c_str(), pin.length());
-
-    _rv = (*_functionList->C_InitPIN)(session, utf8pin, pinLen);
-    if(_rv)
-        {
-            FAILED;
-            throw P11Exception(_rv);
-        }
-    OK;*/
-}
-
 CryptokiSession P11::openSession(unsigned int slot,
 	CryptokiSessionInfo::CryptokiSessionFlags flags,
 	CryptokiNotify* notify, void* appPtr)

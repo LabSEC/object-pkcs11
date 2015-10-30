@@ -59,7 +59,7 @@ void testAPI(P11* p11)
 		CryptokiSessionInfo sinfo;
 		sinfo = session.getSessionInfo();
 		printSessionInfo(sinfo);
-		p11->initPin(session, tpin);
+		session.initPin(tpin);
 		session.getOperationState();
 		session.setOperationState();
 		session.closeSession();
