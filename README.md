@@ -14,7 +14,7 @@ My goal is to implement this library to work with simple use cases and less code
 If you wish to implement more complex applications, I recommend taking a look at
 Libp11 from OpenSC project.
 
-# Running code
+# Running code with SoftHSMv2
 
 I wrote a main file to run my API and print out some neat text with implementation
 status. Currently I use opensc and softhsm2 modules. I am not sure why but softhsm2
