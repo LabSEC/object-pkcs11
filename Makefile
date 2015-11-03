@@ -8,12 +8,10 @@ INCLUDES = -I./include
 EXECUTABLE = run.out
 EXECUTABLE_SRC = main.cpp
 EXECUTABLE_OBJ = $(EXECUTABLE_SRC:.cpp=.o)
-TEST_EXECUTABLE = test.out
 
 SRC_DIR = src
 INCLUDE_DIR =include
 TEST_DIR = tests
-DOC_DIR = docs
 
 SRCS = $(wildcard $(SRC_DIR)/*.cpp)
 OBJS = $(SRCS:.cpp=.o)
@@ -42,14 +40,12 @@ $(MOCKED_SO):
 	@echo ' '
 
 test: $(OBJS) $(OBJS_TEST) $(MOCKED_SO)
-	$(CC) $(CPPFLAGS) $(CXXFLAGS) $(INCLUDES) -o $(TEST_EXECUTABLE) $(LIBS) $(OBJS) $(OBJS_TEST) -lgtest
+	$(CC) $(CPPFLAGS) $(CXXFLAGS) $(INCLUDES) -o test.out $(LIBS) $(OBJS) $(OBJS_TEST) -lgtest
 	@echo 'Test build complete!'
 	@echo ' '
 
 clean: 
-	$(RM) -f $(SRC_DIR)/*.o
-	$(RM) -f $(TEST_DIR)/*.o
-	$(RM) -f $(EXECUTABLE)
-	$(RM) -f $(MOCKED_SO)
-	$(RM) -f $(TEST_EXECUTABLE)
-	$(RM) -rf $(DOC_DIR)
+	$(RM) $(SRC_DIR)/*.o
+	$(RM) $(TEST_DIR)/*.o
+	$(RM) $(EXECUTABLE)
+	$(RM) $(MOCKED_SO)
