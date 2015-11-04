@@ -58,7 +58,7 @@ public:
 	*/
 	P11Init::state getState()
 	{
-		return this->_currentState;
+		return _currentState;
 	};
 
 	/*!
@@ -67,7 +67,16 @@ public:
 	*/
 	bool isAlive()
 	{
-		return _currentState;
+		return _currentState == P11Init::ALIVE;
+	};
+
+	/*!
+	* Returns true is instance is DEAD.
+	* @return true if is DEAD
+	*/
+	bool isDead()
+	{
+		return _currentState == P11Init::DEAD;
 	};
 };
 #endif /*P11INIT_H*/

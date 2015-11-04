@@ -3,18 +3,17 @@
 
 void CryptokiSession::closeSession()
 {
+	if(isDead()) {OK; return;}	
+	
 	PRECONDITION(_functionList)
-	if(isAlive())
+	CK_RV rv = (*_functionList->C_CloseSession)(_session);
+	if(rv)
 	{
-		CK_RV rv = (*_functionList->C_CloseSession)(_session);
-		if(rv)
-			{
-				FAILED;
-				throw P11Exception(rv);
-			}
-		kill();
+		FAILED;
+		throw P11Exception(rv);
 	}
-		OK;
+	kill();
+	OK;
 }
 
 CryptokiSessionInfo CryptokiSession::getSessionInfo()

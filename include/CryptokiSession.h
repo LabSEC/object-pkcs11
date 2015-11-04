@@ -30,7 +30,6 @@ class CryptokiSession : public P11Init
 protected:
 	CK_SESSION_HANDLE _session;
 	CK_FUNCTION_LIST_PTR _functionList;
-	void closeSession();
 public:
 	CryptokiSession() : P11Init(), _functionList(0) {};
 	CryptokiSession(CryptokiSession&& other) {
@@ -58,6 +57,7 @@ public:
 	CryptokiSessionInfo getSessionInfo();
 	void getOperationState();
 	void setOperationState();
+	void closeSession();
 	
 	/*!
 	* Initializes the normal user's PIN.

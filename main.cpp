@@ -54,8 +54,12 @@ void testAPI(P11* p11)
 		printInfo(info);
 		CK_FUNCTION_LIST flist = p11->getFunctionList();
 //		p11->initToken(slot, soPin, label);
-		CryptokiSession session = p11->openSession(slot);
-		CryptokiSession session2 = std::move(session);
+		CryptokiSession session2;
+
+		{
+			CryptokiSession session = p11->openSession(slot);
+			session2 = std::move(session);
+		}
 	
 		session2.login(soPin);
 		CryptokiSessionInfo sinfo;
@@ -64,6 +68,7 @@ void testAPI(P11* p11)
 		session2.initPin(tpin);
 		session2.getOperationState();
 		session2.setOperationState();
+		session2.closeSession();
 	}
 	catch (P11Exception &e)
 	{
