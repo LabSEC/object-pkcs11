@@ -13,6 +13,7 @@ P11::~P11()
 	if(_module)
 	{
 		TRACE("Cleaning up module.");
+		finalize();
 		dlclose(_module);
 	}
 }

@@ -3,16 +3,18 @@
 
 void CryptokiSession::closeSession()
 {
-	PRECONDITION(isAlive())
 	PRECONDITION(_functionList)
-	_rv = (*_functionList->C_CloseSession)(_session);
-    if(_rv)
-        {
-            FAILED;
-            throw P11Exception(_rv);
-        }
-    OK;
-	kill();
+	if(isAlive())
+	{
+		CK_RV rv = (*_functionList->C_CloseSession)(_session);
+		if(rv)
+			{
+				FAILED;
+				throw P11Exception(rv);
+			}
+		kill();
+	}
+		OK;
 }
 
 CryptokiSessionInfo CryptokiSession::getSessionInfo()
@@ -21,11 +23,11 @@ CryptokiSessionInfo CryptokiSession::getSessionInfo()
 	PRECONDITION(_functionList)
 	CryptokiSessionInfo inf;
 	CK_SESSION_INFO a;
-	_rv = (*_functionList->C_GetSessionInfo)(_session, &a);
-    if(_rv)
+	CK_RV rv = (*_functionList->C_GetSessionInfo)(_session, &a);
+    if(rv)
         {
             FAILED;
-            throw P11Exception(_rv);
+            throw P11Exception(rv);
         }
     OK;
 	return inf;
@@ -72,11 +74,11 @@ void CryptokiSession::initPin(std::string& pin)
 	CK_UTF8CHAR* utf8pin = new CK_UTF8CHAR[pin.length()];
     strncpy((char*)utf8pin, pin.c_str(), pin.length());
 
-    _rv = (*_functionList->C_InitPIN)(session, utf8pin, pinLen);
-    if(_rv)
+    CK_RV rv = (*_functionList->C_InitPIN)(session, utf8pin, pinLen);
+    if(rv)
         {
             FAILED;
-            throw P11Exception(_rv);
+            throw P11Exception(rv);
         }
     OK;*/
 }

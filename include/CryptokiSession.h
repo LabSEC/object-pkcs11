@@ -7,6 +7,7 @@
 #include "P11Exception.h"
 #include "CryptokiSessionInfo.h"
 
+
 /*!
  * @brief <b>PKCS#11 Sessions</b><br>
  *
@@ -28,18 +29,32 @@ class CryptokiSession : public P11Init
 
 protected:
 	CK_SESSION_HANDLE _session;
-	CK_RV _rv;
 	CK_FUNCTION_LIST_PTR _functionList;
+	void closeSession();
 public:
-	CryptokiSession() : P11Init() {};
-	virtual ~CryptokiSession(){};
+	CryptokiSession() : P11Init(), _functionList(0) {};
+	CryptokiSession(CryptokiSession&& other) {
+		_session = std::move(other._session);	
+		_functionList = std::move(other._functionList);	
+		_currentState = other._currentState;
+		other._currentState = DEAD;
+	};
+	virtual ~CryptokiSession(){ closeSession(); _functionList = 0;};
+	CryptokiSession& operator=(const CryptokiSession& other) = delete;
+	CryptokiSession& operator=(CryptokiSession&& other)
+	{
+		_session = std::move(other._session);	
+		_functionList = std::move(other._functionList);	
+		_currentState = other._currentState;
+		other._currentState = DEAD;
+		return *this;
+	};
 
 	/*!
 	* @addtogroup session
 	* Session management functions
 	* @{
 	*/
-	void closeSession();
 	CryptokiSessionInfo getSessionInfo();
 	void getOperationState();
 	void setOperationState();

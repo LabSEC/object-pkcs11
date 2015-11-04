@@ -55,6 +55,12 @@ protected:
  	* function in order for this API to work.
  	*/
 	void loadFunctions();
+	
+	/*!
+	* Clean up miscellaneous Cryptoki associated resources.
+	*/
+	void finalize();
+
 public:
 
 	P11(const std::string& path);
@@ -70,11 +76,6 @@ public:
 	* Initializes Cryptoki.
 	*/
 	void initialize();
-
-	/*!
-	* Clean up miscellaneous Cryptoki associated resources.
-	*/
-	void finalize();
 
 	/*!
 	* Obtains general information about Cryptoki.
