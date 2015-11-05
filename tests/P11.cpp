@@ -14,9 +14,11 @@ TEST(P11_Class, Initialize_OK)
 		called = true;
 		return CKR_OK;
 	};	
+	pkcs11->C_Finalize = [&](void* ptr) {
+		return CKR_OK;
+	};	
 
-	p11module.initialize();
-
+	EXPECT_NO_THROW(p11module.initialize());
 	EXPECT_TRUE(called);
 }
 
@@ -28,6 +30,9 @@ TEST(P11_Class, Initialize_Failed_causes_exception)
 	
 	pkcs11->C_Initialize = [&](void* ptr) {
 		return CKR_GENERAL_ERROR;
+	};	
+	pkcs11->C_Finalize = [&](void* ptr) {
+		return CKR_OK;
 	};	
 
 	try {

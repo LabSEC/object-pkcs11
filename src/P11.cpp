@@ -1,9 +1,8 @@
 #include "P11.h"
 
-P11::P11(const std::string& path)
+P11::P11(const std::string& path) : _functionList(0), _module(0)
 {
 //TODO(perin): check if module was loaded correctly.
-	_functionList = 0;
 	loadModule(path);
 	loadFunctions();
 }
