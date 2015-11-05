@@ -5,9 +5,6 @@ CK_RV C_Initialize(void *init_args) {
 }
 
 CK_RV C_Finalize(void *reserved) {
-	pkcs11Mocker.C_Finalize = [&](void* ptr) {
-		return CKR_OK;
-	};	
 	return pkcs11Mocker.C_Finalize(reserved);
 }
 
