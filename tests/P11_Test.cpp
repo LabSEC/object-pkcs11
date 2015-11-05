@@ -3,7 +3,7 @@
 #include "P11.h"
 #include "P11Exception.h"
 
-TEST(P11_Class, Initialize_OK)
+TEST(P11_Test, Initialize_OK)
 {
 	P11 p11module("tests/pkcs11mocked.so");
 	
@@ -19,7 +19,7 @@ TEST(P11_Class, Initialize_OK)
 	EXPECT_TRUE(called);
 }
 
-TEST(P11_Class, Initialize_Failed_causes_exception)
+TEST(P11_Test, Initialize_Failed_causes_exception)
 {
 	P11 p11module("tests/pkcs11mocked.so");
 	
