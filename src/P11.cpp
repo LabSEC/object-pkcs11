@@ -77,15 +77,19 @@ CryptokiInfo P11::getInfo()
 FunctionList P11::getFunctionList()
 {
 	PRECONDITION(_functionList)
-	CK_FUNCTION_LIST_PTR fList;
-	_rv = (*_functionList->C_GetFunctionList)(&fList);
+	CK_FUNCTION_LIST_PTR fListPtr;
+	CK_FUNCTION_LIST fList;
+	
+	_rv = (*_functionList->C_GetFunctionList)(&fListPtr);
 	if(_rv)
 	{
 		FAILED;
 		throw P11Exception(_rv);
 	}
 	OK;
-	return *fList;
+	fList = *fListPtr;
+	//TODO(Gava): Find out if we should free flistPtr here.
+	return fList;
 }
 
 //TODO(perin): copy strings without casting. CK_UTF8CHAR is unsigned char.

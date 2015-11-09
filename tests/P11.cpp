@@ -36,4 +36,75 @@ TEST(P11_Class, Initialize_Failed_causes_exception)
 	} catch (P11Exception& e) {
 		EXPECT_EQ(e.getErrorCode(), CKR_GENERAL_ERROR);
 	}
+
+}
+
+TEST(P11_Class, getInfo)
+{
+
+	P11 p11module("tests/pkcs11mocked.so");
+	
+	CK_LAMBDA_FUNCTION_LIST* pkcs11 = getMockerReference("tests/pkcs11mocked.so");
+
+	pkcs11->C_GetInfo = [&](CK_INFO *info) -> CK_RV {
+		//TODO aqui voc'e recebe o endereco de info. Atribua valores a struct e teste depois da chamada.
+		info->cryptokiVersion.major = 6;
+		info->cryptokiVersion.minor = 7;
+		info->flags = 0;
+		info->libraryVersion.major = 12;
+		info->libraryVersion.minor = 13;
+
+		return CKR_OK;
+	};
+
+	CryptokiInfo cryptokiInfo;
+	cryptokiInfo = p11module.getInfo();
+
+	ASSERT_EQ(cryptokiInfo.cryptokiMajorVersion(),6);
+	ASSERT_EQ(cryptokiInfo.cryptokiMinorVersion(),7);
+	ASSERT_EQ(cryptokiInfo.flags(), CryptokiInfo::EMPTY);
+	ASSERT_EQ(cryptokiInfo.libraryMajorVersion(),12);
+	ASSERT_EQ(cryptokiInfo.libraryMinorVersion(),13);
+}
+
+TEST(P11_Class, getInfo_error)
+{
+	P11 p11module("tests/pkcs11mocked.so");
+	
+	CK_LAMBDA_FUNCTION_LIST* pkcs11 = getMockerReference("tests/pkcs11mocked.so");
+
+	pkcs11->C_GetInfo = [&](CK_INFO *info) -> CK_RV {
+
+		return CKR_GENERAL_ERROR;
+	};
+
+	try {
+		p11module.getInfo();
+		EXPECT_TRUE(false);
+	} catch (P11Exception& e) {
+		EXPECT_EQ(e.getErrorCode(), CKR_GENERAL_ERROR);
+	}
+}
+
+TEST(P11_Class, getFunction)
+{
+	P11 p11module("tests/pkcs11mocked.so");
+
+	CK_LAMBDA_FUNCTION_LIST* pkcs11 = getMockerReference("tests/pkcs11mocked.so");
+
+  	bool called = false;
+	pkcs11->C_Initialize = [&](void* ptr) -> CK_RV {
+		EXPECT_EQ(ptr, (void*)0x123456);
+		called = true;
+		return CKR_OK;
+	};	
+
+	
+	FunctionList test = p11module.getFunctionList();
+	
+	EXPECT_NO_THROW({
+		CK_RV rv = (*test.C_Initialize)((void*)0x123456);
+		EXPECT_EQ(rv, CKR_OK);
+	});
+	EXPECT_TRUE(called);
 }
