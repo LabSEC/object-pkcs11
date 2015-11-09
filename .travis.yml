@@ -1,5 +1,8 @@
 language: cpp
 
+compiler:
+- g++
+
 install:
 - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
 - sudo apt-get update -qq
@@ -11,4 +14,4 @@ install:
 - g++ --version
 
 script:
-- make runtest
+- make CC=g++-4.9 runtest

@@ -42,8 +42,8 @@ public:
 	{
 		switch(_erc)
 		{
-			case -2: return "Precondition failed";
-			case -1: return "Object is not initialized";
+			case 666: return "Precondition failed";
+			case 777: return "Object is not initialized";
 			case CKR_OK: return "CKR_OK";
 			case CKR_CANCEL: return "CKR_CANCEL";
 			case CKR_HOST_MEMORY: return "CKR_HOST_MEMORY";

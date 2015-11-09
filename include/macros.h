@@ -45,11 +45,11 @@
 #ifdef PREC
 #define EXPECT_ZERO(x) if(x){\
 	TRACE_ERROR(#x)\
-	throw P11Exception(__func__,-2);}
+	throw P11Exception(__func__,666);}
 
 #define EXPECT_N_ZERO(x) if(!x){\
 	TRACE_ERROR(#x)\
-	throw P11Exception(__func__,-2);}
+	throw P11Exception(__func__,666);}
 #else
 #define EXPECT_ZERO(x)
 #define EXPECT_N_ZERO(x)
