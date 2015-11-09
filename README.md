@@ -40,4 +40,4 @@ Set all passwords to 123456, then
 
 # Status
 Under development as of Oct 2015 
-Lucas Perin
+Lucas Perin :)

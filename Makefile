@@ -3,7 +3,7 @@ CC = g++
 CPPFLAGS = -DGTEST_HAS_PTHREAD=0 -DDEBUG -DPREC
 CXXFLAGS = -g -std=c++11
 
-LIBS = -ldl
+LIBS = -ldl -lgtest -lpthread
 INCLUDES = -I./include
 
 EXECUTABLE = run.out
@@ -23,7 +23,7 @@ OBJS_TEST = $(SRCS_TEST:.cpp=.o)
 
 MOCKED_SO = tests/pkcs11mocked.so
 
-RM = /bin/rm
+RM = rm
 
 %.o: %.cpp
 	@echo 'Building file: $<'
@@ -33,17 +33,17 @@ RM = /bin/rm
 	@echo ' '
 
 all: $(OBJS) $(EXECUTABLE_OBJ)
-	$(CC) $(CPPFLAGS) $(CXXFLAGS) $(INCLUDES) -o $(EXECUTABLE) $(LIBS) $(OBJS) $(EXECUTABLE_OBJ)
+	$(CC) $(CPPFLAGS) $(CXXFLAGS) $(INCLUDES) -o $(EXECUTABLE) $(OBJS) $(EXECUTABLE_OBJ) $(LIBS) 
 	@echo 'Build complete!'
 	@echo ' '
 
 $(MOCKED_SO):
 	@echo 'Building Mocked PKCS11'
-	$(CC) $(CPPFLAGS) $(CXXFLAGS) $(INCLUDES) -shared -fPIC -o $(MOCKED_SO) $(LIBS) tests/mock/*.cpp
+	$(CC) $(CPPFLAGS) $(CXXFLAGS) $(INCLUDES) -shared -fPIC -o $(MOCKED_SO) tests/mock/*.cpp $(LIBS) 
 	@echo ' '
 
 test: $(OBJS) $(OBJS_TEST) $(MOCKED_SO)
-	$(CC) $(CPPFLAGS) $(CXXFLAGS) $(INCLUDES) -o $(TEST_EXECUTABLE) $(LIBS) $(OBJS) $(OBJS_TEST) -lgtest
+	$(CC) $(CPPFLAGS) $(CXXFLAGS) $(INCLUDES) -o $(TEST_EXECUTABLE) $(OBJS) $(OBJS_TEST) $(LIBS) 
 	@echo 'Test build complete!'
 	@echo ' '
 
