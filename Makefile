@@ -1,3 +1,4 @@
+SHELL = /bin/bash
 CC = g++
 CPPFLAGS = -DGTEST_HAS_PTHREAD=0 -DDEBUG -DPREC
 CXXFLAGS = -g -std=c++11
@@ -22,7 +23,7 @@ OBJS_TEST = $(SRCS_TEST:.cpp=.o)
 
 MOCKED_SO = tests/pkcs11mocked.so
 
-RM = /usr/bin/rm
+RM = /bin/rm
 
 %.o: %.cpp
 	@echo 'Building file: $<'
@@ -53,3 +54,10 @@ clean:
 	$(RM) -f $(MOCKED_SO)
 	$(RM) -f $(TEST_EXECUTABLE)
 	$(RM) -rf $(DOC_DIR)
+
+run: 	all
+	./$(EXECUTABLE)
+
+
+runtest: all test
+	./$(TEST_EXECUTABLE)
