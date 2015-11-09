@@ -109,7 +109,6 @@ TEST(P11_Class, getFunction)
 		called = true;
 		return CKR_OK;
 	};	
-
 	
 	FunctionList test = p11module.getFunctionList();
 	
