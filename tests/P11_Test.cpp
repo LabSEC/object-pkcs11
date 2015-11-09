@@ -3,10 +3,17 @@
 #include "P11.h"
 #include "P11Exception.h"
 
-TEST(P11_Test, Finalize_OK)
+TEST(P11_Test, Finalize_should_be_called_on_destructor)
 {
+	CK_LAMBDA_FUNCTION_LIST* pkcs11 = getMockerReference("tests/pkcs11mocked.so");
+	bool called = false;
+	pkcs11->C_Finalize = [&](void* ptr) -> CK_RV {
+		called = true;
+		return CKR_OK;
+	};	
+
 	{P11 p11module("tests/pkcs11mocked.so");}
-	EXPECT_TRUE(true);
+	EXPECT_TRUE(called);
 }
 
 TEST(P11_Test, Initialize_OK)
