@@ -4,9 +4,23 @@
 
 typedef struct CK_LAMBDA_FUNCTION_LIST_ST
 {
-  std::function<CK_RV(void *)> C_Initialize;
-  std::function<CK_RV(void *)> C_Finalize;
-  std::function<CK_RV(CK_INFO *info)> C_GetInfo;
+  std::function<CK_RV(void *)> C_Initialize = [&](void* ptr) {
+		return CKR_OK;
+	};
+  std::function<CK_RV(void *)> C_Finalize = [&](void* ptr) {
+		return CKR_OK;
+	};
+  std::function<CK_RV(CK_INFO *info)> C_GetInfo = [&](CK_INFO* info) {
+		info->cryptokiVersion.major = 6;
+		info->cryptokiVersion.minor = 66;
+		info->flags = 0;
+		//info->manufacturerID = "Perinovsky                      ";
+		//info->libraryDescription = "Claud Computing                 ";
+		info->libraryVersion.major = 7;
+		info->libraryVersion.minor = 77;
+		return CKR_OK;
+	};
+
   std::function<CK_RV(CK_FUNCTION_LIST **)> C_GetFunctionList;
   std::function<CK_RV(unsigned char, CK_SLOT_ID *, unsigned long *)> C_GetSlotList;
   std::function<CK_RV(CK_SLOT_ID, CK_SLOT_INFO*)> C_GetSlotInfo;

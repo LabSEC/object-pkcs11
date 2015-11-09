@@ -14,6 +14,14 @@ My goal is to implement this library to work with simple use cases and less code
 If you wish to implement more complex applications, I recommend taking a look at
 Libp11 from OpenSC project.
 
+# Contribution
+
+We are designing our objects to be used with RAII pattern. Functions should always
+return copies and pointers are not welcome for the end user (should be kept behind
+curtain). Sessions are closed the object is destructed. Always consider the 
+context of the declaration to manage "close" and "finalize" functions.
+
+
 # Running code with SoftHSMv2
 
 I wrote a main file to run my API and print out some neat text with implementation

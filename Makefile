@@ -1,3 +1,4 @@
+SHELL = /bin/bash
 CC = g++
 CPPFLAGS = -DGTEST_HAS_PTHREAD=0 -DDEBUG -DPREC
 CXXFLAGS = -g -std=c++11
@@ -53,3 +54,10 @@ clean:
 	$(RM) -f $(MOCKED_SO)
 	$(RM) -f $(TEST_EXECUTABLE)
 	$(RM) -rf $(DOC_DIR)
+
+run: 	all
+	./$(EXECUTABLE)
+
+
+runtest: all test
+	./$(TEST_EXECUTABLE)

@@ -3,7 +3,13 @@
 #include "P11.h"
 #include "P11Exception.h"
 
-TEST(P11_Class, Initialize_OK)
+TEST(P11_Test, Finalize_OK)
+{
+	{P11 p11module("tests/pkcs11mocked.so");}
+	EXPECT_TRUE(true);
+}
+
+TEST(P11_Test, Initialize_OK)
 {
 	P11 p11module("tests/pkcs11mocked.so");
 	
@@ -15,12 +21,11 @@ TEST(P11_Class, Initialize_OK)
 		return CKR_OK;
 	};	
 
-	p11module.initialize();
-
+	EXPECT_NO_THROW(p11module.initialize());
 	EXPECT_TRUE(called);
 }
 
-TEST(P11_Class, Initialize_Failed_causes_exception)
+TEST(P11_Test, Initialize_Failed_causes_exception)
 {
 	P11 p11module("tests/pkcs11mocked.so");
 	
@@ -36,7 +41,6 @@ TEST(P11_Class, Initialize_Failed_causes_exception)
 	} catch (P11Exception& e) {
 		EXPECT_EQ(e.getErrorCode(), CKR_GENERAL_ERROR);
 	}
-
 }
 
 TEST(P11_Class, getInfo)
