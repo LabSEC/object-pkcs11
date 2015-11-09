@@ -1,9 +1,7 @@
 C++ Object Oriented Wrapper for PKCS#11
 =======
 
-
-[![Build Status](https://travis-ci.org/lucasperin/object-pkcs11.svg)](https://travis-ci.org/lucasperin/object-pkcs11)
-
+[![Build Status](https://travis-ci.org/lucasperin/object-pkcs11.svg?branch=master)](https://travis-ci.org/lucasperin/object-pkcs11)
 
 # Introduction
 
