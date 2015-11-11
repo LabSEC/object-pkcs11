@@ -79,7 +79,7 @@ TEST_F(P11_Test, getInfo)
 
 	ASSERT_EQ(cryptokiInfo.cryptokiMajorVersion(),6);
 	ASSERT_EQ(cryptokiInfo.cryptokiMinorVersion(),7);
-	ASSERT_EQ(cryptokiInfo.flags(), CryptokiInfo::EMPTY);
+	ASSERT_EQ(cryptokiInfo.flags(), CryptokiInfo::EMPTY); 
 	ASSERT_EQ(cryptokiInfo.libraryMajorVersion(),12);
 	ASSERT_EQ(cryptokiInfo.libraryMinorVersion(),13);
 	pkcstest::setUpFunctions(pkcs11);

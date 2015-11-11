@@ -5,7 +5,7 @@ namespace pkcstest {
 			return getMockerReference("tests/pkcs11mocked.so");
 		}
 
-		static void setUpFunctions(CK_LAMBDA_FUNCTION_LIST* pkcs11) {
+		static void setUpFunctions(CK_LAMBDA_FUNCTION_LIST* pkcs11) { 
 			pkcs11->C_Initialize = [&](void* ptr) -> CK_RV {
 				return CKR_OK;
 			};
