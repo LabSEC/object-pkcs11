@@ -21,11 +21,17 @@ protected :
 
 CK_LAMBDA_FUNCTION_LIST* P11_Test::pkcs11 = NULL; 
 
-TEST_F(P11_Test, Finalize_OK)
-	{
-		{P11 p11module("tests/pkcs11mocked.so");}
-		EXPECT_TRUE(true);
-	}
+TEST_F(P11_Test, Finalize_should_be_called_on_destructor)
+{
+	bool called = false;
+	pkcs11->C_Finalize = [&](void* ptr) -> CK_RV {
+		called = true;
+		return CKR_OK;
+	};	
+
+	{P11 p11module("tests/pkcs11mocked.so");}
+	EXPECT_TRUE(called);
+}
 
 TEST_F(P11_Test, Initialize_OK)
 {
@@ -112,9 +118,8 @@ TEST_F(P11_Test, getFunction)
 		EXPECT_EQ(ptr, (void*)0x123456);
 		called = true;
 		return CKR_OK;
-	};	
+	};
 
-		
 	FunctionList test = p11module.getFunctionList();
 		
 	EXPECT_NO_THROW({

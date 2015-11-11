@@ -52,7 +52,7 @@ void testAPI(P11* p11)
 		p11->initialize();
 		CryptokiInfo info = p11->getInfo();
 		printInfo(info);
-		CK_FUNCTION_LIST flist = p11->getFunctionList();
+		//CK_FUNCTION_LIST flist = p11->getFunctionList();
 //		p11->initToken(slot, soPin, label);
 		CryptokiSession session2;
 
