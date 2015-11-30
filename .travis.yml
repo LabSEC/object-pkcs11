@@ -12,7 +12,6 @@ addons:
     packages:
     - g++-4.9
     - gcc-4.9
-    - libgtest-dev
 
 #install:
 #- sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
@@ -25,4 +24,6 @@ addons:
 #- g++ --version
 
 script:
-- make CC=g++-4.9 runtest
+- make CC=g++-4.9
+- cd tests
+- make test
