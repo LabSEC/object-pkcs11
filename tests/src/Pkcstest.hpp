@@ -2,7 +2,7 @@
 namespace pkcstest {
 
 		static CK_LAMBDA_FUNCTION_LIST* setUpMocker() {
-			return getMockerReference("tests/pkcs11mocked.so");
+			return getMockerReference("/tmp/pkcs11mocked.so");
 		}
 
 		static void setUpFunctions(CK_LAMBDA_FUNCTION_LIST* pkcs11) { 

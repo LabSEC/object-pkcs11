@@ -1,7 +1,7 @@
-#include <gtest/gtest.h>
-#include "P11.h"
-#include "P11Exception.h"
+#include "gtest/gtest.h"
 #include "Pkcstest.hpp"
+#include <P11.h>
+#include <P11Exception.h>
 
 class P11_Test : public ::testing::Test {
 
@@ -29,13 +29,13 @@ TEST_F(P11_Test, Finalize_should_be_called_on_destructor)
 		return CKR_OK;
 	};	
 
-	{P11 p11module("tests/pkcs11mocked.so");}
+	{P11 p11module("/tmp/pkcs11mocked.so");}
 	EXPECT_TRUE(called);
 }
 
 TEST_F(P11_Test, Initialize_OK)
 {
-	P11 p11module("tests/pkcs11mocked.so");
+	P11 p11module("/tmp/pkcs11mocked.so");
 	
 	bool called = false;
 	pkcs11->C_Initialize = [&](void* ptr) -> CK_RV {
@@ -50,7 +50,7 @@ TEST_F(P11_Test, Initialize_OK)
 
 TEST_F(P11_Test, Initialize_Failed_causes_exception)
 {
-	P11 p11module("tests/pkcs11mocked.so");
+	P11 p11module("/tmp/pkcs11mocked.so");
 		
 	pkcs11->C_Initialize = [&](void* ptr) {
 		return CKR_GENERAL_ERROR;
@@ -67,8 +67,7 @@ TEST_F(P11_Test, Initialize_Failed_causes_exception)
 
 TEST_F(P11_Test, getInfo)
 {
-
-	P11 p11module("tests/pkcs11mocked.so");
+	P11 p11module("/tmp/pkcs11mocked.so");
 
 	pkcs11->C_GetInfo = [&](CK_INFO *info) -> CK_RV {
 		info->cryptokiVersion.major = 6;
@@ -93,7 +92,7 @@ TEST_F(P11_Test, getInfo)
 
 TEST_F(P11_Test, getInfo_error)
 {
-	P11 p11module("tests/pkcs11mocked.so");
+	P11 p11module("/tmp/pkcs11mocked.so");
 
 	pkcs11->C_GetInfo = [&](CK_INFO *info) -> CK_RV {
 
@@ -111,7 +110,7 @@ TEST_F(P11_Test, getInfo_error)
 
 TEST_F(P11_Test, getFunction)
 {
-	P11 p11module("tests/pkcs11mocked.so");
+	P11 p11module("/tmp/pkcs11mocked.so");
 
   	bool called = false;
 	pkcs11->C_Initialize = [&](void* ptr) -> CK_RV {
