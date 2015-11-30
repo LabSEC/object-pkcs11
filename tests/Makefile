@@ -21,13 +21,14 @@ OBJS += $(TEST_SRCS:.cpp=.o)
 	@echo ' '
 
 all: check-lib gtest mocker $(OBJS)
-	$(CC) $(CPPFLAGS) $(CXXFLAGS) -o $(EXECUTABLE) $(OBJS) $(LIBOBJECTPKCS11) $(MOCKED_SO) ./$(GTEST_DIR)/gtest-all.o $(LIBS)
+	$(CC) $(CPPFLAGS) $(CXXFLAGS) -o $(EXECUTABLE) $(OBJS) $(LIBOBJECTPKCS11) ./$(GTEST_DIR)/gtest-all.o $(LIBS)
 	@echo 'Build complete!'
 	@echo ' '
 
 mocker:
 	@echo 'Building Mocked PKCS11'
 	$(CC) $(CPPFLAGS) $(CXXFLAGS) $(INCLUDES) -shared -fPIC -o $(MOCKED_SO) $(MOCK_DIR)/*.cpp $(LIBS)
+	mv $(MOCKED_SO) /tmp
 	@echo ' '
 
 check-lib:
