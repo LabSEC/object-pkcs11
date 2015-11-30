@@ -26,4 +26,4 @@ addons:
 script:
 - make CC=g++-4.9
 - cd tests
-- make test
+- make CC=g++-4.9 test
