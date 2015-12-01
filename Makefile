@@ -29,6 +29,7 @@ all: $(OBJS)
 	@echo 'Build complete!'
 	@echo ' '
 
+.PHONY: test
 test: all
 	$(MAKE) -C tests test
 
