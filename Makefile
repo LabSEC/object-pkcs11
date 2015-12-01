@@ -29,6 +29,18 @@ all: $(OBJS)
 	@echo 'Build complete!'
 	@echo ' '
 
+test: all
+	$(MAKE) -C tests test
+
+cleantest: all
+	$(MAKE) -C tests clean
+	$(MAKE) -C tests test
+
+verycleantest: all
+	$(MAKE) -C tests veryclean
+	$(MAKE) -C tests test
+	
+
 clean: 
 	$(RM) -f $(SRC_DIR)/*.o
 	$(RM) -f $(EXECUTABLE)

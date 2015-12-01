@@ -46,6 +46,6 @@ clean:
 
 veryclean: clean
 	rm -rf ./$(GTEST_DIR)/*.o
-	rm -f $(MOCKED_SO)
+	rm -f /tmp/$(MOCKED_SO)
 
 
