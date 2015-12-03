@@ -30,9 +30,6 @@ I wrote a main file to run my API and print out some neat text with implementati
 status. Currently I use opensc and softhsm2 modules. I am not sure why but softhsm2
 requires sudo to run access the token, therefore the same aplies to run the code.
 
-Install softhsm2
-
-	$ softhsm2-util --init-token --slot 0 --label "token1"
 
 Set all passwords to 123456, then
 
