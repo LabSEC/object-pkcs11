@@ -26,16 +26,13 @@ context of the declaration to manage "close" and "finalize" functions.
 
 # Running code with SoftHSMv2
 
-I wrote a main file to run my API and print out some neat text with implementation
-status. Currently I use opensc and softhsm2 modules. I am not sure why but softhsm2
-requires sudo to run access the token, therefore the same aplies to run the code.
+We wrote a PKCS11 mocker using lambda functions. In the test files we can write the
+PKCS11 function implementations on the fly. This allows us to test if the functions
+were indeed called dynamically and to evaluate the return value.
 
+run the tests with:
 
-Set all passwords to 123456, then
-
-	$ make
-	$ ./run.out /path/to/pkcs11-module.so
-
+	$ make test
 
 # Status
 Under development as of Oct 2015 
