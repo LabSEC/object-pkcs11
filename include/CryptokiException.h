@@ -1,11 +1,11 @@
-#ifndef P11EXCEPTION_H
-#define P11EXCEPTION_H
+#ifndef CryptokiEXCEPTION_H
+#define CryptokiEXCEPTION_H
 
 #include "pkcs11.h"
 #include <exception>
 
 /*!
- * @brief <b>General P11 API Exception</b><br>
+ * @brief <b>General Cryptoki API Exception</b><br>
  *
  * This is a general Exception for the API class,
  * it contains the pkcs11 base error codes and
@@ -14,26 +14,26 @@
  *
  * @see pkcs11.h
  */
-class P11Exception : public std::exception
+class CryptokiException : public std::exception
 {
 public:
 	/*!
 	* Default Constructor.
 	* @param erc PKCS#11 Error code.
 	*/
-	P11Exception(CK_RV erc = CKR_GENERAL_ERROR) { _where="not specified"; _erc=erc; };
+	CryptokiException(CK_RV erc = CKR_GENERAL_ERROR) { _where="not specified"; _erc=erc; };
 
 	/*!
 	* Constructor with "where" message.
 	* @param where String with place where exception occurred.
 	* @param erc PKCS#11 Error code.
 	*/
-	P11Exception(const char* where,CK_RV erc = CKR_GENERAL_ERROR) { _where=where; _erc=erc; };
+	CryptokiException(const char* where,CK_RV erc = CKR_GENERAL_ERROR) { _where=where; _erc=erc; };
 
 	/*!
 	* Default destructor.
 	*/
-	virtual ~P11Exception() throw(){};
+	virtual ~CryptokiException() throw(){};
 
 	/*!
 	* Returns a string with the name of the PKCS#11error code.
@@ -148,4 +148,4 @@ protected:
 	CK_RV _erc;
 	const char* _where;
 };
-#endif /*P11EXCEPTION_H*/
+#endif /*CryptokiEXCEPTION_H*/

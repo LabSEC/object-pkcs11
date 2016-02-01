@@ -1,54 +1,54 @@
-#include "CryptokiSession.h"
+#include "Session.h"
+namespace objck {
 
-
-void CryptokiSession::closeSession()
+void Session::closeSession()
 {
-	if(isDead()) {OK; return;}	
+	if(isDisabled()) {OK; return;}	
 	
 	PRECONDITION(_functionList)
 	CK_RV rv = (*_functionList->C_CloseSession)(_session);
 	if(rv)
 	{
 		FAILED;
-		throw P11Exception(rv);
+		throw CryptokiException(rv);
 	}
-	kill();
+	disable();
 	OK;
 }
 
-CryptokiSessionInfo CryptokiSession::getSessionInfo()
+SessionInfo Session::getSessionInfo()
 {
-	PRECONDITION(isAlive())
+	PRECONDITION(isEnabled())
 	PRECONDITION(_functionList)
-	CryptokiSessionInfo inf;
+	SessionInfo inf;
 	CK_SESSION_INFO a;
 	CK_RV rv = (*_functionList->C_GetSessionInfo)(_session, &a);
     if(rv)
         {
             FAILED;
-            throw P11Exception(rv);
+            throw CryptokiException(rv);
         }
     OK;
 	return inf;
 }
 
-void CryptokiSession::getOperationState()
+void Session::getOperationState()
 {
-	PRECONDITION(isAlive())
+	PRECONDITION(isEnabled())
 	PRECONDITION(_functionList)
 	NOT_IMPLEMENTED;
 }
 
-void CryptokiSession::setOperationState()
+void Session::setOperationState()
 {
-	PRECONDITION(isAlive())
+	PRECONDITION(isEnabled())
 	PRECONDITION(_functionList)
 	NOT_IMPLEMENTED;
 }
 
-void CryptokiSession::login(std::string& soPin)
+void Session::login(std::string& soPin)
 {
-	PRECONDITION(isAlive())
+	PRECONDITION(isEnabled())
 	PRECONDITION(_functionList)
     //TODO FIX 
     NOT_IMPLEMENTED;
@@ -60,12 +60,12 @@ void CryptokiSession::login(std::string& soPin)
     if(rv)
         {
             FAILED;
-            throw P11Exception(rv);
+            throw CryptokiException(rv);
         }
     OK;*/
 }
 
-void CryptokiSession::initPin(std::string& pin)
+void Session::initPin(std::string& pin)
 {
 	PRECONDITION(_functionList)
 	NOT_IMPLEMENTED;
@@ -77,8 +77,9 @@ void CryptokiSession::initPin(std::string& pin)
     if(rv)
         {
             FAILED;
-            throw P11Exception(rv);
+            throw CryptokiException(rv);
         }
     OK;*/
 }
 
+}/*END NAMESPACE*/

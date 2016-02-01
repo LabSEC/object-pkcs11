@@ -1,9 +1,10 @@
 #include "gtest/gtest.h"
 #include "Pkcstest.hpp"
-#include <P11.h>
-#include <P11Exception.h>
+#include <Cryptoki.h>
+#include <CryptokiException.h>
 
-class P11_Test : public ::testing::Test {
+using namespace objck;
+class Cryptoki_Test : public ::testing::Test {
 
 protected :
 
@@ -21,9 +22,9 @@ protected :
 	}
 };
 
-CK_LAMBDA_FUNCTION_LIST* P11_Test::pkcs11 = NULL; 
+CK_LAMBDA_FUNCTION_LIST* Cryptoki_Test::pkcs11 = NULL; 
 
-TEST_F(P11_Test, Finalize_should_be_called_on_destructor)
+TEST_F(Cryptoki_Test, Finalize_should_be_called_on_destructor)
 {
 	bool called = false;
 	pkcs11->C_Finalize = [&](void* ptr) -> CK_RV {
@@ -31,13 +32,13 @@ TEST_F(P11_Test, Finalize_should_be_called_on_destructor)
 		return CKR_OK;
 	};	
 
-	{P11 p11module("/tmp/pkcs11mocked.so");}
+	{Cryptoki p11module("/tmp/pkcs11mocked.so");}
 	EXPECT_TRUE(called);
 }
 
-TEST_F(P11_Test, Initialize_OK)
+TEST_F(Cryptoki_Test, Initialize_OK)
 {
-	P11 p11module("/tmp/pkcs11mocked.so");
+	Cryptoki p11module("/tmp/pkcs11mocked.so");
 	
 	bool called = false;
 	pkcs11->C_Initialize = [&](void* ptr) -> CK_RV {
@@ -49,9 +50,9 @@ TEST_F(P11_Test, Initialize_OK)
 	EXPECT_TRUE(called);
 }
 
-TEST_F(P11_Test, Initialize_Failed_causes_exception)
+TEST_F(Cryptoki_Test, Initialize_Failed_causes_exception)
 {
-	P11 p11module("/tmp/pkcs11mocked.so");
+	Cryptoki p11module("/tmp/pkcs11mocked.so");
 		
 	pkcs11->C_Initialize = [&](void* ptr) {
 		return CKR_GENERAL_ERROR;
@@ -60,14 +61,14 @@ TEST_F(P11_Test, Initialize_Failed_causes_exception)
 	try {
 		p11module.initialize();
 		EXPECT_TRUE(false);
-	} catch (P11Exception& e) {
+	} catch (CryptokiException& e) {
 		EXPECT_EQ(e.getErrorCode(), CKR_GENERAL_ERROR);
 	}
 }
 
-TEST_F(P11_Test, getInfo)
+TEST_F(Cryptoki_Test, getInfo)
 {
-	P11 p11module("/tmp/pkcs11mocked.so");
+	Cryptoki p11module("/tmp/pkcs11mocked.so");
 
 	pkcs11->C_GetInfo = [&](CK_INFO *info) -> CK_RV {
 		info->cryptokiVersion.major = 6;
@@ -79,19 +80,19 @@ TEST_F(P11_Test, getInfo)
 		return CKR_OK;
 	};
 
-	CryptokiInfo cryptokiInfo;
+	Info cryptokiInfo;
 	cryptokiInfo = p11module.getInfo();
 
-	ASSERT_EQ(cryptokiInfo.cryptokiMajorVersion(),6);
-	ASSERT_EQ(cryptokiInfo.cryptokiMinorVersion(),7);
-	ASSERT_EQ(cryptokiInfo.flags(), CryptokiInfo::EMPTY); 
-	ASSERT_EQ(cryptokiInfo.libraryMajorVersion(),12);
-	ASSERT_EQ(cryptokiInfo.libraryMinorVersion(),13);
+	ASSERT_EQ(Info.majorVersion(),6);
+	ASSERT_EQ(Info.minorVersion(),7);
+	ASSERT_EQ(Info.flags(), Info::EMPTY); 
+	ASSERT_EQ(Info.libraryMajorVersion(),12);
+	ASSERT_EQ(Info.libraryMinorVersion(),13);
 }
 
-TEST_F(P11_Test, getInfo_error)
+TEST_F(Cryptoki_Test, getInfo_error)
 {
-	P11 p11module("/tmp/pkcs11mocked.so");
+	Cryptoki p11module("/tmp/pkcs11mocked.so");
 
 	pkcs11->C_GetInfo = [&](CK_INFO *info) -> CK_RV {
 
@@ -101,14 +102,14 @@ TEST_F(P11_Test, getInfo_error)
 	try {
 		p11module.getInfo();
 		EXPECT_TRUE(false);
-	} catch (P11Exception& e) {
+	} catch (CryptokiException& e) {
 		EXPECT_EQ(e.getErrorCode(), CKR_GENERAL_ERROR);
 	}
 }
 
-TEST_F(P11_Test, getFunction)
+TEST_F(Cryptoki_Test, getFunction)
 {
-	P11 p11module("/tmp/pkcs11mocked.so");
+	Cryptoki p11module("/tmp/pkcs11mocked.so");
 
   	bool called = false;
 	pkcs11->C_Initialize = [&](void* ptr) -> CK_RV {
