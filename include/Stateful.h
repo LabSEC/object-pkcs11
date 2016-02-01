@@ -1,6 +1,7 @@
-#ifndef P11INIT_H
-#define P11INIT_H
+#ifndef STATEFUL_H
+#define STATEFUL_H
 
+namespace objck {
 /*!
  * @brief <b>Initializable abstract class</b><br>
  *
@@ -12,51 +13,51 @@
  *
  * @author Lucas Pandolfo Perin
  */
-class P11Init
+class Stateful
 {
 protected:
 	/*!
-	* Simple state enumerator, dead r alive!
+	* Simple state enumerator, ENABLED or DISABLED!
 	*/
 	enum state
 	{
-		DEAD = 0,
-		ALIVE = 1
+		DISABLED = 0,
+		ENABLED = 1
 	};
 
-	P11Init::state _currentState;
+	Stateful::state _currentState;
 
 	/*!
-	* Sets _currentState to DEAD
+	* Sets _currentState to DISABLED
 	*/
-	void kill()
+	void disable()
 	{
-		this->_currentState = P11Init::DEAD;
+		this->_currentState = Stateful::DISABLED;
 	}
 
 	/*!
 	* Sets _currentSate to ALIVE
 	*/
-	void ress()
+	void enable()
 	{
-		this->_currentState = P11Init::ALIVE;
+		this->_currentState = Stateful::ENABLED;
 	}
 public:
 	/*!
 	* Default Constructor, initializes as DEAD.
 	*/
-	P11Init(P11Init::state st = P11Init::DEAD) : _currentState(st){};
+	Stateful(Stateful::state st = Stateful::DISABLED) : _currentState(st){};
 
 	/*!
 	* Default destructor
 	*/
-	virtual ~P11Init() throw(){};
+	virtual ~Stateful() throw(){};
 
 	/*!
 	* Returns the current state of the class.
 	* @return _currentState
 	*/
-	P11Init::state getState()
+	Stateful::state getState()
 	{
 		return _currentState;
 	};
@@ -65,18 +66,19 @@ public:
 	* Returns true is instance is ALIVE.
 	* @return true if is ALIVE
 	*/
-	bool isAlive()
+	bool isEnabled()
 	{
-		return _currentState == P11Init::ALIVE;
+		return _currentState == Stateful::ENABLED;
 	};
 
 	/*!
 	* Returns true is instance is DEAD.
 	* @return true if is DEAD
 	*/
-	bool isDead()
+	bool isDisabled()
 	{
-		return _currentState == P11Init::DEAD;
+		return _currentState == Stateful::DISABLED;
 	};
 };
-#endif /*P11INIT_H*/
+}/*END NAMESPACE*/
+#endif /*STATEFUL_H*/

@@ -1,11 +1,11 @@
-#ifndef CRYPTOKIINFO_H
-#define CRYPTOKIINFO_H
+#ifndef INFO_H
+#define INFO_H
 
 #include <string>
 
-#include "P11Init.h"
 #include "pkcs11.h"
 
+namespace objck {
 /*!
  * @brief <b>PKCS#11 Info</b><br>
  *
@@ -13,22 +13,20 @@
  * the original struct protected and provides
  * public functions to return its values.
  *
- * @see P11
+ * @see Cryptoki
  * @see CK_INFO
  *
  * @author Lucas Pandolfo Perin
  */
-class CryptokiInfo : public P11Init
-{
-	friend class P11;
+class Info {
+	friend class Cryptoki;
 protected:
 	CK_INFO _info;
 public:
-	CryptokiInfo() : P11Init(){};
-	virtual ~CryptokiInfo(){};
+	Info(){};
+	virtual ~Info(){};
 	
-	enum CryptokiInfoFlags
-	{
+	enum InfoFlags {
 		EMPTY = 0,
 		TOKEN_IS_PRESENT = 1,
 		REMOVABLE_DEVICE = 2,
@@ -40,16 +38,16 @@ public:
 		UNKNOWN = 32
 	};
 
-	std::string cryptokiVersion();
-	int cryptokiMajorVersion();
-	int cryptokiMinorVersion();
+	std::string version();
+	int majorVersion();
+	int minorVersion();
 	std::string manufacturerId();
-	CryptokiInfo::CryptokiInfoFlags flags();
+	Info::InfoFlags flags();
 	std::string libraryDescription();
 	std::string libraryVersion();
 	int libraryMajorVersion();
 	int libraryMinorVersion();
 	CK_INFO getInfo();
 };
-
-#endif /*CRYPTOKIINFO_H*/
+}/*END NAMESPACE*/
+#endif /*INFO_H*/
