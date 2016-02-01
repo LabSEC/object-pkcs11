@@ -80,14 +80,14 @@ TEST_F(Cryptoki_Test, getInfo)
 		return CKR_OK;
 	};
 
-	Info cryptokiInfo;
-	cryptokiInfo = p11module.getInfo();
+	Info info;
+	info = p11module.getInfo();
 
-	ASSERT_EQ(Info.majorVersion(),6);
-	ASSERT_EQ(Info.minorVersion(),7);
-	ASSERT_EQ(Info.flags(), Info::EMPTY); 
-	ASSERT_EQ(Info.libraryMajorVersion(),12);
-	ASSERT_EQ(Info.libraryMinorVersion(),13);
+	ASSERT_EQ(info.majorVersion(),6);
+	ASSERT_EQ(info.minorVersion(),7);
+	ASSERT_EQ(info.flags(), Info::EMPTY); 
+	ASSERT_EQ(info.libraryMajorVersion(),12);
+	ASSERT_EQ(info.libraryMinorVersion(),13);
 }
 
 TEST_F(Cryptoki_Test, getInfo_error)
