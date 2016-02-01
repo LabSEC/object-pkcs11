@@ -1,6 +1,6 @@
 INCLUDES = -I./$(GTEST_DIR) -I. -I../include
 CC = g++
-CPPFLAGS = -std=c++11
+CPPFLAGS = -std=c++11 -DDEBUG
 CXXFLAGS = -g
 EXECUTABLE = test.out
 LIBS = -pthread -ldl
@@ -45,7 +45,6 @@ clean:
 	rm -rf ./$(SRC_DIR)/*.o $(EXECUTABLE)
 
 veryclean: clean
-	rm -rf ./$(GTEST_DIR)/*.o
 	rm -f /tmp/$(MOCKED_SO)
 
 

@@ -29,20 +29,19 @@ all: $(OBJS)
 	@echo 'Build complete!'
 	@echo ' '
 
+clear_test_files:
+	$(MAKE) -C tests veryclean
+
 .PHONY: test
 test: all
 	$(MAKE) -C tests test
 
-cleantest: all
-	$(MAKE) -C tests clean
-	$(MAKE) -C tests test
+cleantest: clear_test_files test
 
-verycleantest: all
-	$(MAKE) -C tests veryclean
-	$(MAKE) -C tests test
-	
+commitcheck: clean cleantest clean
 
 clean: 
 	$(RM) -f $(SRC_DIR)/*.o
 	$(RM) -f $(EXECUTABLE)
 	$(RM) -rf $(DOC_DIR)
+

@@ -1,11 +1,11 @@
 #include "mock/PKCS11CallbackMocker.h"
 namespace pkcstest {
 
-		static CK_LAMBDA_FUNCTION_LIST* setUpMocker() {
+		static CK_LAMBDA_FUNCTION_LIST* getMocker() {
 			return getMockerReference("/tmp/pkcs11mocked.so");
 		}
 
-		static void setUpFunctions(CK_LAMBDA_FUNCTION_LIST* pkcs11) { 
+		static void setUpMockerFunctions(CK_LAMBDA_FUNCTION_LIST* pkcs11) { 
 			pkcs11->C_Initialize = [&](void* ptr) -> CK_RV {
 				return CKR_OK;
 			};
