@@ -40,6 +40,10 @@ cleantest: clear_test_files test
 
 commitcheck: clean cleantest clean
 
+latex:
+	@doxygen object-pkcs11.doxyfile
+	$(MAKE) -C docs/latex
+
 clean: 
 	$(RM) -f $(SRC_DIR)/*.o
 	$(RM) -f $(EXECUTABLE)

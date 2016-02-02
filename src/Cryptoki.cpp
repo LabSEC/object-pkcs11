@@ -1,7 +1,8 @@
 #include "Cryptoki.h"
+
 namespace objck {
 
-Cryptoki::Cryptoki(const std::string& path) : _functionList(0), _module(0)
+Cryptoki::Cryptoki(const std::string& path) : _module(0), _functionList(0)
 {
 //TODO(perin): check if module was loaded correctly.
 	loadModule(path);
@@ -32,11 +33,11 @@ void Cryptoki::loadModule(const std::string& path)
 void Cryptoki::loadFunctions()
 {
 	CK_C_GetFunctionList getFuncList = (CK_C_GetFunctionList) dlsym(_module, "C_GetFunctionList");
-	_rv = getFuncList(&_functionList);
-	if(_rv)
+	CK_RV rv  = getFuncList(&_functionList);
+	if(rv)
 	{
 		FAILED;
-		throw CryptokiException(_rv);
+		throw CryptokiException(rv);
 	}
 	OK;
 }
@@ -44,11 +45,11 @@ void Cryptoki::loadFunctions()
 void Cryptoki::initialize()
 {
 	PRECONDITION(_functionList)
-	_rv = (*_functionList->C_Initialize)(0);
-	if(_rv)
+	CK_RV rv  = (*_functionList->C_Initialize)(0);
+	if(rv)
 	{
 		FAILED;
-		throw CryptokiException(_rv);
+		throw CryptokiException(rv);
 	}
 	OK;
 }
@@ -64,11 +65,11 @@ Info Cryptoki::getInfo()
 {
 	PRECONDITION(_functionList)
 	Info cryptokiInfo;
-	_rv = (*_functionList->C_GetInfo)(&cryptokiInfo._info);
-	if(_rv)
+	CK_RV rv  = (*_functionList->C_GetInfo)(&cryptokiInfo._info);
+	if(rv)
 	{
 		FAILED;
-		throw CryptokiException(_rv);
+		throw CryptokiException(rv);
 	}
 	OK;
 	return cryptokiInfo;
@@ -78,18 +79,15 @@ FunctionList Cryptoki::getFunctionList()
 {
 	PRECONDITION(_functionList)
 	CK_FUNCTION_LIST_PTR fListPtr;
-	CK_FUNCTION_LIST fList;
 	
-	_rv = (*_functionList->C_GetFunctionList)(&fListPtr);
-	if(_rv)
+	CK_RV rv  = (*_functionList->C_GetFunctionList)(&fListPtr);
+	if(rv)
 	{
 		FAILED;
-		throw CryptokiException(_rv);
+		throw CryptokiException(rv);
 	}
 	OK;
-	fList = *fListPtr;
-	//TODO(Gava): Find out if we should free flistPtr here.
-	return fList;
+	return *fListPtr;
 }
 
 //TODO(perin): copy strings without casting. CK_UTF8CHAR is unsigned char.
@@ -103,11 +101,11 @@ void Cryptoki::initToken(unsigned int slot, std::string& soPin, std::string& lab
 	CK_UTF8CHAR* utf8label = new CK_UTF8CHAR[label.length()];
 	strncpy((char*)utf8label, label.c_str(), label.length());
 
-	_rv = (*_functionList->C_InitToken)(slot, utf8soPin, soPinLen, utf8label);
-	if(_rv)
+	CK_RV rv  = (*_functionList->C_InitToken)(slot, utf8soPin, soPinLen, utf8label);
+	if(rv)
 	{
 		FAILED;
-		throw CryptokiException(_rv);
+		throw CryptokiException(rv);
 	}
 	OK;
 }
@@ -119,11 +117,11 @@ Session Cryptoki::openSession(unsigned int slot,
 	PRECONDITION(_functionList)
 	Session sn;
 	//TODO(Perin): Implement notify callbacks
-    _rv = (*_functionList->C_OpenSession)(slot, flags, 0, 0, &sn._session);
-    if(_rv)
+    CK_RV rv  = (*_functionList->C_OpenSession)(slot, flags, 0, 0, &sn._session);
+    if(rv)
         {
             FAILED;
-            throw CryptokiException(_rv);
+            throw CryptokiException(rv);
         }
     OK;
 	sn._functionList = _functionList;
@@ -134,11 +132,11 @@ Session Cryptoki::openSession(unsigned int slot,
 void Cryptoki::closeAllSessions(unsigned int slot)
 {
 	PRECONDITION(_functionList)
-	_rv = (_functionList->C_CloseAllSessions)(slot);
-    if(_rv)
+	CK_RV rv  = (_functionList->C_CloseAllSessions)(slot);
+    if(rv)
         {
             FAILED;
-            throw CryptokiException(_rv);
+            throw CryptokiException(rv);
         }
     OK;
 }

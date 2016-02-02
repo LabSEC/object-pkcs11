@@ -12,10 +12,10 @@
 #include "Session.h"
 #include "SessionInfo.h"
 
+namespace objck {
 typedef CK_FUNCTION_LIST FunctionList;
 typedef CK_NOTIFY CryptokiNotify;
 
-namespace objck {
 /*!
  * @brief <b>Cryptoki API</b><br>
  *
@@ -32,44 +32,13 @@ namespace objck {
  */
 class Cryptoki
 {
-protected:
-	void* _module; 
-	CK_RV _rv;
-	CK_FUNCTION_LIST_PTR _functionList;
-	
-	/*!
- 	* Protected function that loads
- 	* the pkcs11 module usinf libdl, dynamically.
- 	*/ 
-	void loadModule(const std::string& path);
-
-	/*!
- 	* Protected function that unloads
- 	* the pkcs11 module from libdl.
- 	*/
-	void closeModule();
-
-	/*!
- 	* Protected funtion that loads all the
- 	* PKCS#11 functions using C_GetFunctionList.
- 	* The PKCS#11 module must implement this
- 	* function in order for this API to work.
- 	*/
-	void loadFunctions();
-	
-	/*!
-	* Clean up miscellaneous Cryptoki associated resources.
-	*/
-	void finalize();
-
 public:
 
 	Cryptoki(const std::string& path);
 
 	virtual ~Cryptoki();
 
-	/*! @addtogroup general
-	*  General Purpose functions
+	/*! @addtogroup general General Purpose Functions 
 	* @{
 	*/
 	
@@ -87,10 +56,9 @@ public:
 	* Obtains entry points of Cryptoki library functions.
 	*/
 	FunctionList getFunctionList();
+	/*! @}*/
 
-	/*! @} 
-	* @addtogroup slot&token
-	*  Slot and Token anagement functions
+	/*! @addtogroup tokenslot Slot and Token Management functions
 	* @{
 	*/
 
@@ -98,10 +66,10 @@ public:
 	* Initializes a Token.
 	*/
 	void initToken(unsigned int slot, std::string& soPin, std::string& label);
+	/*! @}*/
 
-	/*! @} 
-	* @addtogroup session
-	*  Session maagement functions.
+	/*!
+	* @addtogroup session Session Management Functions
 	* @{
 	*/
 
@@ -134,6 +102,41 @@ public:
 	void closeAllSessions(unsigned int slot);
 	
 	/*! @} */
+
+protected:
+	/*!
+ 	* Protected function that loads
+ 	* the pkcs11 module usinf libdl, dynamically.
+ 	*/ 
+	void loadModule(const std::string& path);
+
+	/*!
+ 	* Protected function that unloads
+ 	* the pkcs11 module from libdl.
+ 	*/
+	void closeModule();
+
+	/*!
+ 	* Protected funtion that loads all the
+ 	* PKCS#11 functions using C_GetFunctionList.
+ 	* The PKCS#11 module must implement this
+ 	* function in order for this API to work.
+ 	*/
+	void loadFunctions();
+	
+
+	/*! @addtogroup general 
+	* @{
+	*/
+	
+	/*!
+	* Clean up miscellaneous Cryptoki associated resources.
+	*/
+	void finalize();
+	/*! @} */	
+
+	void* _module; 
+	CK_FUNCTION_LIST_PTR _functionList;
 };
 }/*END NAMESPACE*/
 #endif /*CRYPTOKI_H*/
