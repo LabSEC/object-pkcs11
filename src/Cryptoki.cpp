@@ -87,8 +87,6 @@ FunctionList Cryptoki::getFunctionList()
 		throw CryptokiException(rv);
 	}
 	OK;
-	//CK_FUNCTION_LIST fList = *fListPtr;
-	//return fList;
 	return *fListPtr;
 }
 
