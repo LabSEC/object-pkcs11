@@ -32,43 +32,13 @@ typedef CK_NOTIFY CryptokiNotify;
  */
 class Cryptoki
 {
-protected:
-	void* _module; 
-	CK_FUNCTION_LIST_PTR _functionList;
-	
-	/*!
- 	* Protected function that loads
- 	* the pkcs11 module usinf libdl, dynamically.
- 	*/ 
-	void loadModule(const std::string& path);
-
-	/*!
- 	* Protected function that unloads
- 	* the pkcs11 module from libdl.
- 	*/
-	void closeModule();
-
-	/*!
- 	* Protected funtion that loads all the
- 	* PKCS#11 functions using C_GetFunctionList.
- 	* The PKCS#11 module must implement this
- 	* function in order for this API to work.
- 	*/
-	void loadFunctions();
-	
-	/*!
-	* Clean up miscellaneous Cryptoki associated resources.
-	*/
-	void finalize();
-
 public:
 
 	Cryptoki(const std::string& path);
 
 	virtual ~Cryptoki();
 
-	/*! @addtogroup general
-	*  General Purpose functions
+	/*! @addtogroup General purpose functions 
 	* @{
 	*/
 	
@@ -86,10 +56,9 @@ public:
 	* Obtains entry points of Cryptoki library functions.
 	*/
 	FunctionList getFunctionList();
+	/*! @}*/
 
-	/*! @} 
-	* @addtogroup slot&token
-	*  Slot and Token anagement functions
+	/*! @addtogroup Slot and Token anagement functions
 	* @{
 	*/
 
@@ -97,10 +66,10 @@ public:
 	* Initializes a Token.
 	*/
 	void initToken(unsigned int slot, std::string& soPin, std::string& label);
+	/*! @}*/
 
-	/*! @} 
-	* @addtogroup session
-	*  Session maagement functions.
+	/*!
+	* @addtogroup Session maagement functions
 	* @{
 	*/
 
@@ -133,6 +102,41 @@ public:
 	void closeAllSessions(unsigned int slot);
 	
 	/*! @} */
+
+protected:
+	/*!
+ 	* Protected function that loads
+ 	* the pkcs11 module usinf libdl, dynamically.
+ 	*/ 
+	void loadModule(const std::string& path);
+
+	/*!
+ 	* Protected function that unloads
+ 	* the pkcs11 module from libdl.
+ 	*/
+	void closeModule();
+
+	/*!
+ 	* Protected funtion that loads all the
+ 	* PKCS#11 functions using C_GetFunctionList.
+ 	* The PKCS#11 module must implement this
+ 	* function in order for this API to work.
+ 	*/
+	void loadFunctions();
+	
+
+	/*! @addtogroup General purpose functions 
+	* @{
+	*/
+	
+	/*!
+	* Clean up miscellaneous Cryptoki associated resources.
+	*/
+	void finalize();
+	/*! @} */	
+
+	void* _module; 
+	CK_FUNCTION_LIST_PTR _functionList;
 };
 }/*END NAMESPACE*/
 #endif /*CRYPTOKI_H*/
