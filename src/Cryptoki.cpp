@@ -78,7 +78,6 @@ Info Cryptoki::getInfo()
 FunctionList Cryptoki::getFunctionList()
 {
 	PRECONDITION(_functionList)
-	CK_FUNCTION_LIST fList;
 	CK_FUNCTION_LIST_PTR fListPtr;
 	
 	CK_RV rv  = (*_functionList->C_GetFunctionList)(&fListPtr);
@@ -88,8 +87,9 @@ FunctionList Cryptoki::getFunctionList()
 		throw CryptokiException(rv);
 	}
 	OK;
-	fList = *fListPtr;
-	return fList;
+	//CK_FUNCTION_LIST fList = *fListPtr;
+	//return fList;
+	return *fListPtr;
 }
 
 //TODO(perin): copy strings without casting. CK_UTF8CHAR is unsigned char.
