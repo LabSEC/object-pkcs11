@@ -38,7 +38,7 @@ public:
 
 	virtual ~Cryptoki();
 
-	/*! @addtogroup General purpose functions 
+	/*! @addtogroup general General Purpose Functions 
 	* @{
 	*/
 	
@@ -58,7 +58,7 @@ public:
 	FunctionList getFunctionList();
 	/*! @}*/
 
-	/*! @addtogroup Slot and Token anagement functions
+	/*! @addtogroup tokenslot Slot and Token anagement functions
 	* @{
 	*/
 
@@ -69,7 +69,7 @@ public:
 	/*! @}*/
 
 	/*!
-	* @addtogroup Session maagement functions
+	* @addtogroup session Session maagement functions
 	* @{
 	*/
 
@@ -125,7 +125,7 @@ protected:
 	void loadFunctions();
 	
 
-	/*! @addtogroup General purpose functions 
+	/*! @addtogroup general 
 	* @{
 	*/
 	
