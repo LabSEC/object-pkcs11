@@ -34,8 +34,8 @@ class Cryptoki
 {
 protected:
 	void* _module; 
-	CK_RV _rv;
 	CK_FUNCTION_LIST_PTR _functionList;
+	CK_RV _rv;
 	
 	/*!
  	* Protected function that loads
