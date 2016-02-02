@@ -12,10 +12,10 @@
 #include "Session.h"
 #include "SessionInfo.h"
 
+namespace objck {
 typedef CK_FUNCTION_LIST FunctionList;
 typedef CK_NOTIFY CryptokiNotify;
 
-namespace objck {
 /*!
  * @brief <b>Cryptoki API</b><br>
  *
@@ -35,7 +35,6 @@ class Cryptoki
 protected:
 	void* _module; 
 	CK_FUNCTION_LIST_PTR _functionList;
-	CK_RV _rv;
 	
 	/*!
  	* Protected function that loads
