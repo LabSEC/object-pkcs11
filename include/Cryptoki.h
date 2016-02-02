@@ -58,7 +58,7 @@ public:
 	FunctionList getFunctionList();
 	/*! @}*/
 
-	/*! @addtogroup tokenslot Slot and Token anagement functions
+	/*! @addtogroup tokenslot Slot and Token Management functions
 	* @{
 	*/
 
@@ -69,7 +69,7 @@ public:
 	/*! @}*/
 
 	/*!
-	* @addtogroup session Session maagement functions
+	* @addtogroup session Session Management Functions
 	* @{
 	*/
 
