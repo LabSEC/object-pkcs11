@@ -1,22 +1,23 @@
-#ifndef P11_H
-#define P11_H
+#ifndef CRYPTOKI_H
+#define CRYPTOKI_H
 
 #include <string>
 #include <cstring>
 #include <dlfcn.h>
 
 #include "pkcs11.h"
-#include "P11Exception.h"
+#include "CryptokiException.h"
 #include "macros.h"
-#include "CryptokiInfo.h"
-#include "CryptokiSession.h"
-#include "CryptokiSessionInfo.h"
+#include "Info.h"
+#include "Session.h"
+#include "SessionInfo.h"
 
 typedef CK_FUNCTION_LIST FunctionList;
 typedef CK_NOTIFY CryptokiNotify;
 
+namespace objck {
 /*!
- * @brief <b>P11 API</b><br>
+ * @brief <b>Cryptoki API</b><br>
  *
  * This class calls pkcs11 functions from pkcs11
  * module. The module is loaded dynamically and
@@ -25,11 +26,11 @@ typedef CK_NOTIFY CryptokiNotify;
  * <b> Module must implement 'C_GetFunctionList' </b><p>
  *
  * @see pkcs11.h
- * @see P11Exception.h
+ * @see CryptokiException.h
  *
  * @author Lucas Pandolfo Perin
  */
-class P11
+class Cryptoki
 {
 protected:
 	void* _module; 
@@ -63,9 +64,9 @@ protected:
 
 public:
 
-	P11(const std::string& path);
+	Cryptoki(const std::string& path);
 
-	virtual ~P11();
+	virtual ~Cryptoki();
 
 	/*! @addtogroup general
 	*  General Purpose functions
@@ -80,7 +81,7 @@ public:
 	/*!
 	* Obtains general information about Cryptoki.
 	*/
-	CryptokiInfo getInfo();
+	Info getInfo();
 	
 	/*!
 	* Obtains entry points of Cryptoki library functions.
@@ -116,11 +117,11 @@ public:
 	* @param appPtr Application defined pointer to be passed to 
 	* the notification callback.
 	*
-	* @return CryptokiSession
-	* @throw P11Exception
+	* @return Session
+	* @throw CryptokiException
 	*/
-	CryptokiSession openSession(unsigned int slot, 
-		CryptokiSessionInfo::CryptokiSessionFlags flags = CryptokiSessionInfo::SERIAL_SESSION,
+	Session openSession(unsigned int slot, 
+		SessionInfo::SessionFlags flags = SessionInfo::SERIAL_SESSION,
 		CryptokiNotify* notify = 0, void* appPtr = 0);
 
 	/*!
@@ -128,10 +129,11 @@ public:
 	*
 	* @param slot Specifies the token slot.
 	*
-	* @throw P11Exception
+	* @throw CryptokiException
 	*/
 	void closeAllSessions(unsigned int slot);
 	
 	/*! @} */
 };
-#endif /*P11_h*/
+}/*END NAMESPACE*/
+#endif /*CRYPTOKI_H*/

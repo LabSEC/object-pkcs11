@@ -1,13 +1,13 @@
-#ifndef CRYPTOKISESSION_H
-#define CRYPTOKISESSION_H
+#ifndef SESSION_H
+#define SESSION_H
 
-#include "P11Init.h"
+#include "Stateful.h"
 #include "pkcs11.h"
 #include "macros.h"
-#include "P11Exception.h"
-#include "CryptokiSessionInfo.h"
+#include "CryptokiException.h"
+#include "SessionInfo.h"
 
-
+namespace objck {
 /*!
  * @brief <b>PKCS#11 Sessions</b><br>
  *
@@ -19,33 +19,33 @@
  *
  * @see pkcs11.h
  * @see CK_SESSION_HANDLE
- * @see P11.h
+ * @see Cryptoki.h
  *
  * @author Lucas Pandolfo Perin
  */
-class CryptokiSession : public P11Init
+class Session : public Stateful
 {
-	friend class P11;
+	friend class Cryptoki;
 
 protected:
 	CK_SESSION_HANDLE _session;
 	CK_FUNCTION_LIST_PTR _functionList;
 public:
-	CryptokiSession() : P11Init(), _functionList(0) {};
-	CryptokiSession(CryptokiSession&& other) {
+	Session() : Stateful(), _functionList(0) {};
+	Session(Session&& other) {
 		_session = std::move(other._session);	
 		_functionList = std::move(other._functionList);	
 		_currentState = other._currentState;
-		other._currentState = DEAD;
+		other._currentState = DISABLED;
 	};
-	virtual ~CryptokiSession(){ closeSession(); _functionList = 0;};
-	CryptokiSession& operator=(const CryptokiSession& other) = delete;
-	CryptokiSession& operator=(CryptokiSession&& other)
+	virtual ~Session(){ closeSession(); _functionList = 0;};
+	Session& operator=(const Session& other) = delete;
+	Session& operator=(Session&& other)
 	{
 		_session = std::move(other._session);	
 		_functionList = std::move(other._functionList);	
 		_currentState = other._currentState;
-		other._currentState = DEAD;
+		other._currentState = DISABLED;
 		return *this;
 	};
 
@@ -54,7 +54,7 @@ public:
 	* Session management functions
 	* @{
 	*/
-	CryptokiSessionInfo getSessionInfo();
+	SessionInfo getSessionInfo();
 	void getOperationState();
 	void setOperationState();
 	void closeSession();
@@ -74,4 +74,5 @@ public:
 	void logout();
 	/*! @} */
 };
-#endif /*CRYPTOKISESSION_H*/
+}/*END NAMESPACE*/
+#endif /*SESSION_H*/

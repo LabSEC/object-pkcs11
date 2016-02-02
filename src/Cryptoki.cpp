@@ -1,13 +1,14 @@
-#include "P11.h"
+#include "Cryptoki.h"
+namespace objck {
 
-P11::P11(const std::string& path) : _functionList(0), _module(0)
+Cryptoki::Cryptoki(const std::string& path) : _functionList(0), _module(0)
 {
 //TODO(perin): check if module was loaded correctly.
 	loadModule(path);
 	loadFunctions();
 }
 
-P11::~P11()
+Cryptoki::~Cryptoki()
 {
 	if(_module)
 	{
@@ -17,7 +18,7 @@ P11::~P11()
 	}
 }
 
-void P11::loadModule(const std::string& path)
+void Cryptoki::loadModule(const std::string& path)
 {
 	//TODO(perin): check if module is already loaded;
 	TRACE("Loading module from PATH");
@@ -28,53 +29,52 @@ void P11::loadModule(const std::string& path)
 	}
 }
 
-void P11::loadFunctions()
+void Cryptoki::loadFunctions()
 {
 	CK_C_GetFunctionList getFuncList = (CK_C_GetFunctionList) dlsym(_module, "C_GetFunctionList");
 	_rv = getFuncList(&_functionList);
 	if(_rv)
 	{
 		FAILED;
-		throw P11Exception(_rv);
+		throw CryptokiException(_rv);
 	}
 	OK;
 }
 
-void P11::initialize()
+void Cryptoki::initialize()
 {
 	PRECONDITION(_functionList)
 	_rv = (*_functionList->C_Initialize)(0);
 	if(_rv)
 	{
 		FAILED;
-		throw P11Exception(_rv);
+		throw CryptokiException(_rv);
 	}
 	OK;
 }
 
-void P11::finalize()
+void Cryptoki::finalize()
 {
 	PRECONDITION(_functionList)
 	(*_functionList->C_Finalize)(0);
 	OK;
 }
 
-CryptokiInfo P11::getInfo()
+Info Cryptoki::getInfo()
 {
 	PRECONDITION(_functionList)
-	CryptokiInfo cryptokiInfo;
+	Info cryptokiInfo;
 	_rv = (*_functionList->C_GetInfo)(&cryptokiInfo._info);
 	if(_rv)
 	{
 		FAILED;
-		throw P11Exception(_rv);
+		throw CryptokiException(_rv);
 	}
 	OK;
-	cryptokiInfo.ress();
 	return cryptokiInfo;
 }
 
-FunctionList P11::getFunctionList()
+FunctionList Cryptoki::getFunctionList()
 {
 	PRECONDITION(_functionList)
 	CK_FUNCTION_LIST_PTR fListPtr;
@@ -84,7 +84,7 @@ FunctionList P11::getFunctionList()
 	if(_rv)
 	{
 		FAILED;
-		throw P11Exception(_rv);
+		throw CryptokiException(_rv);
 	}
 	OK;
 	fList = *fListPtr;
@@ -93,7 +93,7 @@ FunctionList P11::getFunctionList()
 }
 
 //TODO(perin): copy strings without casting. CK_UTF8CHAR is unsigned char.
-void P11::initToken(unsigned int slot, std::string& soPin, std::string& label)
+void Cryptoki::initToken(unsigned int slot, std::string& soPin, std::string& label)
 {
 	PRECONDITION(_functionList)
 	CK_ULONG soPinLen = soPin.length();
@@ -107,38 +107,40 @@ void P11::initToken(unsigned int slot, std::string& soPin, std::string& label)
 	if(_rv)
 	{
 		FAILED;
-		throw P11Exception(_rv);
+		throw CryptokiException(_rv);
 	}
 	OK;
 }
 
-CryptokiSession P11::openSession(unsigned int slot,
-	CryptokiSessionInfo::CryptokiSessionFlags flags,
+Session Cryptoki::openSession(unsigned int slot,
+	SessionInfo::SessionFlags flags,
 	CryptokiNotify* notify, void* appPtr)
 {
 	PRECONDITION(_functionList)
-	CryptokiSession sn;
+	Session sn;
 	//TODO(Perin): Implement notify callbacks
     _rv = (*_functionList->C_OpenSession)(slot, flags, 0, 0, &sn._session);
     if(_rv)
         {
             FAILED;
-            throw P11Exception(_rv);
+            throw CryptokiException(_rv);
         }
     OK;
 	sn._functionList = _functionList;
-	sn.ress();
+	sn.enable();
 	return sn;
 }
 
-void P11::closeAllSessions(unsigned int slot)
+void Cryptoki::closeAllSessions(unsigned int slot)
 {
 	PRECONDITION(_functionList)
 	_rv = (_functionList->C_CloseAllSessions)(slot);
     if(_rv)
         {
             FAILED;
-            throw P11Exception(_rv);
+            throw CryptokiException(_rv);
         }
     OK;
 }
+
+}/*END NAMESPACE*/
