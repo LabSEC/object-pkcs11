@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.9.1"/>
-<title>Object PKCS#11 C++ Wrapper: Main Page</title>
+<title>Object PKCS#11 C++ Wrapper: Class Index</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -37,10 +37,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 </script>
   <div id="navrow1" class="tabs">
     <ul class="tablist">
-      <li class="current"><a href="index.html"><span>Main&#160;Page</span></a></li>
+      <li><a href="index.html"><span>Main&#160;Page</span></a></li>
       <li><a href="modules.html"><span>Modules</span></a></li>
       <li><a href="namespaces.html"><span>Namespaces</span></a></li>
-      <li><a href="annotated.html"><span>Classes</span></a></li>
+      <li class="current"><a href="annotated.html"><span>Classes</span></a></li>
       <li><a href="files.html"><span>Files</span></a></li>
       <li>
         <div id="MSearchBox" class="MSearchBoxInactive">
@@ -60,6 +60,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
       </li>
     </ul>
   </div>
+  <div id="navrow2" class="tabs2">
+    <ul class="tablist">
+      <li><a href="annotated.html"><span>Class&#160;List</span></a></li>
+      <li class="current"><a href="classes.html"><span>Class&#160;Index</span></a></li>
+      <li><a href="hierarchy.html"><span>Class&#160;Hierarchy</span></a></li>
+      <li><a href="functions.html"><span>Class&#160;Members</span></a></li>
+    </ul>
+  </div>
 </div><!-- top -->
 <!-- window showing the filter options -->
 <div id="MSearchSelectWindow"
@@ -77,21 +85,22 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 
 <div class="header">
   <div class="headertitle">
-<div class="title">Object PKCS#11 C++ Wrapper Documentation</div>  </div>
+<div class="title">Class Index</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a href="https://travis-ci.org/LabSEC/object-pkcs11">![Build Status](https://travis-ci.org/LabSEC/object-pkcs11.svg?branch=master)</a></p>
-<h1>Introduction</h1>
-<p>Recently I had to prototype some PKCS#11 code to test if the API supported symmetric key wrapping and double wrapping using RSA and ECDSA public keys. Coding with C, reading huge pdf docs and header files is just annoying. This is why I decided to start a PKCS#11 Object Oriented and well documented library. I hope it helps me and my team mates with our current projects. Moreover, if it suits you, please feel free to use, share and contribute :)</p>
-<p>My goal is to implement this library to work with simple use cases and less code. If you wish to implement more complex applications, I recommend taking a look at Libp11 from OpenSC project.</p>
-<h1>Contribution</h1>
-<p>We are designing our objects to be used with RAII pattern. Functions should always return copies and pointers are not welcome for the end user (should be kept behind curtain). Sessions are closed the object is destructed. Always consider the context of the declaration to manage "close" and "finalize" functions.</p>
-<h1>Running code with SoftHSMv2</h1>
-<p>We wrote a PKCS11 mocker using lambda functions. In the test files we can write the PKCS11 function implementations on the fly. This allows us to test if the functions were indeed called dynamically and to evaluate the return value.</p>
-<p>run the tests with: </p><pre class="fragment">$ make test
-</pre><h1>Status</h1>
-<p>Under development as of Oct 2015 Lucas Perin :) </p>
-</div></div><!-- contents -->
+<div class="qindex"><a class="qindex" href="#letter_C">C</a>&#160;|&#160;<a class="qindex" href="#letter_I">I</a>&#160;|&#160;<a class="qindex" href="#letter_S">S</a></div>
+<table style="margin: 10px; white-space: nowrap;" align="center" width="95%" border="0" cellspacing="0" cellpadding="0">
+<tr><td rowspan="2" valign="bottom"><a name="letter_C"></a><table border="0" cellspacing="0" cellpadding="0"><tr><td><div class="ah">&#160;&#160;C&#160;&#160;</div></td></tr></table>
+</td><td valign="top"><a class="el" href="classCryptokiException.html">CryptokiException</a>&#160;&#160;&#160;</td><td rowspan="2" valign="bottom"><a name="letter_S"></a><table border="0" cellspacing="0" cellpadding="0"><tr><td><div class="ah">&#160;&#160;S&#160;&#160;</div></td></tr></table>
+</td><td valign="top"><a class="el" href="classobjck_1_1SessionInfo.html">SessionInfo</a> (<a class="el" href="namespaceobjck.html">objck</a>)&#160;&#160;&#160;</td></tr>
+<tr><td rowspan="2" valign="bottom"><a name="letter_I"></a><table border="0" cellspacing="0" cellpadding="0"><tr><td><div class="ah">&#160;&#160;I&#160;&#160;</div></td></tr></table>
+</td><td valign="top"><a class="el" href="classobjck_1_1Stateful.html">Stateful</a> (<a class="el" href="namespaceobjck.html">objck</a>)&#160;&#160;&#160;</td></tr>
+<tr><td valign="top"><a class="el" href="classobjck_1_1Cryptoki.html">Cryptoki</a> (<a class="el" href="namespaceobjck.html">objck</a>)&#160;&#160;&#160;</td><td valign="top"><a class="el" href="classobjck_1_1Session.html">Session</a> (<a class="el" href="namespaceobjck.html">objck</a>)&#160;&#160;&#160;</td><td></td></tr>
+<tr><td></td><td valign="top"><a class="el" href="classobjck_1_1Info.html">Info</a> (<a class="el" href="namespaceobjck.html">objck</a>)&#160;&#160;&#160;</td><td></td><td></td></tr>
+<tr><td></td><td></td><td></td><td></td></tr>
+</table>
+<div class="qindex"><a class="qindex" href="#letter_C">C</a>&#160;|&#160;<a class="qindex" href="#letter_I">I</a>&#160;|&#160;<a class="qindex" href="#letter_S">S</a></div>
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
 Generated by &#160;<a href="http://www.doxygen.org/index.html">
