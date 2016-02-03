@@ -16,8 +16,6 @@ addons:
     - g++-4.9
     
 script:
-- make CC=g++-4.9
-- cd tests
 - make CC=g++-4.9 test
 
 after_success:

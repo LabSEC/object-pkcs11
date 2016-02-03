@@ -1,6 +1,6 @@
 INCLUDES = -I./$(GTEST_DIR) -I. -I../include
 CC = g++
-CPPFLAGS = -std=c++11 -DDEBUG --coverage
+CPPFLAGS = -std=c++11 -DDEBUG
 CXXFLAGS = -g
 EXECUTABLE = test.out
 LIBS = -pthread -ldl
@@ -16,7 +16,7 @@ OBJS += $(TEST_SRCS:.cpp=.o)
 
 %.o: %.cpp
 	@echo 'Building file: $<'
-	$(CC) $(CPPFLAGS) $(CXXFLAGS) $(INCLUDES) -O0 -Wall -c -o "$@" "$<"
+	$(CC) $(CPPFLAGS) $(CXXFLAGS) $(INCLUDES) --coverage -O0 -Wall -c -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 
@@ -42,7 +42,7 @@ test:	all
 	@echo 'Done!'
 
 clean:
-	rm -rf ./$(SRC_DIR)/*.o $(EXECUTABLE)
+	rm -rf ./$(SRC_DIR)/*.o ./$(SRC_DIR)/*.gc* $(EXECUTABLE)
 
 veryclean: clean
 	rm -f /tmp/$(MOCKED_SO)
