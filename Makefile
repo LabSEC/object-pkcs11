@@ -1,6 +1,6 @@
 SHELL = /bin/bash
 CC = g++
-CPPFLAGS = -std=c++11 -DPREC
+CPPFLAGS = -std=c++11 -DPREC --coverage
 CXXFLAGS = -g -shared -fPIC
 
 LIBS = -ldl

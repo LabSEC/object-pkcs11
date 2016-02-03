@@ -5,12 +5,21 @@ compiler:
 
 sudo: false
 
+before_install:
+- pip install --user cpp-coveralls
+
 addons:
   apt:
     sources:
     - ubuntu-toolchain-r-test
     packages:
     - g++-4.9
-
+    
 script:
+- make CC=g++-4.9
+- cd tests
 - make CC=g++-4.9 test
+- cd ..
+
+after_success:
+- coveralls --exclude include --exclude tests --gcov-options '\-lp' --gcov 'gcov-4.9'

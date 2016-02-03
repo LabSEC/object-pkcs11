@@ -1,7 +1,8 @@
 INCLUDES = -I./$(GTEST_DIR) -I. -I../include
 CC = g++
-CPPFLAGS = -std=c++11 -DDEBUG
+CPPFLAGS = -std=c++11 -DDEBUG --coverage
 CXXFLAGS = -g
+COVFLAGS = -fprofile-arcs -ftest-coverage -lgcov --coverage
 EXECUTABLE = test.out
 LIBS = -pthread -ldl
 
@@ -42,7 +43,7 @@ test:	all
 	@echo 'Done!'
 
 clean:
-	rm -rf ./$(SRC_DIR)/*.o $(EXECUTABLE)
+	rm -rf ./$(SRC_DIR)/*.o ./$(SRC_DIR)/*.gc* $(EXECUTABLE)
 
 veryclean: clean
 	rm -f /tmp/$(MOCKED_SO)
