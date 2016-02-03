@@ -1,7 +1,8 @@
 INCLUDES = -I./$(GTEST_DIR) -I. -I../include
 CC = g++
-CPPFLAGS = -std=c++11 -DDEBUG
+CPPFLAGS = -std=c++11 -DDEBUG --coverage
 CXXFLAGS = -g
+COVFLAGS = -fprofile-arcs -ftest-coverage -lgcov --coverage
 EXECUTABLE = test.out
 LIBS = -pthread -ldl
 
@@ -16,7 +17,7 @@ OBJS += $(TEST_SRCS:.cpp=.o)
 
 %.o: %.cpp
 	@echo 'Building file: $<'
-	$(CC) $(CPPFLAGS) $(CXXFLAGS) $(INCLUDES) --coverage -O0 -Wall -c -o "$@" "$<"
+	$(CC) $(CPPFLAGS) $(CXXFLAGS) $(INCLUDES) -O0 -Wall -c -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 
