@@ -1,6 +1,6 @@
 INCLUDES = -I./$(GTEST_DIR) -I. -I../include
 CC = g++
-CPPFLAGS = -std=c++11 -DDEBUG
+CPPFLAGS = -std=c++11 -DDEBUG --coverage
 CXXFLAGS = -g
 EXECUTABLE = test.out
 LIBS = -pthread -ldl
