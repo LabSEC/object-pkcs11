@@ -13,10 +13,10 @@ addons:
     sources:
     - ubuntu-toolchain-r-test
     packages:
-    - gcc-4.9
+    - g++-4.9
     
 script:
-- make CC="gcc-4.9 --enable-gcov" test
+- make CC="g++-4.9 --enable-gcov" test
 
 after_success:
 - coveralls --exclude lib --exclude tests --gcov-options '\-lp'
