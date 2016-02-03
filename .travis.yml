@@ -16,7 +16,7 @@ addons:
     - g++-4.9
     
 script:
-- make CC="g++-4.9 --enable-gcov" test
+- make CC="g++-4.9 --coverage" test
 
 after_success:
 - coveralls --exclude lib --exclude tests --gcov-options '\-lp'
