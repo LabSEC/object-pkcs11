@@ -1,6 +1,7 @@
 C++ Object Oriented Wrapper for PKCS#11
 =======
 [![Build Status](https://travis-ci.org/LabSEC/object-pkcs11.svg?branch=master)](https://travis-ci.org/LabSEC/object-pkcs11)
+[![Coverage Status](https://coveralls.io/repos/github/LabSEC/object-pkcs11/badge.svg?branch=dev)](https://coveralls.io/github/LabSEC/object-pkcs11?branch=dev)
 
 # Introduction
 
