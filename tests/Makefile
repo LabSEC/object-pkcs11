@@ -43,7 +43,7 @@ test:	all
 	@echo 'Done!'
 
 clean:
-	rm -rf ./$(SRC_DIR)/*.o ./$(SRC_DIR)/*.gc* $(EXECUTABLE)
+	rm -rf ./$(SRC_DIR)/*.o ./$(SRC_DIR)/*.gc* $(EXECUTABLE) *.gc*
 
 veryclean: clean
 	rm -f /tmp/$(MOCKED_SO)

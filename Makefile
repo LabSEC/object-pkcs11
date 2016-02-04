@@ -46,6 +46,7 @@ latex:
 
 clean: 
 	$(RM) -f $(SRC_DIR)/*.o
+	$(RM) -f $(SRC_DIR)/*.gc*
 	$(RM) -f $(EXECUTABLE)
 	$(RM) -rf $(DOC_DIR)
 
