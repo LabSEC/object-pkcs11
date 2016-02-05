@@ -35,5 +35,11 @@ run the tests with:
 	$ make test
 
 # Status
-Under development as of Oct 2015 
-Lucas Perin :)
+Under development as of Oct 2015.
+
+The following table describes which PKCS11 functions are supported. Although they are not completely supported (maybe), the tests should be a good measure of what we support or not.
+
+| Function Name | Status        |
+| ------------- | ------------- |
+| C_Initialize  | OK            |
+| C_Finalize    |               |
