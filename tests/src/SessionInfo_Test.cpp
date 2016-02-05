@@ -25,3 +25,14 @@ TEST(SessionInfo_test, constructor) {
 	EXPECT_EQ(recoveredInfo.flags, info.flags);	
 	EXPECT_EQ(recoveredInfo.ulDeviceError, info.ulDeviceError);	
 }
+
+TEST(SessionInfo_test, empty_and_unknown_flags) {
+	CK_SESSION_INFO info = { 0, 0, 0, 0 };
+	SessionInfo sInfo(info);
+
+	EXPECT_EQ(sInfo.flags(), SessionInfo::SessionFlags::EMPTY);
+
+	info.flags = 8;
+	sInfo = SessionInfo(info);
+	EXPECT_EQ(sInfo.flags(), SessionInfo::SessionFlags::UNKNOWN);
+}
