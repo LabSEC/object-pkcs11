@@ -37,7 +37,7 @@ run the tests with:
 # Status
 Under development as of Oct 2015.
 
-The following table describes which PKCS11 functions are supported. Although they are not completely supported (maybe), the tests should be a good measure of what we support or not.
+The following table describes which PKCS11 functions are supported. Although they are not completely supported (maybe), the tests should be a good measure of what we support or not. An OK mark should mean that at least the function is used somewhere in the code.
 
 | Function Name         | Status        |
 | --------------------- | ------------- |
