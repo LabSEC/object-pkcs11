@@ -20,9 +20,9 @@ SessionInfo Session::getSessionInfo()
 {
 	PRECONDITION(isEnabled())
 	PRECONDITION(_functionList)
-	SessionInfo inf;
 	CK_SESSION_INFO a;
 	CK_RV rv = (*_functionList->C_GetSessionInfo)(_session, &a);
+	SessionInfo inf(a);
     if(rv)
         {
             FAILED;
