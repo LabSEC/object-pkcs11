@@ -20,6 +20,18 @@ CK_RV C_GetSlotInfo(CK_SLOT_ID slot_id, CK_SLOT_INFO *info) {
 	return pkcs11Mocker.C_GetSlotInfo(slot_id, info);
 }
 
+CK_RV C_GetTokenInfo(CK_SLOT_ID slot_id, CK_TOKEN_INFO *info) {
+	return pkcs11Mocker.C_GetTokenInfo(slot_id, info);
+}
+
+CK_RV C_GetMechanismList(CK_SLOT_ID slot_id, CK_MECHANISM_TYPE *mechanism_list, unsigned long *count) {
+	return pkcs11Mocker.C_GetMechanismList(slot_id, mechanism_list, count);
+}
+
+CK_RV C_GetMechanismInfo(CK_SLOT_ID slot_id, CK_MECHANISM_TYPE type, struct ck_mechanism_info *info) {
+	return pkcs11Mocker.C_GetMechanismInfo(slot_id, type, info);
+}
+
 CK_RV C_InitToken(CK_SLOT_ID slot_id, unsigned char *pin, unsigned long pin_len, unsigned char *label) {
 	return pkcs11Mocker.C_InitToken(slot_id, pin, pin_len, label);
 }
@@ -35,8 +47,8 @@ CK_FUNCTION_LIST realFunctionList = {
   .C_GetFunctionList = C_GetFunctionList,
   .C_GetSlotList = C_GetSlotList,
   .C_GetSlotInfo = C_GetSlotInfo,
-  .C_GetTokenInfo = NULL,
-  .C_GetMechanismList = NULL,
+  .C_GetTokenInfo = C_GetTokenInfo,
+  .C_GetMechanismList = C_GetMechanismList,
   .C_GetMechanismInfo = NULL,
   .C_InitToken = C_InitToken,
   .C_InitPIN = NULL,
