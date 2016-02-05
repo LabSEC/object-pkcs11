@@ -20,6 +20,10 @@ CK_RV C_GetSlotInfo(CK_SLOT_ID slot_id, CK_SLOT_INFO *info) {
 	return pkcs11Mocker.C_GetSlotInfo(slot_id, info);
 }
 
+CK_RV C_InitToken(CK_SLOT_ID slot_id, unsigned char *pin, unsigned long pin_len, unsigned char *label) {
+	return pkcs11Mocker.C_InitToken(slot_id, pin, pin_len, label);
+}
+
 
 //TODO Do it for every other function as necessary
 
@@ -34,7 +38,7 @@ CK_FUNCTION_LIST realFunctionList = {
   .C_GetTokenInfo = NULL,
   .C_GetMechanismList = NULL,
   .C_GetMechanismInfo = NULL,
-  .C_InitToken = NULL,
+  .C_InitToken = C_InitToken,
   .C_InitPIN = NULL,
   .C_SetPIN = NULL,
   .C_OpenSession = NULL,

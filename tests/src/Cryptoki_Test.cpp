@@ -24,8 +24,7 @@ protected :
 
 CK_LAMBDA_FUNCTION_LIST* Cryptoki_Test::pkcs11 = NULL; 
 
-TEST_F(Cryptoki_Test, Finalize_should_be_called_on_destructor)
-{
+TEST_F(Cryptoki_Test, Finalize_should_be_called_on_destructor) {
 	bool called = false;
 	pkcs11->C_Finalize = [&](void* ptr) -> CK_RV {
 		called = true;
@@ -107,7 +106,7 @@ TEST_F(Cryptoki_Test, getInfo_error)
 	}
 }
 
-TEST_F(Cryptoki_Test, getFunction)
+TEST_F(Cryptoki_Test, getFunctionList)
 {
 	Cryptoki p11module("/tmp/pkcs11mocked.so");
 
@@ -124,5 +123,45 @@ TEST_F(Cryptoki_Test, getFunction)
 		CK_RV rv = (*test.C_Initialize)((void*)0x123456);
 		EXPECT_EQ(rv, CKR_OK);
 	});
+	EXPECT_TRUE(called);
+}
+
+TEST_F(Cryptoki_Test, initToken) {
+	Cryptoki p11module("/tmp/pkcs11mocked.so");
+
+	bool called = false;
+	std::string pin = "123456";
+	std::string label = "test";
+
+	pkcs11->C_InitToken = [&](CK_SLOT_ID slot_id, unsigned char *pin, 
+		unsigned long pin_len, unsigned char *label) -> CK_RV {
+		called = true;
+		//TODO(perin): compare strings?
+		return CKR_OK;
+	};
+
+	EXPECT_NO_THROW(p11module.initToken(0, pin, label));
+	EXPECT_TRUE(called);
+}
+
+TEST_F(Cryptoki_Test, initToken_Failed_causes_exception) {
+	Cryptoki p11module("/tmp/pkcs11mocked.so");
+
+	bool called = false;
+
+	pkcs11->C_InitToken = [&](CK_SLOT_ID slot_id, unsigned char *pin, 
+		unsigned long pin_len, unsigned char *label) -> CK_RV {
+		called = true;
+		return CKR_GENERAL_ERROR;
+	};
+
+	std::string pin = "123456";
+	std::string label = "test";
+	try {
+		p11module.initToken(0, pin, label);
+		EXPECT_TRUE(false);
+	} catch (CryptokiException& e) {
+		EXPECT_EQ(e.getErrorCode(), CKR_GENERAL_ERROR);
+	}
 	EXPECT_TRUE(called);
 }
