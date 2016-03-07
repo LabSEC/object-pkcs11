@@ -38,7 +38,7 @@ public:
 		_currentState = other._currentState;
 		other._currentState = DISABLED;
 	};
-	virtual ~Session(){ closeSession(); _functionList = 0;};
+	virtual ~Session(){ try{closeSession();}catch(...){} _functionList = 0;};
 	Session& operator=(const Session& other) = delete;
 	Session& operator=(Session&& other)
 	{

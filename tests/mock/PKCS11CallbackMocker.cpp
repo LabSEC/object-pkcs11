@@ -32,6 +32,10 @@ CK_RV C_CloseSession(CK_SESSION_HANDLE session) {
     return pkcs11Mocker.C_CloseSession(session);
 }
   
+CK_RV C_CloseAllSessions(CK_SLOT_ID slot_id) {
+    return pkcs11Mocker.C_CloseAllSessions(slot_id);
+}
+  
 CK_RV C_Login(CK_SESSION_HANDLE session, CK_USER_TYPE user_type, unsigned char *pin, unsigned long pin_len) {
     return pkcs11Mocker.C_Login(session, user_type, pin, pin_len);
 }
@@ -55,7 +59,7 @@ CK_FUNCTION_LIST realFunctionList = {
   .C_SetPIN = NULL,
   .C_OpenSession = C_OpenSession,
   .C_CloseSession = C_CloseSession,
-  .C_CloseAllSessions = NULL,
+  .C_CloseAllSessions = C_CloseAllSessions,
   .C_GetSessionInfo = NULL,
   .C_GetOperationState = NULL,
   .C_SetOperationState = NULL,
