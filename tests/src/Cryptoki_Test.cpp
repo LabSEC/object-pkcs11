@@ -103,6 +103,34 @@ TEST_F(Cryptoki_Test, getInfo)
 	ASSERT_FALSE(memcmp(recoveredStruct.libraryDescription, "Claud Computing                 ", 32));
 }
 
+TEST_F(Cryptoki_Test, info_can_handle_unknown_flags)
+{
+	Cryptoki p11module("/tmp/pkcs11mocked.so");
+
+	pkcs11->C_GetInfo = [&](CK_INFO *info) -> CK_RV {
+		info->flags = 8;
+		return CKR_OK;
+	};
+
+	Info info;
+	CK_INFO recoveredStruct;
+	
+    info = p11module.getInfo();
+	ASSERT_EQ(info.flags(), Info::UNKNOWN); 
+	recoveredStruct = info.getInfo();
+	ASSERT_EQ(recoveredStruct.flags, 8);
+
+	pkcs11->C_GetInfo = [&](CK_INFO *info) -> CK_RV {
+		info->flags = 4;
+		return CKR_OK;
+	};
+
+	info = p11module.getInfo();
+	ASSERT_EQ(info.flags(), Info::HARDWARE_SLOT); 
+	recoveredStruct = info.getInfo();
+	ASSERT_EQ(recoveredStruct.flags, 4);
+}
+
 TEST_F(Cryptoki_Test, getInfo_error)
 {
 	Cryptoki p11module("/tmp/pkcs11mocked.so");
