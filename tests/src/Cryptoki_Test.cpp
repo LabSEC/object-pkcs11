@@ -165,3 +165,34 @@ TEST_F(Cryptoki_Test, initToken_Failed_causes_exception) {
 	}
 	EXPECT_TRUE(called);
 }
+
+TEST_F(Cryptoki_Test, object_pkcs11_can_login) {
+	Cryptoki p11module("/tmp/pkcs11mocked.so");
+
+	bool called = false;
+
+    pkcs11->C_OpenSession = [&](CK_SLOT_ID slot_id, CK_FLAGS flags, void *application, CK_NOTIFY notify, CK_SESSION_HANDLE *session) -> CK_RV {
+        *session = 0x123456;
+		return CKR_OK;
+	};
+  
+    pkcs11->C_CloseSession = [&](CK_SESSION_HANDLE session) -> CK_RV {
+		return CKR_OK;
+	};
+  
+    pkcs11->C_Login = [&](CK_SESSION_HANDLE session, CK_USER_TYPE user_type, unsigned char *pin, unsigned long pin_len) -> CK_RV {
+        called = true;
+        EXPECT_EQ(session, 0x123456);
+
+        return CKR_OK;
+    };
+
+	std::string pin = "123456";
+	try {
+		Session session = p11module.openSession(0, SessionInfo::SessionFlags::RW_SESSION, 0, 0);
+        session.userLogin(pin);
+	} catch (CryptokiException& e) {
+		ASSERT_TRUE(false);
+	}
+	EXPECT_TRUE(called);
+}

@@ -66,10 +66,10 @@ public:
 
 	
 	/*!
-	* Logs into a Token.
+	* Logs into a Token as a user.
 	*/
-	void login(std::string& soPin);
-	
+	void userLogin(std::string& soPin);
+
 	CK_SESSION_HANDLE getSessionHandle();
 	void logout();
 	/*! @} */

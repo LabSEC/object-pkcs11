@@ -46,23 +46,20 @@ void Session::setOperationState()
 	NOT_IMPLEMENTED;
 }
 
-void Session::login(std::string& soPin)
+void Session::userLogin(std::string& userPin)
 {
 	PRECONDITION(isEnabled())
 	PRECONDITION(_functionList)
-    //TODO FIX 
-    NOT_IMPLEMENTED;
-	/*CK_ULONG pinLen = soPin.length();
-    CK_UTF8CHAR* utf8soPin = new CK_UTF8CHAR[soPin.length()];
-    strncpy((char*)utf8soPin, soPin.c_str(), soPin.length());
+	
+    CK_ULONG pinLen = userPin.length();
 
-    rv = (*functionList->C_Login)(session, CKU_SO, utf8soPin, pinLen);
+    CK_RV rv = (*_functionList->C_Login)(_session, CKU_USER, (unsigned char*)userPin.c_str(), pinLen);
     if(rv)
-        {
-            FAILED;
-            throw CryptokiException(rv);
-        }
-    OK;*/
+    {
+        FAILED;
+        throw CryptokiException(rv);
+    }
+    OK;
 }
 
 void Session::initPin(std::string& pin)
