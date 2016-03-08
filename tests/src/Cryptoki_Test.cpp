@@ -75,7 +75,8 @@ TEST_F(Cryptoki_Test, getInfo)
 		info->flags = 0;
 		info->libraryVersion.major = 12;
 		info->libraryVersion.minor = 13;
-
+		memcpy(info->manufacturerID, "Perinovsky                      ", 32);
+		memcpy(info->libraryDescription, "Claud Computing                 ", 32);
 		return CKR_OK;
 	};
 
@@ -84,9 +85,50 @@ TEST_F(Cryptoki_Test, getInfo)
 
 	ASSERT_EQ(info.majorVersion(),6);
 	ASSERT_EQ(info.minorVersion(),7);
+	ASSERT_EQ(info.version(),"6.7");
+	ASSERT_EQ(info.manufacturerId(), "Perinovsky                      ");
+	ASSERT_EQ(info.libraryDescription(), "Claud Computing                 ");
 	ASSERT_EQ(info.flags(), Info::EMPTY); 
 	ASSERT_EQ(info.libraryMajorVersion(),12);
 	ASSERT_EQ(info.libraryMinorVersion(),13);
+	ASSERT_EQ(info.libraryVersion(),"12.13");
+
+	CK_INFO recoveredStruct = info.getInfo();
+	ASSERT_EQ(recoveredStruct.cryptokiVersion.major, 6);
+	ASSERT_EQ(recoveredStruct.cryptokiVersion.minor, 7);
+	ASSERT_EQ(recoveredStruct.flags, 0);
+	ASSERT_EQ(recoveredStruct.libraryVersion.major, 12);
+	ASSERT_EQ(recoveredStruct.libraryVersion.minor, 13);
+	ASSERT_FALSE(memcmp(recoveredStruct.manufacturerID, "Perinovsky                      ", 32));
+	ASSERT_FALSE(memcmp(recoveredStruct.libraryDescription, "Claud Computing                 ", 32));
+}
+
+TEST_F(Cryptoki_Test, info_can_handle_unknown_flags)
+{
+	Cryptoki p11module("/tmp/pkcs11mocked.so");
+
+	pkcs11->C_GetInfo = [&](CK_INFO *info) -> CK_RV {
+		info->flags = 8;
+		return CKR_OK;
+	};
+
+	Info info;
+	CK_INFO recoveredStruct;
+	
+    info = p11module.getInfo();
+	ASSERT_EQ(info.flags(), Info::UNKNOWN); 
+	recoveredStruct = info.getInfo();
+	ASSERT_EQ(recoveredStruct.flags, 8);
+
+	pkcs11->C_GetInfo = [&](CK_INFO *info) -> CK_RV {
+		info->flags = 4;
+		return CKR_OK;
+	};
+
+	info = p11module.getInfo();
+	ASSERT_EQ(info.flags(), Info::HARDWARE_SLOT); 
+	recoveredStruct = info.getInfo();
+	ASSERT_EQ(recoveredStruct.flags, 4);
 }
 
 TEST_F(Cryptoki_Test, getInfo_error)
