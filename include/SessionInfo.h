@@ -24,6 +24,7 @@ class SessionInfo
 protected:
 	CK_SESSION_INFO _info;
 public:
+	SessionInfo(CK_SESSION_INFO info);
 
 	virtual ~SessionInfo(){};
 

@@ -1,6 +1,10 @@
 #include "SessionInfo.h"
 namespace objck {
 
+SessionInfo::SessionInfo(CK_SESSION_INFO info) : _info(info) {
+	
+}
+
 unsigned long SessionInfo::slotId() {
 	return _info.slotID;
 }
