@@ -24,6 +24,22 @@ CK_RV C_InitToken(CK_SLOT_ID slot_id, unsigned char *pin, unsigned long pin_len,
 	return pkcs11Mocker.C_InitToken(slot_id, pin, pin_len, label);
 }
 
+CK_RV C_OpenSession(CK_SLOT_ID slot_id, CK_FLAGS flags, void *application, CK_NOTIFY notify, CK_SESSION_HANDLE *session) {
+    return pkcs11Mocker.C_OpenSession(slot_id, flags, application, notify, session);
+}
+  
+CK_RV C_CloseSession(CK_SESSION_HANDLE session) {
+    return pkcs11Mocker.C_CloseSession(session);
+}
+  
+CK_RV C_CloseAllSessions(CK_SLOT_ID slot_id) {
+    return pkcs11Mocker.C_CloseAllSessions(slot_id);
+}
+  
+CK_RV C_Login(CK_SESSION_HANDLE session, CK_USER_TYPE user_type, unsigned char *pin, unsigned long pin_len) {
+    return pkcs11Mocker.C_Login(session, user_type, pin, pin_len);
+}
+
 
 //TODO Do it for every other function as necessary
 
@@ -41,13 +57,13 @@ CK_FUNCTION_LIST realFunctionList = {
   .C_InitToken = C_InitToken,
   .C_InitPIN = NULL,
   .C_SetPIN = NULL,
-  .C_OpenSession = NULL,
-  .C_CloseSession = NULL,
-  .C_CloseAllSessions = NULL,
+  .C_OpenSession = C_OpenSession,
+  .C_CloseSession = C_CloseSession,
+  .C_CloseAllSessions = C_CloseAllSessions,
   .C_GetSessionInfo = NULL,
   .C_GetOperationState = NULL,
   .C_SetOperationState = NULL,
-  .C_Login = NULL,
+  .C_Login = C_Login,
   .C_Logout = NULL,
   .C_CreateObject = NULL,
   .C_CopyObject = NULL,
