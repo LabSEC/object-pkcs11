@@ -11,21 +11,22 @@ protected :
 	static CK_LAMBDA_FUNCTION_LIST* pkcs11;
 
 	/*Set up after each test fixture*/
-	static void SetUpTestCase() {/*Nothing to do*/}
-
-	/*Tear down after each test fixture*/
-	static void TearDownTestCase() {/*Nothing to do*/}
-
-	/*Set up before running test fixtures*/
-	void SetUp() {
+	static void SetUpTestCase() {
 		pkcs11 = pkcstest::getMocker();
 		pkcstest::setUpMockerFunctions(pkcs11);
 	}
 
-	/*Tear down loaded mocker*/
-	void TearDown() {
+	/*Tear down after each test fixture*/
+	static void TearDownTestCase() {
 		pkcstest::closeMocker(pkcs11);
 	}
+
+	/*Set up before running test fixtures*/
+	void SetUp() {
+	}
+
+	/*Tear down loaded mocker*/
+	void TearDown() {}
 };
 
 CK_LAMBDA_FUNCTION_LIST* Cryptoki_Test::pkcs11 = NULL; 
