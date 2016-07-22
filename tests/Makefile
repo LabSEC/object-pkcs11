@@ -28,7 +28,7 @@ all: check-lib gtest mocker $(OBJS)
 
 mocker:
 	@echo 'Building Mocked PKCS11'
-	$(CC) $(CPPFLAGS) $(CXXFLAGS) $(INCLUDES) -shared -fPIC -o $(MOCKED_SO) $(MOCK_DIR)/*.cpp $(LIBS)
+	$(CC) $(CPPFLAGS) $(CXXFLAGS) $(INCLUDES) -shared -fPIC -o $(MOCKED_SO) $(MOCK_DIR)/*.cpp
 	mv $(MOCKED_SO) /tmp
 	@echo ' '
 

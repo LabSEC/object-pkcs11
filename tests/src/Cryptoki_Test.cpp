@@ -10,15 +10,21 @@ protected :
 
 	static CK_LAMBDA_FUNCTION_LIST* pkcs11;
 
-	static void SetUpTestCase() {
+	/*Set up after each test fixture*/
+	static void SetUpTestCase() {/*Nothing to do*/}
+
+	/*Tear down after each test fixture*/
+	static void TearDownTestCase() {/*Nothing to do*/}
+
+	/*Set up before running test fixtures*/
+	void SetUp() {
 		pkcs11 = pkcstest::getMocker();
+		pkcstest::setUpMockerFunctions(pkcs11);
 	}
 
-	static void TearDownTestCase() {}
-
-	void SetUp()
-	{
-		pkcstest::setUpMockerFunctions(pkcs11);
+	/*Tear down loaded mocker*/
+	void TearDown() {
+		pkcstest::closeMocker(pkcs11);
 	}
 };
 

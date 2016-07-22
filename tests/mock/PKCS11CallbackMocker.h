@@ -1,6 +1,5 @@
 #include "pkcs11.h"
 #include <functional>
-#include <dlfcn.h>
 
 typedef struct CK_LAMBDA_FUNCTION_LIST_ST
 {
@@ -75,11 +74,4 @@ typedef struct CK_LAMBDA_FUNCTION_LIST_ST
 } CK_LAMBDA_FUNCTION_LIST;
 
 CK_LAMBDA_FUNCTION_LIST pkcs11Mocker;
-
-CK_RV C_GetFunctionList(CK_FUNCTION_LIST **function_list);
-
-CK_LAMBDA_FUNCTION_LIST* getMockerReference(const std::string& path) {
-	void* lib = dlopen(path.c_str(), RTLD_LAZY);
-	return (CK_LAMBDA_FUNCTION_LIST*) dlsym(lib, "pkcs11Mocker");
-}
 
