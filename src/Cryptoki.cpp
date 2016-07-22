@@ -26,7 +26,8 @@ void Cryptoki::loadModule(const std::string& path)
 	_module = dlopen(path.c_str(), RTLD_LAZY);
 	if (!_module) {
 		TRACE(dlerror());
-		FAILED;
+		//TODO(perin): Should use different exception code?
+		throw CryptokiException(666);
 	}
 }
 

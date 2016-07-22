@@ -30,6 +30,28 @@ protected :
 
 CK_LAMBDA_FUNCTION_LIST* Cryptoki_Test::pkcs11 = NULL; 
 
+TEST_F(Cryptoki_Test, LoadModule_causes_exception) {
+	try {
+		Cryptoki p11module("wrong/path.so");
+	} catch (CryptokiException& e) {
+		//TODO(perin): this exception code may change in Cryptoki class source
+		EXPECT_EQ(e.getErrorCode(), 666);
+	}
+
+}
+
+TEST_F(Cryptoki_Test, LoadFunctions_causes_exception) {
+	pkcs11Mocker.C_GetFunctionList = [&](CK_FUNCTION_LIST**) -> CK_RV {
+		return CKR_GENERAL_ERROR;
+	};
+	try {
+		Cryptoki p11module("/tmp/pkcs11mocked.so");
+	} catch (CryptokiException& e) {
+		EXPECT_EQ(e.getErrorCode(), CKR_GENERAL_ERROR);
+	}
+
+}
+
 TEST_F(Cryptoki_Test, Finalize_should_be_called_on_destructor) {
 	bool called = false;
 	pkcs11->C_Finalize = [&](void* ptr) -> CK_RV {
@@ -172,6 +194,21 @@ TEST_F(Cryptoki_Test, getFunctionList)
 		EXPECT_EQ(rv, CKR_OK);
 	});
 	EXPECT_TRUE(called);
+}
+
+TEST_F(Cryptoki_Test, GetFunctionList_causes_exception) {
+	Cryptoki p11module("/tmp/pkcs11mocked.so");
+
+	pkcs11Mocker.C_GetFunctionList = [&](CK_FUNCTION_LIST**) -> CK_RV {
+		return CKR_GENERAL_ERROR;
+	};
+
+	try {
+		FunctionList test = p11module.getFunctionList();
+	} catch (CryptokiException& e) {
+		EXPECT_EQ(e.getErrorCode(), CKR_GENERAL_ERROR);
+	}
+
 }
 
 TEST_F(Cryptoki_Test, initToken) {
