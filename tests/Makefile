@@ -1,7 +1,7 @@
 INCLUDES = -I./$(GTEST_DIR) -I. -I../include
 CC = g++
 CPPFLAGS = -std=c++11 -DDEBUG --coverage
-CXXFLAGS = -g
+CXXFLAGS = -g -O0
 COVFLAGS = -fprofile-arcs -ftest-coverage -lgcov --coverage
 EXECUTABLE = test.out
 LIBS = -pthread -ldl

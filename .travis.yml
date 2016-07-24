@@ -19,4 +19,4 @@ script:
 - make CC=g++-6 test
 
 after_success:
-- coveralls --exclude include --exclude tests --gcov-options '\-lp' --gcov 'gcov-4.9'
+- coveralls --exclude include --exclude tests --gcov-options '\-lp'

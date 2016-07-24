@@ -11,6 +11,7 @@ namespace pkcstest {
 	static void closeMocker(CK_LAMBDA_FUNCTION_LIST* mocker) {
 		if(mocker)
 			dlclose(mocker);
+			mocker = NULL;
 	}
 
 	static void setUpMockerFunctions(CK_LAMBDA_FUNCTION_LIST* pkcs11) { 

@@ -1,7 +1,7 @@
 SHELL = /bin/bash
 CC = g++
 CPPFLAGS = -std=c++11 -DPREC --coverage
-CXXFLAGS = -g -shared -fPIC
+CXXFLAGS = -g -O0 -shared -fPIC
 
 LIBS = -ldl
 INCLUDES = -I./include
