@@ -31,27 +31,6 @@ protected :
 
 CK_LAMBDA_FUNCTION_LIST* Cryptoki_Test::pkcs11 = NULL; 
 
-TEST_F(Cryptoki_Test, LoadModule_causes_exception) {
-	try {
-		Cryptoki p11module("wrong/path.so");
-	} catch (CryptokiException& e) {
-		//TODO(perin): this exception code may change in Cryptoki class source
-		EXPECT_EQ(e.getErrorCode(), 666);
-	}
-
-}
-
-TEST_F(Cryptoki_Test, LoadFunctions_causes_exception) {
-	pkcs11Mocker.C_GetFunctionList = [&](CK_FUNCTION_LIST**) -> CK_RV {
-		return CKR_GENERAL_ERROR;
-	};
-	try {
-		Cryptoki p11module("/tmp/pkcs11mocked.so");
-	} catch (CryptokiException& e) {
-		EXPECT_EQ(e.getErrorCode(), CKR_GENERAL_ERROR);
-	}
-
-}
 
 TEST_F(Cryptoki_Test, Finalize_should_be_called_on_destructor) {
 	bool called = false;
@@ -125,7 +104,7 @@ TEST_F(Cryptoki_Test, getInfo)
 	CK_INFO recoveredStruct = info.getInfo();
 	ASSERT_EQ(recoveredStruct.cryptokiVersion.major, 6);
 	ASSERT_EQ(recoveredStruct.cryptokiVersion.minor, 7);
-	ASSERT_EQ(recoveredStruct.flags, 0);
+	ASSERT_EQ(recoveredStruct.flags, (unsigned int)0);
 	ASSERT_EQ(recoveredStruct.libraryVersion.major, 12);
 	ASSERT_EQ(recoveredStruct.libraryVersion.minor, 13);
 	ASSERT_FALSE(memcmp(recoveredStruct.manufacturerID, "Perinovsky                      ", 32));
@@ -147,7 +126,7 @@ TEST_F(Cryptoki_Test, info_can_handle_unknown_flags)
     info = p11module.getInfo();
 	ASSERT_EQ(info.flags(), Info::UNKNOWN); 
 	recoveredStruct = info.getInfo();
-	ASSERT_EQ(recoveredStruct.flags, 8);
+	ASSERT_EQ(recoveredStruct.flags, 8UL);
 
 	pkcs11->C_GetInfo = [&](CK_INFO *info) -> CK_RV {
 		info->flags = 4;
@@ -157,7 +136,7 @@ TEST_F(Cryptoki_Test, info_can_handle_unknown_flags)
 	info = p11module.getInfo();
 	ASSERT_EQ(info.flags(), Info::HARDWARE_SLOT); 
 	recoveredStruct = info.getInfo();
-	ASSERT_EQ(recoveredStruct.flags, 4);
+	ASSERT_EQ(recoveredStruct.flags, 4UL);
 }
 
 TEST_F(Cryptoki_Test, getInfo_error)
@@ -195,21 +174,6 @@ TEST_F(Cryptoki_Test, getFunctionList)
 		EXPECT_EQ(rv, CKR_OK);
 	});
 	EXPECT_TRUE(called);
-}
-
-TEST_F(Cryptoki_Test, GetFunctionList_causes_exception) {
-	Cryptoki p11module("/tmp/pkcs11mocked.so");
-
-	pkcs11Mocker.C_GetFunctionList = [&](CK_FUNCTION_LIST**) -> CK_RV {
-		return CKR_GENERAL_ERROR;
-	};
-
-	try {
-		FunctionList test = p11module.getFunctionList();
-	} catch (CryptokiException& e) {
-		EXPECT_EQ(e.getErrorCode(), CKR_GENERAL_ERROR);
-	}
-
 }
 
 TEST_F(Cryptoki_Test, initToken) {
@@ -258,7 +222,7 @@ TEST_F(Cryptoki_Test, object_pkcs11_can_login) {
 	bool called = false;
 
     pkcs11->C_OpenSession = [&](CK_SLOT_ID slot_id, CK_FLAGS flags, void *application, CK_NOTIFY notify, CK_SESSION_HANDLE *session) -> CK_RV {
-        *session = 0x123456;
+        *session = 123456UL;
 		return CKR_OK;
 	};
   
@@ -268,7 +232,7 @@ TEST_F(Cryptoki_Test, object_pkcs11_can_login) {
   
     pkcs11->C_Login = [&](CK_SESSION_HANDLE session, CK_USER_TYPE user_type, unsigned char *pin, unsigned long pin_len) -> CK_RV {
         called = true;
-        EXPECT_EQ(session, 0x123456);
+        EXPECT_EQ(session, 123456UL);
 
         return CKR_OK;
     };
@@ -409,3 +373,48 @@ TEST_F(Cryptoki_Test, close_all_sessions_works) {
     EXPECT_TRUE(called);
     EXPECT_TRUE(gotexception);
 }
+
+
+/* 
+ * Keep these for last. These test fixtures mess up with the getFunctionList"
+ */
+TEST_F(Cryptoki_Test, LoadModule_causes_exception) {
+	try {
+		Cryptoki p11module("wrong/path.so");
+		FAIL() << "Expected an exception.";
+	} catch (CryptokiException& e) {
+		//TODO(perin): this exception code may change in Cryptoki class source
+		EXPECT_EQ(e.getErrorCode(), 666UL);
+	}
+
+}
+
+TEST_F(Cryptoki_Test, LoadFunctions_causes_exception) {
+	pkcs11Mocker.C_GetFunctionList = [&](CK_FUNCTION_LIST**) -> CK_RV {
+		return CKR_GENERAL_ERROR;
+	};
+	try {
+		Cryptoki p11module("/tmp/pkcs11mocked.so");
+		FAIL() << "Expected an exception.";
+	} catch (CryptokiException& e) {
+		EXPECT_EQ(e.getErrorCode(), CKR_GENERAL_ERROR);
+	}
+
+}
+
+TEST_F(Cryptoki_Test, GetFunctionList_causes_exception) {
+	Cryptoki p11module("/tmp/pkcs11mocked.so");
+
+	pkcs11Mocker.C_GetFunctionList = [&](CK_FUNCTION_LIST**) -> CK_RV {
+		return CKR_GENERAL_ERROR;
+	};
+
+	try {
+		p11module.getFunctionList();
+		FAIL() << "Expected an exception.";
+	} catch (CryptokiException& e) {
+		EXPECT_EQ(e.getErrorCode(), CKR_GENERAL_ERROR);
+	}
+
+}
+

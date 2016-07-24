@@ -1,17 +1,33 @@
 #include "mock/PKCS11CallbackMocker.h"
 #include <dlfcn.h>
+#include <iostream>
 
 namespace pkcstest {
 
 	static CK_LAMBDA_FUNCTION_LIST* getMocker() {
-		void* mocker = dlopen("/tmp/pkcs11mocked.so", RTLD_LAZY);	
-		return (CK_LAMBDA_FUNCTION_LIST*) dlsym(mocker, "pkcs11Mocker");
+		/* Change to RTLD_LAZY if loading is slow*/
+		void* handle = dlopen("/tmp/pkcs11mocked.so", RTLD_NOW);
+		if(!handle) {
+			std::cerr << "Could not load mocker binary: " << dlerror() << std::endl;
+			exit(1);
+		}
+		
+		dlerror();
+		CK_LAMBDA_FUNCTION_LIST* mocker = (CK_LAMBDA_FUNCTION_LIST*) dlsym(handle, "pkcs11Mocker");
+		char* err;
+		
+		if( (err = dlerror()) != NULL) {
+			std::cerr << "Could not load symbol \"pkcs11Mocker\": " << dlerror() << std::endl;
+			exit(1);
+		}
+		return mocker;
 	}
 
 	static void closeMocker(CK_LAMBDA_FUNCTION_LIST* mocker) {
-		if(mocker)
+		if(mocker){
 			dlclose(mocker);
 			mocker = NULL;
+		}
 	}
 
 	static void setUpMockerFunctions(CK_LAMBDA_FUNCTION_LIST* pkcs11) { 

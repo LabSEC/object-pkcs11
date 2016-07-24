@@ -14,10 +14,10 @@ TEST(SessionInfo_test, constructor) {
 			
 	SessionInfo sInfo(info);
 
-	EXPECT_EQ(sInfo.slotId(), 37);
+	EXPECT_EQ(sInfo.slotId(), 37UL);
 	EXPECT_EQ(sInfo.state(), CKS_RW_PUBLIC_SESSION);
 	EXPECT_EQ(sInfo.flags(), SessionInfo::SessionFlags::SERIAL_SESSION);
-	EXPECT_EQ(sInfo.deviceError(), 2);
+	EXPECT_EQ(sInfo.deviceError(), 2UL);
 
 	CK_SESSION_INFO recoveredInfo = sInfo.getSessionInfo();
 	EXPECT_EQ(recoveredInfo.slotID, info.slotID);	

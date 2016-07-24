@@ -44,8 +44,6 @@ CK_RV C_Login(CK_SESSION_HANDLE session, CK_USER_TYPE user_type, unsigned char *
 
 
 //TODO Do it for every other function as necessary
-std::function<CK_RV(CK_FUNCTION_LIST **)> test;
-
 CK_FUNCTION_LIST realFunctionList = {
   /*.version*/				{0,0},
   /*.C_Initialize*/			C_Initialize,
