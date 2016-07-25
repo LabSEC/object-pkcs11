@@ -22,7 +22,7 @@ OBJS += $(TEST_SRCS:.cpp=.o)
 	@echo ' '
 
 all: check-lib gtest mocker $(OBJS)
-	$(CC) $(CPPFLAGS) $(CXXFLAGS) -o $(EXECUTABLE) $(OBJS) $(LIBOBJECTPKCS11) ./$(GTEST_DIR)/gtest-all.o $(LIBS)
+	$(CC) $(CPPFLAGS) $(CXXFLAGS) -o $(EXECUTABLE) $(OBJS) $(LIBOBJECTPKCS11) ./$(GTEST_DIR)/gtest-all.o $(LIBS) -rdynamic
 	@echo 'Build complete!'
 	@echo ' '
 

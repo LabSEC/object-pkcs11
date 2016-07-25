@@ -13,7 +13,6 @@ Cryptoki::~Cryptoki()
 {
 	if(_module)
 	{
-		TRACE("Cleaning up module.");
 		finalize();
 		dlclose(_module);
 	}
@@ -21,26 +20,32 @@ Cryptoki::~Cryptoki()
 
 void Cryptoki::loadModule(const std::string& path)
 {
-	//TODO(perin): check if module is already loaded;
-	TRACE("Loading module from PATH");
-	_module = dlopen(path.c_str(), RTLD_LAZY);
+	/* Change to RTLD_LAZY if loading is slow*/
+	_module = dlopen(path.c_str(), RTLD_NOW);
 	if (!_module) {
-		TRACE(dlerror());
 		//TODO(perin): Should use different exception code?
-		throw CryptokiException(666);
+		TRACE("Load module fail!");
+		throw CryptokiException(dlerror(), 666);
 	}
 }
 
 void Cryptoki::loadFunctions()
 {
+	dlerror();
 	CK_C_GetFunctionList getFuncList = (CK_C_GetFunctionList) dlsym(_module, "C_GetFunctionList");
+	char* err = dlerror();
+	if( (err = dlerror()) != NULL) {
+		//TODO(perin): Should use different exception code?
+		TRACE("Load Functions fail! Cant find GetFunctionList symbol");
+		throw CryptokiException(err, 666);
+	}
+	
 	CK_RV rv  = getFuncList(&_functionList);
 	if(rv)
-	{
-		FAILED;
-		throw CryptokiException(rv);
+	{	
+		TRACE("Load Functions fail! getFunctionList retur different then CK_RV");
+		throw CryptokiException("Could not load function list.", rv);
 	}
-	OK;
 }
 
 void Cryptoki::initialize()
@@ -49,10 +54,8 @@ void Cryptoki::initialize()
 	CK_RV rv  = (*_functionList->C_Initialize)(0);
 	if(rv)
 	{
-		FAILED;
 		throw CryptokiException(rv);
 	}
-	OK;
 }
 
 void Cryptoki::finalize()
@@ -84,10 +87,8 @@ FunctionList Cryptoki::getFunctionList()
 	CK_RV rv  = (*_functionList->C_GetFunctionList)(&fListPtr);
 	if(rv)
 	{
-		FAILED;
 		throw CryptokiException(rv);
 	}
-	OK;
 	return *fListPtr;
 }
 

@@ -1,45 +1,47 @@
 #include "PKCS11CallbackMocker.h"
 
 CK_RV C_Initialize(void *init_args) {
-	return pkcs11Mocker.C_Initialize(init_args);
+	return Pkcs11Mocker::getInstance().C_Initialize(init_args);
 }
 
 CK_RV C_Finalize(void *reserved) {
-	return pkcs11Mocker.C_Finalize(reserved);
+	return Pkcs11Mocker::getInstance().C_Finalize(reserved);
 }
 
 CK_RV C_GetInfo(CK_INFO *info) {
-	return pkcs11Mocker.C_GetInfo(info);
+	return Pkcs11Mocker::getInstance().C_GetInfo(info);
 }
 
 CK_RV C_GetFunctionList(CK_FUNCTION_LIST **function_list);
+	//return Pkcs11Mocker::getInstance().C_GetFunctionList(function_list);
+//}
 
 CK_RV C_GetSlotList(unsigned char token_present, CK_SLOT_ID *slot_list, unsigned long *count) {
-	return pkcs11Mocker.C_GetSlotList(token_present, slot_list, count);
+	return Pkcs11Mocker::getInstance().C_GetSlotList(token_present, slot_list, count);
 }
 
 CK_RV C_GetSlotInfo(CK_SLOT_ID slot_id, CK_SLOT_INFO *info) {
-	return pkcs11Mocker.C_GetSlotInfo(slot_id, info);
+	return Pkcs11Mocker::getInstance().C_GetSlotInfo(slot_id, info);
 }
 
 CK_RV C_InitToken(CK_SLOT_ID slot_id, unsigned char *pin, unsigned long pin_len, unsigned char *label) {
-	return pkcs11Mocker.C_InitToken(slot_id, pin, pin_len, label);
+	return Pkcs11Mocker::getInstance().C_InitToken(slot_id, pin, pin_len, label);
 }
 
 CK_RV C_OpenSession(CK_SLOT_ID slot_id, CK_FLAGS flags, void *application, CK_NOTIFY notify, CK_SESSION_HANDLE *session) {
-    return pkcs11Mocker.C_OpenSession(slot_id, flags, application, notify, session);
+    return Pkcs11Mocker::getInstance().C_OpenSession(slot_id, flags, application, notify, session);
 }
   
 CK_RV C_CloseSession(CK_SESSION_HANDLE session) {
-    return pkcs11Mocker.C_CloseSession(session);
+    return Pkcs11Mocker::getInstance().C_CloseSession(session);
 }
   
 CK_RV C_CloseAllSessions(CK_SLOT_ID slot_id) {
-    return pkcs11Mocker.C_CloseAllSessions(slot_id);
+    return Pkcs11Mocker::getInstance().C_CloseAllSessions(slot_id);
 }
   
 CK_RV C_Login(CK_SESSION_HANDLE session, CK_USER_TYPE user_type, unsigned char *pin, unsigned long pin_len) {
-    return pkcs11Mocker.C_Login(session, user_type, pin, pin_len);
+    return Pkcs11Mocker::getInstance().C_Login(session, user_type, pin, pin_len);
 }
 
 
@@ -119,11 +121,18 @@ CK_FUNCTION_LIST realFunctionList = {
 
 
 
-CK_RV C_GetFunctionList(CK_FUNCTION_LIST **function_list)
-{
-	pkcs11Mocker.C_GetFunctionList = [&](CK_FUNCTION_LIST**) -> CK_RV {
-		*function_list = &realFunctionList;
-		return CKR_OK;
-	};
-	return pkcs11Mocker.C_GetFunctionList(function_list);
+CK_RV C_GetFunctionList(CK_FUNCTION_LIST **function_list) {
+	if(Pkcs11Mocker::getInstance().C_GetFunctionList == nullptr ){
+		Pkcs11Mocker::getInstance().C_GetFunctionList = [&](CK_FUNCTION_LIST** lola) -> CK_RV {
+			*lola = &realFunctionList;
+			return CKR_OK;
+		};
+	}
+	return Pkcs11Mocker::getInstance().C_GetFunctionList(function_list);
 }
+
+extern "C" {
+	Pkcs11Mocker& getMockerInstance() {
+		return Pkcs11Mocker::getInstance();
+	}
+};

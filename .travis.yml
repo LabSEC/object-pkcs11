@@ -16,7 +16,7 @@ addons:
     - g++-6
     
 script:
-- make CC=g++-6 test
+- make CC=g++-6 -j 4 test
 
 after_success:
 - coveralls --exclude include --exclude tests --gcov-options '\-lp'
