@@ -24,21 +24,28 @@ RM = rm
 	@echo 'Finished building: $<'
 	@echo ' '
 
-all: $(OBJS)
+all: 
+	$(MAKE) $(OBJS)
 	$(CC) $(CPPFLAGS) $(CXXFLAGS) -o $(EXECUTABLE) $(OBJS) $(LIBS) 
 	@echo 'Build complete!'
 	@echo ' '
 
-clear_test_files:
+clean_test_files:
 	$(MAKE) -C tests veryclean
 
 .PHONY: test
-test: all
+test: 
+	$(MAKE) all
 	$(MAKE) -C tests test
 
-cleantest: clear_test_files test
+cleantest: 
+	$(MAKE) clean_test_files 
+	$(MAKE) test
 
-commitcheck: clean cleantest clean
+commitcheck: 
+	$(MAKE) clean 
+	$(MAKE) cleantest 
+	$(MAKE) clean
 
 latex:
 	@doxygen object-pkcs11.doxyfile
