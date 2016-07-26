@@ -11,6 +11,8 @@ Cryptoki::Cryptoki(const std::string& path) : _module(0), _functionList(0) {
 Cryptoki::~Cryptoki() {
 	if(_module)
 	{
+		//TODO(perin): Finalize should return exception if C_Finalize is null.
+		//Should we catch(...) here?
 		finalize();
 		dlclose(_module);
 	}
@@ -99,10 +101,8 @@ void Cryptoki::initToken(unsigned int slot, std::string& soPin, std::string& lab
 	CK_RV rv  = (*_functionList->C_InitToken)(slot, utf8soPin, soPinLen, utf8label);
 	if(rv)
 	{
-		FAILED;
 		throw CryptokiException(rv);
 	}
-	OK;
 }
 
 Session Cryptoki::openSession(unsigned int slot, SessionInfo::SessionFlags flags, CryptokiNotify* notify, void* appPtr)
@@ -113,10 +113,8 @@ Session Cryptoki::openSession(unsigned int slot, SessionInfo::SessionFlags flags
     CK_RV rv  = (*_functionList->C_OpenSession)(slot, flags, 0, 0, &sn._session);
     if(rv)
         {
-            FAILED;
             throw CryptokiException(rv);
         }
-    OK;
 	sn._functionList = _functionList;
 	sn.enable();
 	return sn;
@@ -128,10 +126,8 @@ void Cryptoki::closeAllSessions(unsigned int slot)
 	CK_RV rv  = (_functionList->C_CloseAllSessions)(slot);
     if(rv)
         {
-            FAILED;
             throw CryptokiException(rv);
         }
-    OK;
 }
 
 }/*END NAMESPACE*/
