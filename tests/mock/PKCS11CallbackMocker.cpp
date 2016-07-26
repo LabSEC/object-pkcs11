@@ -40,7 +40,6 @@ CK_RV C_Login(CK_SESSION_HANDLE session, CK_USER_TYPE user_type, unsigned char *
     return Pkcs11Mocker::getInstance().C_Login(session, user_type, pin, pin_len);
 }
 
-
 //TODO Do it for every other function as necessary
 CK_FUNCTION_LIST realFunctionList = {
   /*.version*/				{0,0},
@@ -113,9 +112,6 @@ CK_FUNCTION_LIST realFunctionList = {
   /*.C_CancelFunction*/		NULL,
   /*.C_WaitForSlotEvent*/	NULL
 };
-
-
-
 
 CK_RV C_GetFunctionList(CK_FUNCTION_LIST **function_list) {
 	if(Pkcs11Mocker::getInstance().C_GetFunctionList == nullptr ){

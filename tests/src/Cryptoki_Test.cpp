@@ -71,6 +71,74 @@ TEST_F(Cryptoki_Test, Initialize_Failed_causes_exception)
 	}
 }
 
+TEST_F(Cryptoki_Test, LoadModule_causes_exception) {
+	try {
+		Cryptoki p11module("wrong/path.so");
+		FAIL() << "Expected an exception.";
+	} catch (CryptokiException& e) {
+		//TODO(perin): this exception code may change in Cryptoki class source
+		EXPECT_EQ(e.getErrorCode(), 666UL);
+	}
+
+}
+
+TEST_F(Cryptoki_Test, LoadFunctions_causes_exception_1) {
+	pkcstest::getMocker().C_GetFunctionList = [&](CK_FUNCTION_LIST**) -> CK_RV {
+		return 666UL;
+	};
+	try {
+		Cryptoki p11module("/tmp/pkcs11mocked.so");
+		FAIL() << "Expected an exception.";
+	} catch (CryptokiException& e) {
+		EXPECT_EQ(e.getErrorCode(), 666UL);
+	}
+	pkcstest::resetFunctionList();
+}
+
+TEST_F(Cryptoki_Test, LoadFunctions_causes_exception_2) {
+	try {
+		//TODO(perin): Change this to some allmigthy .so
+		Cryptoki p11module("./../libobjectpkcs11.so");
+		FAIL() << "Expected an exception.";
+	} catch (CryptokiException& e) {
+		EXPECT_EQ(e.getErrorCode(), 666UL);
+	}
+	pkcstest::resetFunctionList();
+}
+
+TEST_F(Cryptoki_Test, LoadFunctions_causes_exception_3) {
+	pkcstest::getMocker().C_GetFunctionList = [&](CK_FUNCTION_LIST** funcList) -> CK_RV {
+		*funcList = NULL;
+		return CKR_OK;
+	};
+	try {
+		//TODO(perin): Change this to some allmigthy .so
+		Cryptoki p11module("/usr/lib/libcryptosec.so");
+		FAIL() << "Expected an exception.";
+	} catch (CryptokiException& e) {
+		EXPECT_EQ(e.getErrorCode(), 666UL);
+	}
+	pkcstest::resetFunctionList();
+}
+
+TEST_F(Cryptoki_Test, GetFunctionList_causes_exception) {
+
+	Cryptoki p11module("/tmp/pkcs11mocked.so");
+
+	pkcstest::getMocker().C_GetFunctionList = [&](CK_FUNCTION_LIST**) -> CK_RV {
+		return 666UL;
+	};
+
+	try {
+		p11module.getFunctionList();
+		FAIL() << "Expected an exception.";
+	} catch (CryptokiException& e) {
+		EXPECT_EQ(e.getErrorCode(), 666UL);
+	}
+
+	pkcstest::resetFunctionList();
+}
+
 TEST_F(Cryptoki_Test, getInfo)
 {
 	Cryptoki p11module("/tmp/pkcs11mocked.so");
@@ -370,60 +438,5 @@ TEST_F(Cryptoki_Test, close_all_sessions_works) {
 	
     EXPECT_TRUE(called);
     EXPECT_TRUE(gotexception);
-}
-
-/* 
- * Keep these for last. These test fixtures mess up with the getFunctionList"
- */
-TEST_F(Cryptoki_Test, LoadModule_causes_exception) {
-	try {
-		Cryptoki p11module("wrong/path.so");
-		FAIL() << "Expected an exception.";
-	} catch (CryptokiException& e) {
-		//TODO(perin): this exception code may change in Cryptoki class source
-		EXPECT_EQ(e.getErrorCode(), 666UL);
-	}
-
-}
-
-TEST_F(Cryptoki_Test, LoadFunctions_causes_exception_1) {
-	pkcstest::getMocker().C_GetFunctionList = [&](CK_FUNCTION_LIST**) -> CK_RV {
-		return 666UL;
-	};
-	try {
-		Cryptoki p11module("/tmp/pkcs11mocked.so");
-		FAIL() << "Expected an exception.";
-	} catch (CryptokiException& e) {
-		EXPECT_EQ(e.getErrorCode(), 666UL);
-	}
-	pkcstest::resetFunctionList();
-}
-
-TEST_F(Cryptoki_Test, LoadFunctions_causes_exception_2) {
-	try {
-		//TODO(perin): Change this to some allmigthy .so
-		Cryptoki p11module("/usr/lib/libcryptosec.so");
-		FAIL() << "Expected an exception.";
-	} catch (CryptokiException& e) {
-		EXPECT_EQ(e.getErrorCode(), 666UL);
-	}
-	pkcstest::resetFunctionList();
-}
-
-TEST_F(Cryptoki_Test, GetFunctionList_causes_exception) {
-
-	Cryptoki p11module("/tmp/pkcs11mocked.so");
-
-	pkcstest::getMocker().C_GetFunctionList = [&](CK_FUNCTION_LIST**) -> CK_RV {
-		return 666UL;
-	};
-
-	try {
-		p11module.getFunctionList();
-		FAIL() << "Expected an exception.";
-	} catch (CryptokiException& e) {
-		EXPECT_EQ(e.getErrorCode(), 666UL);
-	}
-
 }
 
