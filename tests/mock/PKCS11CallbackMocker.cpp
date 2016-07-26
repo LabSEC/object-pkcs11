@@ -12,10 +12,6 @@ CK_RV C_GetInfo(CK_INFO *info) {
 	return Pkcs11Mocker::getInstance().C_GetInfo(info);
 }
 
-CK_RV C_GetFunctionList(CK_FUNCTION_LIST **function_list);
-	//return Pkcs11Mocker::getInstance().C_GetFunctionList(function_list);
-//}
-
 CK_RV C_GetSlotList(unsigned char token_present, CK_SLOT_ID *slot_list, unsigned long *count) {
 	return Pkcs11Mocker::getInstance().C_GetSlotList(token_present, slot_list, count);
 }

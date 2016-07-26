@@ -386,7 +386,7 @@ TEST_F(Cryptoki_Test, LoadModule_causes_exception) {
 
 }
 
-TEST_F(Cryptoki_Test, LoadFunctions_causes_exception) {
+TEST_F(Cryptoki_Test, LoadFunctions_causes_exception_1) {
 	pkcstest::getMocker().C_GetFunctionList = [&](CK_FUNCTION_LIST**) -> CK_RV {
 		return 666UL;
 	};
@@ -396,10 +396,21 @@ TEST_F(Cryptoki_Test, LoadFunctions_causes_exception) {
 	} catch (CryptokiException& e) {
 		EXPECT_EQ(e.getErrorCode(), 666UL);
 	}
+	pkcstest::resetFunctionList();
+}
+
+TEST_F(Cryptoki_Test, LoadFunctions_causes_exception_2) {
+	try {
+		//TODO(perin): Change this to some allmigthy .so
+		Cryptoki p11module("/usr/lib/libcryptosec.so");
+		FAIL() << "Expected an exception.";
+	} catch (CryptokiException& e) {
+		EXPECT_EQ(e.getErrorCode(), 666UL);
+	}
+	pkcstest::resetFunctionList();
 }
 
 TEST_F(Cryptoki_Test, GetFunctionList_causes_exception) {
-	pkcstest::resetFunctionList();
 
 	Cryptoki p11module("/tmp/pkcs11mocked.so");
 

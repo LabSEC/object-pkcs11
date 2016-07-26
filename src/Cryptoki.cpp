@@ -32,18 +32,24 @@ void Cryptoki::loadModule(const std::string& path)
 void Cryptoki::loadFunctions()
 {
 	dlerror();
-	CK_C_GetFunctionList getFuncList = (CK_C_GetFunctionList) dlsym(_module, "C_GetFunctionList");
-	char* err = dlerror();
+	CK_C_GetFunctionList getFuncList = reinterpret_cast<CK_C_GetFunctionList>(dlsym(_module, "C_GetFunctionList"));
+	char* err;
 	if( (err = dlerror()) != NULL) {
 		//TODO(perin): Should use different exception code?
-		TRACE("Load Functions fail! Cant find GetFunctionList symbol");
+		TRACE("Cant find GetFunctionList symbol.");
 		throw CryptokiException(err, 666);
+	}
+
+	if(getFuncList == NULL) {
+		//TODO(perin): Should use different exception code?
+		TRACE("Loaded function type castig failed.");
+		throw CryptokiException("Could not cast loadead function to C_GetFunctionList.", 666);
 	}
 	
 	CK_RV rv  = getFuncList(&_functionList);
 	if(rv)
 	{	
-		TRACE("Load Functions fail! getFunctionList retur different then CK_RV");
+		TRACEm("getFunctionList returned \'%i\', expected \'0\'", rv);
 		throw CryptokiException("Could not load function list.", rv);
 	}
 }
