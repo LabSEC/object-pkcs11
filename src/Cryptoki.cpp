@@ -47,7 +47,8 @@ void Cryptoki::loadFunctions() {
 	}
 
 	if(!_functionList) {
-		throw CryptokiException("Could not load function list.", rv);
+		//TODO(perin): Should use different exception code?
+		throw CryptokiException("Could not load function list.", 666);
 	}
 }
 

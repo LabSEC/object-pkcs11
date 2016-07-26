@@ -83,6 +83,23 @@ TEST_F(Cryptoki_Test, LoadModule_causes_exception) {
 }
 
 TEST_F(Cryptoki_Test, LoadFunctions_causes_exception_1) {
+	try {
+		//TODO(perin): Change this to some allmigthy .so
+		Cryptoki p11module("./../libobjectpkcs11.so");
+		FAIL() << "Expected an exception.";
+	} catch (CryptokiException& e) {
+		EXPECT_EQ(e.getErrorCode(), 666UL);
+	}
+	pkcstest::resetFunctionList();
+}
+
+TEST_F(Cryptoki_Test, LoadFunctions_causes_exception_2) {
+	//TODO(Perin): I can't think of a way to test exception 2
+	//without creating a new mocker specific for this scenario.
+}
+
+
+TEST_F(Cryptoki_Test, LoadFunctions_causes_exception_3) {
 	pkcstest::getMocker().C_GetFunctionList = [&](CK_FUNCTION_LIST**) -> CK_RV {
 		return 666UL;
 	};
@@ -95,25 +112,14 @@ TEST_F(Cryptoki_Test, LoadFunctions_causes_exception_1) {
 	pkcstest::resetFunctionList();
 }
 
-TEST_F(Cryptoki_Test, LoadFunctions_causes_exception_2) {
-	try {
-		//TODO(perin): Change this to some allmigthy .so
-		Cryptoki p11module("./../libobjectpkcs11.so");
-		FAIL() << "Expected an exception.";
-	} catch (CryptokiException& e) {
-		EXPECT_EQ(e.getErrorCode(), 666UL);
-	}
-	pkcstest::resetFunctionList();
-}
-
-TEST_F(Cryptoki_Test, LoadFunctions_causes_exception_3) {
+TEST_F(Cryptoki_Test, LoadFunctions_causes_exception_4) {
 	pkcstest::getMocker().C_GetFunctionList = [&](CK_FUNCTION_LIST** funcList) -> CK_RV {
 		*funcList = NULL;
 		return CKR_OK;
 	};
 	try {
 		//TODO(perin): Change this to some allmigthy .so
-		Cryptoki p11module("/usr/lib/libcryptosec.so");
+		Cryptoki p11module("/tmp/pkcs11mocked.so");
 		FAIL() << "Expected an exception.";
 	} catch (CryptokiException& e) {
 		EXPECT_EQ(e.getErrorCode(), 666UL);
