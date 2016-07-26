@@ -36,10 +36,6 @@ void Cryptoki::loadFunctions() {
 		throw CryptokiException(err, 666);
 	}
 
-	if(getFuncList == NULL) {
-		//TODO(perin): Should use different exception code?
-		throw CryptokiException("Could not cast loadead function to C_GetFunctionList.", 666);
-	}
 	_functionList = NULL;
 	CK_RV rv  = getFuncList(&_functionList);
 	if(rv) {	

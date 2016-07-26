@@ -94,12 +94,6 @@ TEST_F(Cryptoki_Test, LoadFunctions_causes_exception_1) {
 }
 
 TEST_F(Cryptoki_Test, LoadFunctions_causes_exception_2) {
-	//TODO(Perin): I can't think of a way to test exception 2
-	//without creating a new mocker specific for this scenario.
-}
-
-
-TEST_F(Cryptoki_Test, LoadFunctions_causes_exception_3) {
 	pkcstest::getMocker().C_GetFunctionList = [&](CK_FUNCTION_LIST**) -> CK_RV {
 		return 666UL;
 	};
@@ -112,7 +106,7 @@ TEST_F(Cryptoki_Test, LoadFunctions_causes_exception_3) {
 	pkcstest::resetFunctionList();
 }
 
-TEST_F(Cryptoki_Test, LoadFunctions_causes_exception_4) {
+TEST_F(Cryptoki_Test, LoadFunctions_causes_exception_3) {
 	pkcstest::getMocker().C_GetFunctionList = [&](CK_FUNCTION_LIST** funcList) -> CK_RV {
 		*funcList = NULL;
 		return CKR_OK;
