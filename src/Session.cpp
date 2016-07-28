@@ -9,11 +9,9 @@ void Session::closeSession()
 	CK_RV rv = (*_functionList->C_CloseSession)(_session);
 	if(rv)
 	{
-		FAILED;
 		throw CryptokiException(rv);
 	}
 	disable();
-	OK;
 }
 
 SessionInfo Session::getSessionInfo()
@@ -25,10 +23,8 @@ SessionInfo Session::getSessionInfo()
 	SessionInfo inf(a);
     if(rv)
         {
-            FAILED;
             throw CryptokiException(rv);
         }
-    OK;
 	return inf;
 }
 
@@ -56,10 +52,8 @@ void Session::userLogin(std::string& userPin)
     CK_RV rv = (*_functionList->C_Login)(_session, CKU_USER, (unsigned char*)userPin.c_str(), pinLen);
     if(rv)
     {
-        FAILED;
         throw CryptokiException(rv);
     }
-    OK;
 }
 
 void Session::initPin(std::string& pin)
