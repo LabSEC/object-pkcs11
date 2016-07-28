@@ -1,6 +1,6 @@
 #include "Cryptoki.h"
 
-namespace objck {
+namespace raiki {
 
 Cryptoki::Cryptoki(const std::string& path) : _module(0), _functionList(0) {
 //TODO(perin): check if module was loaded correctly.

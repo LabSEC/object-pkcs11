@@ -1,5 +1,5 @@
 #include "Session.h"
-namespace objck {
+namespace raiki {
 
 void Session::closeSession()
 {

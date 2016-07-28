@@ -2,7 +2,7 @@
 #include <SessionInfo.h>
 #include <CryptokiException.h>
 
-using namespace objck;
+using namespace raiki;
 
 TEST(SessionInfo_test, constructor) {
 	CK_SESSION_INFO info = {

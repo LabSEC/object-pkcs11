@@ -1,7 +1,7 @@
 #ifndef STATEFUL_H
 #define STATEFUL_H
 
-namespace objck {
+namespace raiki {
 /*!
  * @brief <b>Initializable abstract class</b><br>
  *

@@ -5,7 +5,7 @@
 
 #include "pkcs11.h"
 
-namespace objck {
+namespace raiki {
 /*!
  *@brief <b>PKCS#11 Session Info</b><br>
  * 

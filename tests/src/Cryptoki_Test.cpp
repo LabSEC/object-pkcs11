@@ -5,7 +5,7 @@
 #include <iostream>
 #include <algorithm>
 
-using namespace objck;
+using namespace raiki;
 class Cryptoki_Test : public ::testing::Test {
 
 protected :

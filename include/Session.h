@@ -7,7 +7,7 @@
 #include "CryptokiException.h"
 #include "SessionInfo.h"
 
-namespace objck {
+namespace raiki {
 /*!
  * @brief <b>PKCS#11 Sessions</b><br>
  *
