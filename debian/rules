@@ -3,7 +3,7 @@
 # Be carefull, this is a Makefile, so the indents are tabs and not spaces!
 # -*- makefile -*-
 
-export DESTROOT=$(CURDIR)/debian/rkt
+export DESTROOT=$(CURDIR)/debian/object-pkcs11
 
 %:
 	dh $@
