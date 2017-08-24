@@ -8,6 +8,8 @@ INCLUDES = -I./include
 
 EXECUTABLE = libobjectpkcs11.so
 
+ARQ= $(shell uname -m)
+
 SRC_DIR = src
 INCLUDE_DIR =include
 DOC_DIR = docs
@@ -34,18 +36,18 @@ clean_test_files:
 	$(MAKE) -C tests veryclean
 
 # TODO do this in a proper way
-libdir:
 ifeq ($(ARQ), x86_64)
-	LIBDIR=/usr/lib64
+LIBDIR=/usr/lib64
+else
+LIBDIR=/usr/lib
 endif
 
-install: all libdir
+install: all 
 	@if test -z "$(DESTDIR)"; then echo "Please set DESTDIR"; exit 1; fi
-	@echo 'Installing to $(DESTDIR)'
-	mkdir -p $(DESTDIR)$(PREFIX)/lib
-	mkdir -p $(DESTDIR)$(PREFIX)/include/object-pkcs11
-	install -D $(EXECUTABLE) $(DESTDIR)$(PREFIX)/lib/$(EXECUTABLE) 
-	cp -r $(INCLUDE_DIR)/* $(DESTDIR)$(PREFIX)/include/object-pkcs11
+	mkdir -p $(DESTDIR)$(LIBDIR)
+	mkdir -p $(DESTDIR)/include/object-pkcs11
+	install -D $(EXECUTABLE) $(DESTDIR)$(LIBDIR)/$(EXECUTABLE) 
+	cp -r $(INCLUDE_DIR)/* $(DESTDIR)/include/object-pkcs11
 
 .PHONY: test
 test: 
