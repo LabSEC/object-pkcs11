@@ -36,9 +36,10 @@ clean_test_files:
 install: all
 	@if test -z "$(DESTDIR)"; then echo "Please set DESTDIR"; exit 1; fi
 	@echo 'Installing to $(DESTDIR)'
-	install -D $(EXECUTABLE) $(DESTDIR)/lib/$(EXECUTABLE) 
-	mkdir -p $(DESTDIR)/include/objectpkcs11
-	cp -r $(INCLUDE_DIR)/*  $(DESTDIR)/include/objectpkcs11
+	mkdir -p $(DESTDIR)$(PREFIX)/lib
+	mkdir -p $(DESTDIR)$(PREFIX)/include/object-pkcs11
+	install -D $(EXECUTABLE) $(DESTDIR)$(PREFIX)/lib/$(EXECUTABLE) 
+	cp -r $(INCLUDE_DIR)/* $(DESTDIR)$(PREFIX)/include/object-pkcs11
 
 .PHONY: test
 test: 
