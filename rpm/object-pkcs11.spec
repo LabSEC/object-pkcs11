@@ -1,13 +1,17 @@
-Name:           objectpkcs11
+# https://fedoraproject.org/wiki/Packaging:SourceURL
+%global commit0 7ee003ceee625ce068fbada2f25d12d72500f0fe
+%global shortcommit0 %(c=%{commit0}; echo ${c:0:7}) 
+
+Name:           object-pkcs11
 Version:        0.0.1
 Release:        1%{?dist}
 Summary:        C++ Object Oriented Wrapper for PKCS#11
 
 License:        BSD License 2.0
 URL:            https://labsec.github.io/object-pkcs11/
-Source0:        https://github.com/LabSEC/object-pkcs11/archive/dev.zip
+Source:         https://github.com/dettonijr/%{name}/archive/%{commit0}.tar.gz#/%{name}-%{shortcommit0}.tar.gz
 
-BuildRequires:  gcc
+BuildRequires:  gcc-c++
 BuildRequires:  make
 
 %description
@@ -22,8 +26,8 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 The %{name}-devel package contains libraries and header files for
 developing applications that use %{name}.
 
-
 %prep
+%autosetup -n %{name}-%{commit0}
 
 %build
 make 
@@ -38,15 +42,12 @@ make test
 
 %postun -p /sbin/ldconfig
 
-
 %files
-%{_libdir}/*.so.*
 %{_libdir}/*.so
 
 %files devel
 %{_includedir}/*
 %{_libdir}/*.so
-%{_libdir}/*.so.*
 
 
 %changelog
