@@ -109,3 +109,4 @@ The following table describes which PKCS11 functions are supported. Although the
 | C_GetFunctionStatus   |               |
 | C_CancelFunction      |               |
 | C_WaitForSlotEvent    |               |
+
