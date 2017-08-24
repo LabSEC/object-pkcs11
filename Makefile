@@ -33,6 +33,13 @@ all:
 clean_test_files:
 	$(MAKE) -C tests veryclean
 
+install: all
+	@if test -z "$(DESTDIR)"; then echo "Please set DESTDIR"; exit 1; fi
+	@echo 'Installing to $(DESTDIR)'
+	install -D $(EXECUTABLE) $(DESTDIR)/lib/$(EXECUTABLE) 
+	mkdir -p $(DESTDIR)/include/objectpkcs11
+	cp -r $(INCLUDE_DIR)/*  $(DESTDIR)/include/objectpkcs11
+
 .PHONY: test
 test: 
 	$(MAKE) all
