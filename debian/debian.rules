@@ -10,4 +10,3 @@ export DESTROOT=$(CURDIR)/debian/object-pkcs11
 
 override_dh_auto_install:
 	dh_auto_install
-	install -p -D -m 0755 libobjectpkcs11.so $(DESTROOT)/usr/lib
