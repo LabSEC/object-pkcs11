@@ -33,7 +33,13 @@ all:
 clean_test_files:
 	$(MAKE) -C tests veryclean
 
-install: all
+# TODO do this in a proper way
+libdir:
+ifeq ($(ARQ), x86_64)
+	LIBDIR=/usr/lib64
+endif
+
+install: all libdir
 	@if test -z "$(DESTDIR)"; then echo "Please set DESTDIR"; exit 1; fi
 	@echo 'Installing to $(DESTDIR)'
 	mkdir -p $(DESTDIR)$(PREFIX)/lib
