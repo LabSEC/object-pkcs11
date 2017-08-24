@@ -1,0 +1,13 @@
+# debian.control
+Source: object-pkcs11
+Section: libs
+Priority: optional
+Maintainer: Claudio Dettoni <cd611@cl.cam.ac.uk>
+Build-Depends: debhelper (>= 8.0.0)
+Standards-Version: 3.9.4
+Homepage: https://labsec.github.io/object-pkcs11/
+
+Package: object-pkcs11
+Architecture: any
+Depends: ${shlibs:Depends}
+Description: C++ wrapper for PKCS#11 modules
