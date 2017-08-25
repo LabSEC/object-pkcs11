@@ -51,7 +51,7 @@ public:
 	/*!
 	* Default destructor
 	*/
-	virtual ~Stateful() (){};
+	virtual ~Stateful(){};
 
 	/*!
 	* Returns the current state of the class.
