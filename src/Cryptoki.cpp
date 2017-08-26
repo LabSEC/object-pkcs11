@@ -14,7 +14,6 @@ Cryptoki::~Cryptoki() {
 		//TODO(perin): Finalize should return exception if C_Finalize is null.
 		//Should we catch(...) here?
 		finalize();
-		finalize();
 		dlclose(_module);
 	}
 }
