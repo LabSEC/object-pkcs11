@@ -43,7 +43,6 @@ make test
 
 %files devel
 %{_includedir}/*
-%{_libdir}/*.so
 
 
 %changelog
