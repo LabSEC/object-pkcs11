@@ -33,6 +33,22 @@ all:
 clean_test_files:
 	$(MAKE) -C tests veryclean
 
+# TODO do this in a proper way
+ARQ= $(shell uname -m)
+ifeq ($(ARQ), x86_64)
+LIBDIR=/lib64
+else
+LIBDIR=/lib
+endif
+PREFIX=/usr
+
+install: all 
+	@if test -z "$(DESTDIR)"; then echo "Please set DESTDIR"; exit 1; fi
+	mkdir -p $(DESTDIR)$(PREFIX)$(LIBDIR)
+	mkdir -p $(DESTDIR)$(PREFIX)/include/object-pkcs11
+	install -D $(EXECUTABLE) $(DESTDIR)$(PREFIX)$(LIBDIR)/$(EXECUTABLE) 
+	cp -r $(INCLUDE_DIR)/* $(DESTDIR)$(PREFIX)/include/object-pkcs11
+
 .PHONY: test
 test: 
 	$(MAKE) all
