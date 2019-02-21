@@ -2,17 +2,17 @@
 
 namespace raiki {
 
-Cryptoki::Cryptoki(const std::string& path) : _module(0), _functionList(0) {
-//TODO(perin): check if module was loaded correctly.
+Cryptoki::Cryptoki() noexcept : _module(0), _functionList(0) {
+	//Nothing to do? We should not load any module here for safety.
+}
+
+Cryptoki::Cryptoki(std::string path) : _module(0), _functionList(0) {
 	loadModule(path);
-	loadFunctions();
 }
 
 Cryptoki::~Cryptoki() {
 	if(_module)
 	{
-		//TODO(perin): Finalize should return exception if C_Finalize is null.
-		//Should we catch(...) here?
 		finalize();
 		dlclose(_module);
 	}
@@ -25,6 +25,7 @@ void Cryptoki::loadModule(const std::string& path) {
 		//TODO(perin): Should use different exception code?
 		throw CryptokiException(dlerror(), 666);
 	}
+	loadFunctions();
 }
 
 void Cryptoki::loadFunctions() {

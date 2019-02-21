@@ -34,9 +34,31 @@ class Cryptoki
 {
 public:
 
-	Cryptoki(const std::string& path);
+	/*!
+	 * Default and safe constructor. Must call loadModule to initialize
+	 * the API and get the module function list.
+	 */
+	Cryptoki() noexcept;
 
+	/*!
+	 * Here be dragons!
+	 *
+	 * Optional unsafe constructor. LoadModule is called by this function
+	 * and may lead to exception. Use only for simplicity.
+	 */
+	Cryptoki(std::string path);
+
+	/*!
+	 * Default constructor. Calls Finalize function, if available.
+	 */
 	virtual ~Cryptoki();
+
+	/*!
+ 	* Function that dynamically loads the pkcs11 module using libdl.
+	* Must call this function before using API.
+ 	*/ 
+	void loadModule(const std::string& path);
+
 
 	/*! @addtogroup general General Purpose Functions 
 	* @{
@@ -104,12 +126,6 @@ public:
 	/*! @} */
 
 protected:
-	/*!
- 	* Protected function that loads
- 	* the pkcs11 module usinf libdl, dynamically.
- 	*/ 
-	void loadModule(const std::string& path);
-
 	/*!
  	* Protected function that unloads
  	* the pkcs11 module from libdl.
