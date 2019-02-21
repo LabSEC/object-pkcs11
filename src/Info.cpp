@@ -1,5 +1,5 @@
 #include "Info.h"
-namespace objck {
+namespace raiki {
 std::string Info::version() {
 	std::string major = std::to_string(majorVersion());
 	std::string minor = std::to_string(minorVersion());

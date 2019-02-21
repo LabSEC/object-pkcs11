@@ -5,7 +5,7 @@
 
 #include "pkcs11.h"
 
-namespace objck {
+namespace raiki {
 /*!
  *@brief <b>PKCS#11 Session Info</b><br>
  * 
@@ -24,6 +24,7 @@ class SessionInfo
 protected:
 	CK_SESSION_INFO _info;
 public:
+	SessionInfo(CK_SESSION_INFO info);
 
 	virtual ~SessionInfo(){};
 

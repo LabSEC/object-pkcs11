@@ -1,5 +1,5 @@
 #include "Session.h"
-namespace objck {
+namespace raiki {
 
 void Session::closeSession()
 {
@@ -9,26 +9,22 @@ void Session::closeSession()
 	CK_RV rv = (*_functionList->C_CloseSession)(_session);
 	if(rv)
 	{
-		FAILED;
 		throw CryptokiException(rv);
 	}
 	disable();
-	OK;
 }
 
 SessionInfo Session::getSessionInfo()
 {
 	PRECONDITION(isEnabled())
 	PRECONDITION(_functionList)
-	SessionInfo inf;
 	CK_SESSION_INFO a;
 	CK_RV rv = (*_functionList->C_GetSessionInfo)(_session, &a);
+	SessionInfo inf(a);
     if(rv)
         {
-            FAILED;
             throw CryptokiException(rv);
         }
-    OK;
 	return inf;
 }
 
@@ -46,23 +42,18 @@ void Session::setOperationState()
 	NOT_IMPLEMENTED;
 }
 
-void Session::login(std::string& soPin)
+void Session::userLogin(std::string& userPin)
 {
 	PRECONDITION(isEnabled())
 	PRECONDITION(_functionList)
-    //TODO FIX 
-    NOT_IMPLEMENTED;
-	/*CK_ULONG pinLen = soPin.length();
-    CK_UTF8CHAR* utf8soPin = new CK_UTF8CHAR[soPin.length()];
-    strncpy((char*)utf8soPin, soPin.c_str(), soPin.length());
+	
+    CK_ULONG pinLen = userPin.length();
 
-    rv = (*functionList->C_Login)(session, CKU_SO, utf8soPin, pinLen);
+    CK_RV rv = (*_functionList->C_Login)(_session, CKU_USER, (unsigned char*)userPin.c_str(), pinLen);
     if(rv)
-        {
-            FAILED;
-            throw CryptokiException(rv);
-        }
-    OK;*/
+    {
+        throw CryptokiException(rv);
+    }
 }
 
 void Session::initPin(std::string& pin)

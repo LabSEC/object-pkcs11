@@ -1,7 +1,7 @@
 #ifndef STATEFUL_H
 #define STATEFUL_H
 
-namespace objck {
+namespace raiki {
 /*!
  * @brief <b>Initializable abstract class</b><br>
  *
@@ -51,7 +51,7 @@ public:
 	/*!
 	* Default destructor
 	*/
-	virtual ~Stateful() throw(){};
+	virtual ~Stateful(){};
 
 	/*!
 	* Returns the current state of the class.

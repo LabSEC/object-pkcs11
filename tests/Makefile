@@ -1,7 +1,8 @@
 INCLUDES = -I./$(GTEST_DIR) -I. -I../include
 CC = g++
-CPPFLAGS = -std=c++11 -DDEBUG
-CXXFLAGS = -g
+CPPFLAGS = -std=c++11 -DDEBUG --coverage
+CXXFLAGS = -g -O0
+COVFLAGS = -fprofile-arcs -ftest-coverage -lgcov --coverage
 EXECUTABLE = test.out
 LIBS = -pthread -ldl
 
@@ -21,13 +22,13 @@ OBJS += $(TEST_SRCS:.cpp=.o)
 	@echo ' '
 
 all: check-lib gtest mocker $(OBJS)
-	$(CC) $(CPPFLAGS) $(CXXFLAGS) -o $(EXECUTABLE) $(OBJS) $(LIBOBJECTPKCS11) ./$(GTEST_DIR)/gtest-all.o $(LIBS)
+	$(CC) $(CPPFLAGS) $(CXXFLAGS) -o $(EXECUTABLE) $(OBJS) $(LIBOBJECTPKCS11) ./$(GTEST_DIR)/gtest-all.o $(LIBS) -rdynamic
 	@echo 'Build complete!'
 	@echo ' '
 
 mocker:
 	@echo 'Building Mocked PKCS11'
-	$(CC) $(CPPFLAGS) $(CXXFLAGS) $(INCLUDES) -shared -fPIC -o $(MOCKED_SO) $(MOCK_DIR)/*.cpp $(LIBS)
+	$(CC) $(CPPFLAGS) $(CXXFLAGS) $(INCLUDES) -shared -fPIC -o $(MOCKED_SO) $(MOCK_DIR)/*.cpp
 	mv $(MOCKED_SO) /tmp
 	@echo ' '
 
@@ -42,7 +43,7 @@ test:	all
 	@echo 'Done!'
 
 clean:
-	rm -rf ./$(SRC_DIR)/*.o $(EXECUTABLE)
+	rm -rf ./$(SRC_DIR)/*.o ./$(SRC_DIR)/*.gc* $(EXECUTABLE) *.gc*
 
 veryclean: clean
 	rm -f /tmp/$(MOCKED_SO)
