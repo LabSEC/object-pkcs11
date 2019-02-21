@@ -12,7 +12,7 @@
 #include "Session.h"
 #include "SessionInfo.h"
 
-namespace objck {
+namespace raiki {
 typedef CK_FUNCTION_LIST FunctionList;
 typedef CK_NOTIFY CryptokiNotify;
 

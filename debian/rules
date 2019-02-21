@@ -1,0 +1,12 @@
+#!/usr/bin/make -f
+# debian.rules
+# Be carefull, this is a Makefile, so the indents are tabs and not spaces!
+# -*- makefile -*-
+
+export DESTDIR=$(CURDIR)/debian/object-pkcs11
+
+%:
+	dh $@
+
+override_dh_auto_install:
+	dh_auto_install --destdir=$(DESTDIR)

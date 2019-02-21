@@ -24,11 +24,11 @@ curtain). Sessions are closed the object is destructed. Always consider the
 context of the declaration to manage "close" and "finalize" functions.
 
 
-# Running code with SoftHSMv2
+# Tests
 
-We wrote a PKCS11 mocker using lambda functions. In the test files we can write the
-PKCS11 function implementations on the fly. This allows us to test if the functions
-were indeed called dynamically and to evaluate the return value.
+We wrote a PKCS11 mocker using std::functions. In the test files we can write the
+PKCS11 function implementations on the fly. This allows us to test multiple scenarios
+without writing multiple mockers.
 
 run the tests with:
 
